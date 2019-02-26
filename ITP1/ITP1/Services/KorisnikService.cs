@@ -121,7 +121,7 @@ namespace ITP1.Services
                     {
                         File = new FileDescription(formFile.FileName, stream),
                         PublicId = @"Users/" + imgName,
-                        Transformation = new Transformation().Width(200).Height(200).Crop("limit"),
+                        Transformation = new Transformation().Width(400).Height(400).Crop("limit"),
                     };
                     var uploadResult = await cloudinary.UploadAsync(uploadParams);
                     return uploadResult.Uri.ToString();
