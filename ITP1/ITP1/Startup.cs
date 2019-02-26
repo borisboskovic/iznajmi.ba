@@ -40,6 +40,7 @@ namespace ITP1
             //Ovo
             services.AddSingleton(Configuration);
             services.AddScoped<IKorisnik, KorisnikService>();
+            services.AddScoped<INekretnina, NekretninaService>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

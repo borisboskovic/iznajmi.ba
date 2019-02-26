@@ -37,6 +37,7 @@ namespace ITP1.Controllers
                     WebKontaktUrl = korisnikModel.WebKontaktUrl,
                     ProsjecnaOcjena = _korisnik.GetProsjecnaOcjena(korisnikModel.NumberOfRatings1, korisnikModel.NumberOfRatings2, korisnikModel.NumberOfRatings3, korisnikModel.NumberOfRatings4, korisnikModel.NumberOfRatings5),
                     BrojOcjena = korisnikModel.NumberOfRatings1 + korisnikModel.NumberOfRatings2 + korisnikModel.NumberOfRatings3 + korisnikModel.NumberOfRatings4 + korisnikModel.NumberOfRatings5,
+                    CurrentUserId = id,
                 };
 
                 return View(model);
@@ -49,8 +50,7 @@ namespace ITP1.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(KorisnikProfil korisnikModel)
         {
-
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && IsAuthorized(korisnikModel.CurrentUserId))
             {
                 string avatar = null;
                 if (korisnikModel.ImgFile != null)

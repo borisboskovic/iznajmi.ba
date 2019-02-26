@@ -5,7 +5,7 @@
 }
 
 <div class="container">
-    <div class="thumbnail col-md-10 col-md-offset-1 col-xs-12">
+    <div class="thumbnail col-sm-10 col-sm-offset-1 col-xs-12">
         <div class="container">
 
 
@@ -13,14 +13,21 @@
                 <div class="row">
                     @Html.HiddenFor(model => model.UserId)
                     @Html.HiddenFor(model => model.ImgFile)
+                    @Html.HiddenFor(model => model.CurrentUserId)
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="col-sm-offset-1" style="margin-left:6%;">
-                        <h2 style="margin-right:4px;display:inline">
-                        <i class="fas fa-star" style="color:#FFDF00;"></i>
-                        @Model.ProsjecnaOcjena</h2><h4 style="display:inline">/5</h4> 
-                        <br /><h5 style="margin-left:10px;">@Model.BrojOcjena</h5>
+                        <div style="display:inline">
+                            <h2 style="margin-right:4px;display:inline">
+                                <i class="fas fa-star fa-lg" style="color:#FFDF00;vertical-align:-.27em"></i>
+                            </h2>
+                        </div>
+                        <div style="display:inline">
+                            <h2 style="display:inline">@Model.ProsjecnaOcjena</h2>
+                            <h4 style="display:inline">/5</h4>
+                            <h5 style="margin-left:60px; margin-top:-3px;">@Model.BrojOcjena</h5>
+                        </div>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-sm-3" style="margin-top:15px;">
                         @if (Model.AvatarImgUrl == null)
                         {
                             <img id="myImg" src="~/images/defaultUser.png" alt="Unable to load image" class="" style="border-radius:50%;height:200px;width:200px;" />

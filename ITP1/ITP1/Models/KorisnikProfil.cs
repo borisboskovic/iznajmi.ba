@@ -10,6 +10,7 @@ namespace ITP1.Models
     public class KorisnikProfil
     {
         public int Id { get; set; }
+        public string CurrentUserId { get; set; }
 
         [Required(ErrorMessage ="Ovo polje je obavezno.")]
         [Display(Name = "Ime i prezime")]
