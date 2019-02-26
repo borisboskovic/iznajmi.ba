@@ -30,11 +30,11 @@
                     <div class="form-group col-sm-3" style="margin-top:15px;">
                         @if (Model.AvatarImgUrl == null)
                         {
-                            <img id="myImg" src="~/images/defaultUser.png" alt="Unable to load image" class="" style="border-radius:50%;height:200px;width:200px;" />
+                            <img id="myImg" src="~/images/defaultUser.png" accept="images/*" alt="Unable to load image" class="" style="border-radius:50%; object-fit:cover; height:200px;width:200px;" />
                         }
                         else
                         {
-                            <img id="myImg" src="@Model.AvatarImgUrl" alt="Unable to load image" class="" style="border-radius:50%;height:200px;width:200px;" />
+                            <img id="myImg" src="@Model.AvatarImgUrl" accept="images/*" alt="Unable to load image" class="" style="border-radius:50%; object-fit:cover; height:200px;width:200px;" />
                         }
                         <div style="margin-top:10px;">
                             <a href="#"><label for="img-input" style="margin-left:56px;">promijeni sliku</label></a>
