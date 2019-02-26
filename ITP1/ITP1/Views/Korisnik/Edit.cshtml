@@ -1,0 +1,118 @@
+﻿@model ITP1.Models.KorisnikProfil
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="thumbnail col-md-10 col-md-offset-1 col-xs-12">
+        <div class="container">
+
+
+            <form asp-action="Edit" enctype="multipart/form-data" asp-route-id="@Model.Id">
+                <div class="row">
+                    @Html.HiddenFor(model => model.UserId)
+                    @Html.HiddenFor(model => model.ImgFile)
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-sm-offset-1" style="margin-left:6%;">
+                        <h2 style="margin-right:4px;display:inline">
+                        <i class="fas fa-star" style="color:#FFDF00;"></i>
+                        @Model.ProsjecnaOcjena</h2><h4 style="display:inline">/5</h4> 
+                        <br /><h5 style="margin-left:10px;">@Model.BrojOcjena</h5>
+                    </div>
+                    <div class="form-group col-md-3">
+                        @if (Model.AvatarImgUrl == null)
+                        {
+                            <img id="myImg" src="~/images/defaultUser.png" alt="Unable to load image" class="" style="border-radius:50%;height:200px;width:200px;" />
+                        }
+                        else
+                        {
+                            <img id="myImg" src="@Model.AvatarImgUrl" alt="Unable to load image" class="" style="border-radius:50%;height:200px;width:200px;" />
+                        }
+                        <div style="margin-top:10px;">
+                            <a href="#"><label for="img-input" style="margin-left:56px;">promijeni sliku</label></a>
+                            <input style="visibility:hidden" id="img-input" type="file" asp-for="ImgFile" accept="image/gif, image/jpeg, image/png" class="input-group" onchange="readURL(this);" /><br />
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <span style="font-size:17px">
+                                <label asp-for="Ime" class="control-label"></label>
+                            </span>
+                            <input asp-for="Ime" id="name-input" class="form-control" style="font-size:17px" required />
+                            <span asp-validation-for="Ime" class="text-danger"></span>
+                        </div><br />
+                        <h3>Kontakt</h3>
+                        <div class="table-bordered" style="padding:15px">
+                            <div class="form-group">
+                                <span style="font-size:17px">
+                                    <i class="fas fa-phone"></i>
+                                    <label asp-for="Tel" class="control-label"></label>
+                                </span>
+                                <input asp-for="Tel" class="form-control" style="font-size:17px" />
+                                <span asp-validation-for="Tel" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <span style="font-size:17px">
+                                    <i class="fas fa-envelope"></i>
+                                    <label asp-for="Mail" class="control-label"></label>
+                                </span>
+                                <input asp-for="Mail" type="email" class="form-control" style="font-size:17px" />
+                                <span asp-validation-for="Mail" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <span style="font-size:17px">
+                                    <i class="fa fa-globe"></i>
+                                    <label asp-for="WebKontaktUrl" class="control-label"></label>
+                                </span>
+                                <input asp-for="WebKontaktUrl" class="form-control" style="font-size:17px" />
+                                <span asp-validation-for="WebKontaktUrl" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+                <div class="form-group col-sm-4 pull-right">
+                    <input type="submit" value="Sačuvaj" class="custom-btn offset" />
+                </div>
+            </form>
+
+            @*<div>
+                <a asp-action="Index">Back to List</a>
+            </div>*@
+
+
+        </div>
+    </div>
+</div>
+<br /><br />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#myImg')
+                        .attr('src', e.target.result)
+                        .width(200)
+                        .height(200);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        var nameInput = document.getElementById('name-input');
+        nameInput.oninvalid = function (e) { e.target.setCustomValidity('Ovo polje je ooobavezno.'); };
+        nameInput.oninput = function (e) { e.target.setCustomValidity(''); };
+
+    </script>
+}
+
+

@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using ITP1.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ITP1.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using TestProject3.Areas.Identity.Services;
 
 namespace ITP1
 {
@@ -34,13 +37,42 @@ namespace ITP1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            //Ovo
+            services.AddSingleton(Configuration);
+            services.AddScoped<IKorisnik, KorisnikService>();
+
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            //Ovo
+            services.AddDefaultIdentity<IdentityUser>(config =>
+            {
+                config.SignIn.RequireConfirmedEmail = true;
+                config.Password.RequireDigit = false;
+                config.Password.RequiredLength = 4;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireUppercase = false;
+                config.Password.RequireLowercase = false;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            //ovo
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["AppId"];
+                facebookOptions.AppSecret = Configuration["AppSecret"];
+                facebookOptions.Scope.Add("public_profile");
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // requires //Dodati
+            // using Microsoft.AspNetCore.Identity.UI.Services;
+            // using WebPWrecover.Services;
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
