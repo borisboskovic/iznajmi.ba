@@ -1,94 +1,308 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<link href="~/css/offcanvas.css" rel="stylesheet" />
+<div class="container">
+    <div class="row row-offcanvas row-offcanvas-left" style="margin-top:-37px;">
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" style="background-color:#F5F5F5;border-right:1px solid #DDDDDD;">
+            <br /><br />
+                  <form asp-controller="Home" asp-action="Filter" method="get" id="formFilter" class="form-horizontal">
+                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
+                      <div class="container" style="padding:unset">
+                          <br />
+                          <div style="padding-left:1%">
+                              <h4 style="color:#FFA260"><strong>Tip</strong></h4>
+                          </div>
+                          <div class="col-sm-4 col-xs-12" style="padding-left:4%">
+                              <a class=" kuca" style="color:#79A736;" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="kuca" hidden value="kuca" class="" onchange="changeActiveKuca(this);" /><i class="far fa-square kucaIcons"></i>&nbsp;Kuća</label></a>
+                          </div>
+                          <div class="col-sm-12"></div>
+                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
+                              <a class=" stan" style="color:#79A736" href="#"><label class="form-check-label" style="text-decoration:none;cursor:pointer"><input type="checkbox" name="Stan" value="stan" hidden onchange="changeActiveStan(this);" /><i class="far fa-square stanIcons"></i>&nbsp;Stan</label></a>
+                          </div>
+                          <div class="col-sm-12"></div>
+                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
+                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="vikendica" hidden value="vikendica" class="" onchange="changeActiveVikendica(this);" /><i class="far fa-square vikendicaIcons"></i>&nbsp;Vikendica</label></a>
+                          </div>
+                          <div class="col-sm-12"></div>
+                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
+                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="soba" hidden value="soba" class="" onchange="changeActiveSoba(this);" /><i class="far fa-square sobaIcons"></i>&nbsp;Soba</label></a>
+                          </div>
+                          <div class="col-sm-12"></div>
+                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
+                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="apartman" hidden value="apartman" class="" onchange="changeActiveApartman(this);" /><i class="far fa-square apartmanIcons"></i>&nbsp;Apartman</label></a>
+                          </div>
+                          <div class="col-sm-12"></div>
+                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
+                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="krevet" hidden value="krevet" class="" onchange="changeActiveKrevet(this);" /><i class="far fa-square krevetIcons"></i>&nbsp;Krevet</label></a>
+                          </div>
+                          <div class="col-sm-12"></div>
+                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
+                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="garaza" hidden value="garaza" class="" onchange="changeActiveGaraza(this);" /><i class="far fa-square garazaIcons"></i>&nbsp;Garaža</label></a>
+                          </div>
+                          <div class="col-sm-12"></div>
+                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
+                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="ostalo" hidden value="ostalo" class="" onchange="changeActiveOstalo(this);" /><i class="far fa-square ostaloIcons"></i>&nbsp;Ostalo</label></a>
+                          </div>
+                      </div>
+                      <br />
+                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
+                      <div class="container" style="padding:unset">
+                          <br />
+                          <div style="padding-left:1%">
+                              <h4 style="color:#FFA260"><strong>Cijena</strong></h4>
+                          </div>
+                          <div class="row">
+                              <div class="col-sm-3 col-xs-12 " style="padding-left:2%;">
+                                  <span style="color:#79A736;font-size:12px;">
+                                      BAM&nbsp;<input class="form-control input-sm" style="width:80px; display:inline;margin-bottom:10px;" type="number" />&nbsp;
+                                      <span style="font-weight:bold">-</span>
+                                      &nbsp;BAM&nbsp;<input class="form-control input-sm" style="width:80px;display:inline" type="number" />
+                                      &nbsp;&nbsp;<i class="fas fa-chevron-right fa-lg" style="color:white;background-color:#FFA260;cursor:pointer;border:1px solid #FFA260; padding:2px;padding-top:6px;padding-bottom:8px;"></i>
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                      <br />
+                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
+                      <div class="container" style="padding:unset">
+                          <br />
+                          <div style="padding-left:1%">
+                              <h4 style="color:#FFA260"><strong>Površina</strong></h4>
+                          </div>
+                          <div class="row">
+                              <div class="col-sm-3 col-xs-12 " style="padding-left:2%;">
+                                  <span style="color:#79A736;font-size:12px;">
+                                      &nbsp;&nbsp;
+                                      <span style="font-weight:bold;">
+                                          m<sup>2</sup>
+                                      </span>
+                                      <input class="form-control input-sm" style="width:80px; display:inline;margin-bottom:10px;" type="number" />&nbsp;
+                                      &nbsp;&nbsp;<span style="font-weight:bold">-</span>
+                                      &nbsp;&nbsp;
+
+                                      <span style="font-weight:bold;">
+                                          m<sup>2</sup>
+                                      </span>
+                                      <input class="form-control input-sm" style="width:80px;display:inline" type="number" />
+                                      &nbsp;&nbsp;<i class="fas fa-chevron-right fa-lg" style="color:white;background-color:#FFA260;cursor:pointer;border:1px solid #FFA260; padding:2px;padding-top:6px;padding-bottom:8px;"></i>
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                      <br />
+                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
+                      <div class="container" style="padding:unset">
+                          <br />
+                          <div style="padding-left:1%">
+                              <h4 style="color:#FFA260"><strong>Dostupno</strong></h4>
+                          </div>
+
+                          <div class="row">
+                              <h5 class="pull-left" style="color:#FFA260; display:inline; margin-right:20px; margin-left:20px;"><strong>Od</strong></h5>
+                              <div class='col-sm-2 col-xs-11'>
+                                  <div class="form-group">
+                                      <div class='input-group date' id='datetimepicker1'>
+                                          <span class="input-group-addon input-sm">
+                                              <span class="fa fa-calendar"></span>
+                                          </span>
+                                          <input type='text' class="form-control input-sm" />
+
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <h5 class="pull-left" style="color:#FFA260; display:inline; margin-right:20px; margin-left:20px;"><strong>Do</strong></h5>
+                              <div class='col-sm-2 col-xs-11'>
+                                  <div class="form-group">
+                                      <div class='input-group date' id='datetimepicker2'>
+                                          <span class="input-group-addon input-sm">
+                                              <span class="fa fa-calendar"></span>
+                                          </span>
+                                          <input type='text' class="form-control input-sm" />
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <br />
+                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
+                      <div class="container" style="padding:unset">
+                          <br />
+                          <div style="padding-left:1%">
+                              <h4 style="color:#FFA260"><strong>Dodatno</strong></h4>
+                          </div>
+                          <div class="col-sm-4 col-xs-12" style="padding-left:4%">
+                              <a class="poSatu" style="color:#79A736;" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="poSatu" hidden value="poSatu" class="" onchange="changeActivePoSatu(this);" /><i class="far fa-square poSatuIcons"></i>&nbsp;Iznajmljivanje po satu</label></a>
+                          </div>
+                          <div class="col-sm-12"></div>
+                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
+                              <a class="poDanu" style="color:#79A736" href="#"><label class="form-check-label" style="text-decoration:none;cursor:pointer"><input type="checkbox" name="poDanu" value="poDanu" hidden onchange="changeActivePoDanu(this);" /><i class="far fa-square poDanuIcons"></i>&nbsp;Iznajmljivanje po danu</label></a>
+                          </div>
+                          <div class="col-sm-12"></div>
+                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
+                              <a class="poMjesecu" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="poMjesecu" hidden value="poMjesecu" class="" onchange="changeActivePoMjesecu(this);" /><i class="far fa-square poMjesecuIcons"></i>&nbsp;Iznajmljivanje po mjesecu</label></a>
+                          </div>
+                          <div class="col-sm-12"></div>
+                      </div>
+                      <br />
+                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
+                  </form>
+                <br /><br /><br /><br /><br />
         </div>
-        <div class="item">
-            <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
+
+
+        <div class="col-xs-12 col-sm-9">
+            <p class="pull-left visible-xs" style="margin-top:8px;margin-left:-10px;">
+                <button type="button" class="btn btn-default btn-sm" data-toggle="offcanvas"><i class="fas fa-filter"></i></button>
+            </p>
+
+            Tijelo
         </div>
-        <div class="item">
-            <img src="~/images/banner3.svg" alt="Microsoft Azure" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
+
     </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
 </div>
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET Core MVC</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
-        </ul>
-    </div>
-</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/offcanvas.js"></script>
+
+@*Sklonit kasnije...*@
+<script>
+    function changeActiveKuca(radioBtn) {
+        var kucaIcons = document.getElementsByClassName('kucaIcons')[0];
+        if (kucaIcons.classList.contains('fa-square')) {
+            kucaIcons.classList.remove('fa-square');
+            kucaIcons.classList.add('fa-check-square');
+        }
+        else {
+            kucaIcons.classList.remove('fa-check-square');
+            kucaIcons.classList.add('fa-square');
+        }
+       // document.getElementById('formFilter').submit();
+    }
+
+    function changeActiveStan(radioBtn) {
+        var stanIcons = document.getElementsByClassName('stanIcons')[0];
+        if (stanIcons.classList.contains('fa-square')) {
+            stanIcons.classList.remove('fa-square');
+            stanIcons.classList.add('fa-check-square');
+        }
+        else {
+            stanIcons.classList.remove('fa-check-square');
+            stanIcons.classList.add('fa-square');
+        }
+      //  document.getElementById('formFilter').submit();
+    }
+
+    function changeActiveSoba(radioBtn) {
+        var sobaIcons = document.getElementsByClassName('sobaIcons')[0];
+        if (sobaIcons.classList.contains('fa-square')) {
+            sobaIcons.classList.remove('fa-square');
+            sobaIcons.classList.add('fa-check-square');
+        }
+        else {
+            sobaIcons.classList.remove('fa-check-square');
+            sobaIcons.classList.add('fa-square');
+        }
+      //  document.getElementById('formFilter').submit();
+
+    }
+
+    function changeActiveApartman(radioBtn) {
+        var apartmanIcons = document.getElementsByClassName('apartmanIcons')[0];
+        if (apartmanIcons.classList.contains('fa-square')) {
+            apartmanIcons.classList.remove('fa-square');
+            apartmanIcons.classList.add('fa-check-square');
+        }
+        else {
+            apartmanIcons.classList.remove('fa-check-square');
+            apartmanIcons.classList.add('fa-square');
+        }
+    }
+
+    function changeActiveKrevet(radioBtn) {
+        var krevetIcons = document.getElementsByClassName('krevetIcons')[0];
+        if (krevetIcons.classList.contains('fa-square')) {
+            krevetIcons.classList.remove('fa-square');
+            krevetIcons.classList.add('fa-check-square');
+        }
+        else {
+            krevetIcons.classList.remove('fa-check-square');
+            krevetIcons.classList.add('fa-square');
+        }
+    }
+
+    function changeActiveGaraza(radioBtn) {
+        var garazaIcons = document.getElementsByClassName('garazaIcons')[0];
+        if (garazaIcons.classList.contains('fa-square')) {
+            garazaIcons.classList.remove('fa-square');
+            garazaIcons.classList.add('fa-check-square');
+        }
+        else {
+            garazaIcons.classList.remove('fa-check-square');
+            garazaIcons.classList.add('fa-square');
+        }
+    }
+
+    function changeActiveVikendica(radioBtn) {
+        var vikendicaIcons = document.getElementsByClassName('vikendicaIcons')[0];
+        if (vikendicaIcons.classList.contains('fa-square')) {
+            vikendicaIcons.classList.remove('fa-square');
+            vikendicaIcons.classList.add('fa-check-square');
+        }
+        else {
+            vikendicaIcons.classList.remove('fa-check-square');
+            vikendicaIcons.classList.add('fa-square');
+        }
+    }
+
+    function changeActiveOstalo(radioBtn) {
+        var ostaloIcons = document.getElementsByClassName('ostaloIcons')[0];
+        if (ostaloIcons.classList.contains('fa-square')) {
+            ostaloIcons.classList.remove('fa-square');
+            ostaloIcons.classList.add('fa-check-square');
+        }
+        else {
+            ostaloIcons.classList.remove('fa-check-square');
+            ostaloIcons.classList.add('fa-square');
+        }
+    }
+
+    function changeActivePoSatu(radioBtn) {
+        var poSatuIcons = document.getElementsByClassName('poSatuIcons')[0];
+        if (poSatuIcons.classList.contains('fa-square')) {
+            poSatuIcons.classList.remove('fa-square');
+            poSatuIcons.classList.add('fa-check-square');
+        }
+        else {
+            poSatuIcons.classList.remove('fa-check-square');
+            poSatuIcons.classList.add('fa-square');
+        }
+    }
+
+    function changeActivePoDanu(radioBtn) {
+        var poDanuIcons = document.getElementsByClassName('poDanuIcons')[0];
+        if (poDanuIcons.classList.contains('fa-square')) {
+            poDanuIcons.classList.remove('fa-square');
+            poDanuIcons.classList.add('fa-check-square');
+        }
+        else {
+            poDanuIcons.classList.remove('fa-check-square');
+            poDanuIcons.classList.add('fa-square');
+        }
+    }
+
+    function changeActivePoMjesecu(radioBtn) {
+        var poMjesecuIcons = document.getElementsByClassName('poMjesecuIcons')[0];
+        if (poMjesecuIcons.classList.contains('fa-square')) {
+            poMjesecuIcons.classList.remove('fa-square');
+            poMjesecuIcons.classList.add('fa-check-square');
+        }
+        else {
+            poMjesecuIcons.classList.remove('fa-check-square');
+            poMjesecuIcons.classList.add('fa-square');
+        }
+    }
+</script>

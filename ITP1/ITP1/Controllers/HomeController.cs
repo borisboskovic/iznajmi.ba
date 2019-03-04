@@ -15,6 +15,14 @@ namespace ITP1.Controllers
             return View();
         }
 
+
+        //Ovo akcija samo proba... nece biti ovako
+        public IActionResult Filter(string kuca, string stan, string vikendica, string ostalo)
+        {
+            return View("Index");
+        }
+
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

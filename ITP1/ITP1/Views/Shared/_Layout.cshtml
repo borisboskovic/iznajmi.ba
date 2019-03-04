@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ITP1</title>
 
-
+    <link href="~/css/offcanvas.css" rel="stylesheet" />
     <link href="~/bootstrap/dist/css/bootstrapunited.css" rel="stylesheet" />
     <link href="~/css/Site.css" rel="stylesheet" />
     <link href="~/fontawesome/css/all.css" rel="stylesheet" />
+
+
+
     @*<environment include="Development">*@
     @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />*@
     @*<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
@@ -20,8 +23,10 @@
                   asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
             <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         </environment>*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+
 </head>
-<body>
+<body style="min-height:750px;">
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand" style="margin-top: -7px;height: 70px;"><i class="fas fa-home fa-2x"></i></a>
@@ -40,7 +45,6 @@
             </div>
         </div>
     </nav>
-    <br /><br /><br /><br />
     <partial name="_CookieConsentPartial" />
     @if (TempData["LoginInfo"] != null)
     {
@@ -49,6 +53,7 @@
             <p><strong>@TempData["LoginInfo"]</strong></p>
         </div>
     }
+    <br />
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -57,8 +62,11 @@
         </footer>
     </div>
 
+
     <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
+        @*<script src="~/lib/jquery/dist/jquery.js"></script>*@
+        @*Stavit ovaj jquery u jquery.js kad se sjetim*@
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
@@ -77,8 +85,23 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
         <script src="~/fontawesome/js/fontawesome.js"></script>
+        <script src="~/js/offcanvas.js"></script>
     </environment>
 
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script>
+    <script src="~/js/datetime-picker.js"></script>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            $('#datetimepicker1').datetimepicker({
+                locale: 'sr',
+            });
+            $('#datetimepicker2').datetimepicker({
+                locale: 'sr',
+            });
+        }
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
