@@ -13,7 +13,7 @@ namespace ITP1.Models
         public string CurrentUserId { get; set; }
 
         [Required(ErrorMessage ="Ovo polje je obavezno.")]
-        [Display(Name = "Ime i prezime")]
+        [Display(Name = "Ime i prezime*")]
         public string Ime { get; set; }
 
         [Display(Name = "Telefon")]

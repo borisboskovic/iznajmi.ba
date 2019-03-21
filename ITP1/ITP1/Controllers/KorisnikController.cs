@@ -70,6 +70,7 @@ namespace ITP1.Controllers
                 };
                 _korisnik.UpdateKorisnik(korisnik);
                 return RedirectToAction("Index", "Home", new { area = "" });
+                //return View(korisnikModel);
             }
 
             return View(korisnikModel);
