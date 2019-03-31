@@ -19,6 +19,7 @@ namespace ITP1.Controllers
         //Ovo akcija samo proba... nece biti ovako
         public IActionResult Filter(string kuca, string stan, string vikendica, string ostalo)
         {
+            //test
             return View("Index");
         }
 
