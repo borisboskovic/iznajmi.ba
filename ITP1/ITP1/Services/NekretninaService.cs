@@ -307,6 +307,5 @@ namespace ITP1.Services
             return _context.NacinIznajmljivnja;
         }
 
->>>>>>> a8069a4695785f7accfd917af07f2c5b70f7312c
     }
 }
