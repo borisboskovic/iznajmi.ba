@@ -36,6 +36,7 @@ namespace ITP1.Controllers
                     Mail = korisnikModel.MailKontakt == null ? "" : korisnikModel.MailKontakt,
                     WebKontaktUrl = korisnikModel.WebKontaktUrl,
                     ProsjecnaOcjena = _korisnik.GetProsjecnaOcjena(korisnikModel.NumberOfRatings1, korisnikModel.NumberOfRatings2, korisnikModel.NumberOfRatings3, korisnikModel.NumberOfRatings4, korisnikModel.NumberOfRatings5),
+                    NekretninaItems = _korisnik.GetListaNekretninaZaKorisnika(korisnikModel.Id),
                     BrojOcjena = korisnikModel.NumberOfRatings1 + korisnikModel.NumberOfRatings2 + korisnikModel.NumberOfRatings3 + korisnikModel.NumberOfRatings4 + korisnikModel.NumberOfRatings5,
                     CurrentUserId = id,
                 };

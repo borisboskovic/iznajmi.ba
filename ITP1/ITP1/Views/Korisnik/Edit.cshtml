@@ -43,7 +43,30 @@
                                 <div class="tab-content  form-group col-md-6" style="border:1px solid #DFD2D2;">
                                     <div id="nekretnine" class="tab-pane fade in active">
                                         <h3>Moje ponude</h3>
-                                        <p>Lista ponuda...</p>
+                                        @for(int i = 0; i < Model.NekretninaItems.Count; i++)
+                                        {
+                                        <div style="border-style: outset; border-color:aquamarine; margin:5px;">
+                                            <h3 style="text-align:center;">@Model.NekretninaItems.ElementAt(i).Naslov</h3>
+                                            <div style="display:inline-block;">
+                                                @if (Model.NekretninaItems.ElementAt(i).CoverImgUrl == null)
+                                                {
+                                                    <img src="~/images/randHouse.jpg" style="width:220px;height:150px; margin-bottom:12px;" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="@Model.NekretninaItems.ElementAt(i).CoverImgUrl" style="width:220px;height:150px;margin-bottom:12px;" />
+                                                }
+                                            </div>
+                                            <div style="display:inline-block;">
+                                                <p>
+                                                    Dostupno od @Model.NekretninaItems.ElementAt(i).DostupnoOd do @Model.NekretninaItems.ElementAt(i).DostupnoDo
+                                                </p>
+                                                <p>
+                                                    Cijena @Model.NekretninaItems.ElementAt(i).Cijena KM
+                                                </p>
+                                            </div>
+                                        </div>
+                                        }
                                     </div>
                                     <div id="utisci" class="tab-pane fade">
                                         <h3>Utisci</h3>

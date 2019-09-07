@@ -1,4 +1,5 @@
 ﻿using ITP1.Data.Models;
+using ITP1.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -24,5 +25,6 @@ namespace ITP1.Data
         string GetUsernameFromAspNetUsers(string id);
         void AddAspNetUser(Microsoft.AspNetCore.Identity.IdentityUser user);
         string GetForeignKeyAspNetUsersId(string email);
+        List<NekretninaItem> GetListaNekretninaZaKorisnika(int id);
     }
 }

@@ -29,5 +29,6 @@ namespace ITP1.Models
         public double ProsjecnaOcjena { get; set; }
         public int BrojOcjena { get; set; }
         public string UserId { get; set; }
+        public List<NekretninaItem> NekretninaItems { get; set; }
     }
 }

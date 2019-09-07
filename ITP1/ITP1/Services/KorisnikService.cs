@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ITP1.Models;
 
 namespace ITP1.Services
 {
@@ -141,6 +142,43 @@ namespace ITP1.Services
         public Double GetProsjecnaOcjena(int jedinice, int dvice, int trice, int cetvorke, int petice)
         {
             return (jedinice + dvice + trice + cetvorke + petice) / 5;
+        }
+
+        public List<NekretninaItem> GetListaNekretninaZaKorisnika(int korisnikId)
+        {
+            IEnumerable<Nekretnina> nekretnine;
+
+            nekretnine = _context.Nekretnine.Where(n => n.KorisnikId == korisnikId).ToList();
+            List<NekretninaItem> nekretnine_item = new List<NekretninaItem>();
+
+            foreach (var item in nekretnine)
+            {
+                NekretninaItem nekretnina_item = new NekretninaItem()
+                {
+                    Cijena = item.Cijena,
+                    Naslov = item.Naslov,
+                    Korisik = item.Korisnik,
+                    Lokacija = item.Lokacija,
+                    Povrsina = item.Povrsina,
+                    DostupnoOd = item.DostupnoOd,
+                    DostupnoDo = item.DostupnoDo,
+                    CoverImgUrl = item.CoverImg == null ? null : item.CoverImg.Url,
+                    Tip = new TipModel()
+                    {
+                        Id = item.Tip == null ? 0 : item.Tip.Id,
+                        ImeTipa = item.Tip == null ? null : item.Tip.ImeTipa
+                    },
+                    NacinIznajmljivanja = new NacinIznajmljivanjaModel()
+                    {
+                        Id = item.NacinIznajmljivanja == null ? 0 : item.NacinIznajmljivanja.Id,
+                        Naziv = item.NacinIznajmljivanja == null ? null : item.NacinIznajmljivanja.Naziv,
+                    }
+                    ,
+                };
+                nekretnine_item.Add(nekretnina_item);
+            }
+
+            return nekretnine_item;
         }
     }
 }
