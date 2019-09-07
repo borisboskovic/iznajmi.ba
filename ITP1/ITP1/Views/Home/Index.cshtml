@@ -1,165 +1,296 @@
-﻿@{
+﻿@model ITP1.Models.PocetnaModel
+@{
     ViewData["Title"] = "Home Page";
 }
 <link href="~/css/offcanvas.css" rel="stylesheet" />
+<link href="~/css/sitestyle.css" rel="stylesheet" />
+
 <div class="container">
     <div class="row row-offcanvas row-offcanvas-left" style="margin-top:-37px;">
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" style="background-color:#F5F5F5;border-right:1px solid #DDDDDD;">
-            <br /><br />
-                  <form asp-controller="Home" asp-action="Filter" method="get" id="formFilter" class="form-horizontal">
-                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
+        <form asp-controller="Home" asp-action="Index" method="get" id="formIndex" class="form-horizontal">
+            <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" style="background-color:#F5F5F5;border-right:1px solid #DDDDDD;">
+                <br /><br />
+                <div class="orange-line"></div>
+                <input asp-for="@Model.CurrPage" id="CurrPage" type="hidden" />
 
-                      <div class="container" style="padding:unset">
-                          <br />
-                          <div style="padding-left:1%">
-                              <h4 style="color:#FFA260"><strong>Tip</strong></h4>
-                          </div>
-                          <div class="col-sm-4 col-xs-12" style="padding-left:4%">
-                              <a class=" kuca" style="color:#79A736;" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="kuca" hidden value="kuca" class="" onchange="changeActiveKuca(this);" /><i class="far fa-square kucaIcons"></i>&nbsp;Kuća</label></a>
-                          </div>
-                          <div class="col-sm-12"></div>
-                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
-                              <a class=" stan" style="color:#79A736" href="#"><label class="form-check-label" style="text-decoration:none;cursor:pointer"><input type="checkbox" name="Stan" value="stan" hidden onchange="changeActiveStan(this);" /><i class="far fa-square stanIcons"></i>&nbsp;Stan</label></a>
-                          </div>
-                          <div class="col-sm-12"></div>
-                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
-                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="vikendica" hidden value="vikendica" class="" onchange="changeActiveVikendica(this);" /><i class="far fa-square vikendicaIcons"></i>&nbsp;Vikendica</label></a>
-                          </div>
-                          <div class="col-sm-12"></div>
-                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
-                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="soba" hidden value="soba" class="" onchange="changeActiveSoba(this);" /><i class="far fa-square sobaIcons"></i>&nbsp;Soba</label></a>
-                          </div>
-                          <div class="col-sm-12"></div>
-                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
-                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="apartman" hidden value="apartman" class="" onchange="changeActiveApartman(this);" /><i class="far fa-square apartmanIcons"></i>&nbsp;Apartman</label></a>
-                          </div>
-                          <div class="col-sm-12"></div>
-                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
-                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="krevet" hidden value="krevet" class="" onchange="changeActiveKrevet(this);" /><i class="far fa-square krevetIcons"></i>&nbsp;Krevet</label></a>
-                          </div>
-                          <div class="col-sm-12"></div>
-                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
-                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="garaza" hidden value="garaza" class="" onchange="changeActiveGaraza(this);" /><i class="far fa-square garazaIcons"></i>&nbsp;Garaža</label></a>
-                          </div>
-                          <div class="col-sm-12"></div>
-                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
-                              <a class="" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="ostalo" hidden value="ostalo" class="" onchange="changeActiveOstalo(this);" /><i class="far fa-square ostaloIcons"></i>&nbsp;Ostalo</label></a>
-                          </div>
-                      </div>
-                      <br />
-                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
-                      <div class="container" style="padding:unset">
-                          <br />
-                          <div style="padding-left:1%">
-                              <h4 style="color:#FFA260"><strong>Cijena</strong></h4>
-                          </div>
-                          <div class="row">
-                              <div class="col-sm-3 col-xs-12 " style="padding-left:2%;">
-                                  <span style="color:#79A736;font-size:12px;">
-                                      BAM&nbsp;<input class="form-control input-sm" style="width:80px; display:inline;margin-bottom:10px;" type="number" />&nbsp;
-                                      <span style="font-weight:bold">-</span>
-                                      &nbsp;BAM&nbsp;<input class="form-control input-sm" style="width:80px;display:inline" type="number" />
-                                      &nbsp;&nbsp;<i class="fas fa-chevron-right fa-lg" style="color:white;background-color:#FFA260;cursor:pointer;border:1px solid #FFA260; padding:2px;padding-top:6px;padding-bottom:8px;"></i>
-                                  </span>
-                              </div>
-                          </div>
-                      </div>
-                      <br />
-                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
-                      <div class="container" style="padding:unset">
-                          <br />
-                          <div style="padding-left:1%">
-                              <h4 style="color:#FFA260"><strong>Površina</strong></h4>
-                          </div>
-                          <div class="row">
-                              <div class="col-sm-3 col-xs-12 " style="padding-left:2%;">
-                                  <span style="color:#79A736;font-size:12px;">
-                                      &nbsp;&nbsp;
-                                      <span style="font-weight:bold;">
-                                          m<sup>2</sup>
-                                      </span>
-                                      <input class="form-control input-sm" style="width:80px; display:inline;margin-bottom:10px;" type="number" />&nbsp;
-                                      &nbsp;&nbsp;<span style="font-weight:bold">-</span>
-                                      &nbsp;&nbsp;
+                <div class="container" style="padding:unset">
+                    <br />
+                    <div style="padding-left:1%">
+                        <h4 style="color:#FFA260"><strong>Tip</strong></h4>
+                    </div>
 
-                                      <span style="font-weight:bold;">
-                                          m<sup>2</sup>
-                                      </span>
-                                      <input class="form-control input-sm" style="width:80px;display:inline" type="number" />
-                                      &nbsp;&nbsp;<i class="fas fa-chevron-right fa-lg" style="color:white;background-color:#FFA260;cursor:pointer;border:1px solid #FFA260; padding:2px;padding-top:6px;padding-bottom:8px;"></i>
-                                  </span>
-                              </div>
-                          </div>
-                      </div>
-                      <br />
-                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
-                      <div class="container" style="padding:unset">
-                          <br />
-                          <div style="padding-left:1%">
-                              <h4 style="color:#FFA260"><strong>Dostupno</strong></h4>
-                          </div>
+                    @for (int i = 0; i < Model.SviTipovi.Count; i++)
+                    {
+                        <div class="col-sm-4 col-xs-12" style="padding-left:4%">
+                            <a class=" kuca" style="color:#79A736;" href="#">
+                                <label class="form-check-label" asp-for="@Model.SviTipovi[i].Selected" style="text-decoration:none;cursor:pointer">
+                                    @{ var clsName = Model.SviTipovi[i].Id + "tip";}
+                                    <input type="checkbox" asp-for="@Model.SviTipovi[i].Selected" hidden class="@clsName" onchange="changeActiveCheckBox(this);" onload="changeActiveCheckBox(this);" onloadstart="changeActiveCheckBox(this);" />
+                                    @{ var klasa = "fa-square";
+                                        if (Model.SviTipovi[i].Selected)
+                                        {
+                                            klasa = "fa-check-square";
+                                        }
 
-                          <div class="row">
-                              <h5 class="pull-left" style="color:#FFA260; display:inline; margin-right:20px; margin-left:20px;"><strong>Od</strong></h5>
-                              <div class='col-sm-2 col-xs-11'>
-                                  <div class="form-group">
-                                      <div class='input-group date' id='datetimepicker1'>
-                                          <span class="input-group-addon input-sm">
-                                              <span class="fa fa-calendar"></span>
-                                          </span>
-                                          <input type='text' class="form-control input-sm" />
+                                    }
+                                    <i class="far @klasa" name="@clsName"></i>
+                                    &nbsp;@Model.SviTipovi[i].ImeTipa
+                                </label>
+                                <input type="hidden" asp-for="@Model.SviTipovi[i].Id" />
+                                <input type="hidden" asp-for="@Model.SviTipovi[i].ImeTipa" />
+                            </a>
 
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <h5 class="pull-left" style="color:#FFA260; display:inline; margin-right:20px; margin-left:20px;"><strong>Do</strong></h5>
-                              <div class='col-sm-2 col-xs-11'>
-                                  <div class="form-group">
-                                      <div class='input-group date' id='datetimepicker2'>
-                                          <span class="input-group-addon input-sm">
-                                              <span class="fa fa-calendar"></span>
-                                          </span>
-                                          <input type='text' class="form-control input-sm" />
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <br />
-                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
-                      <div class="container" style="padding:unset">
-                          <br />
-                          <div style="padding-left:1%">
-                              <h4 style="color:#FFA260"><strong>Dodatno</strong></h4>
-                          </div>
-                          <div class="col-sm-4 col-xs-12" style="padding-left:4%">
-                              <a class="poSatu" style="color:#79A736;" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="poSatu" hidden value="poSatu" class="" onchange="changeActivePoSatu(this);" /><i class="far fa-square poSatuIcons"></i>&nbsp;Iznajmljivanje po satu</label></a>
-                          </div>
-                          <div class="col-sm-12"></div>
-                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
-                              <a class="poDanu" style="color:#79A736" href="#"><label class="form-check-label" style="text-decoration:none;cursor:pointer"><input type="checkbox" name="poDanu" value="poDanu" hidden onchange="changeActivePoDanu(this);" /><i class="far fa-square poDanuIcons"></i>&nbsp;Iznajmljivanje po danu</label></a>
-                          </div>
-                          <div class="col-sm-12"></div>
-                          <div class="col-sm-5 col-xs-12" style="padding-left:4%">
-                              <a class="poMjesecu" style="color:#79A736" href="#"> <label class="form-check-label" style="text-decoration:none;cursor:pointer"> <input type="checkbox" name="poMjesecu" hidden value="poMjesecu" class="" onchange="changeActivePoMjesecu(this);" /><i class="far fa-square poMjesecuIcons"></i>&nbsp;Iznajmljivanje po mjesecu</label></a>
-                          </div>
-                          <div class="col-sm-12"></div>
-                      </div>
-                      <br />
-                      <div style="width:100%;height:1px; background-color:#FFA260"></div>
-                  </form>
-                <br /><br /><br /><br /><br />
-        </div>
+                        </div>
+                        <div class="col-sm-12"></div>
+                    }
+                </div>
+                <br />
+                <div class="orange-line"></div>
+                <div class="container" style="padding:unset">
+                    <br />
+                    <div style="padding-left:1%">
+                        <h4 style="color:#FFA260"><strong>Cijena</strong></h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-12 " style="padding-left:2%;">
+                            <span style="color:#79A736;font-size:12px;">
+                                BAM&nbsp;<input class="form-control input-sm" style="width:80px; display:inline;margin-bottom:10px;" type="number" asp-for="@Model.Filter.CijenaMin" />&nbsp;
+                                <span style="font-weight:bold">-</span>
+                                &nbsp;BAM&nbsp;<input class="form-control input-sm" style="width:80px;display:inline" type="number" asp-for="@Model.Filter.CijenaMax" />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="container" style="padding:unset">
+                    <br />
+                    <div style="padding-left:1%">
+                        <h4 style="color:#FFA260"><strong>Iznajmljivanje</strong></h4>
+                    </div>
+                    @for (int i = 0; i < Model.NaciniIznajmljivanja.Count; i++)
+                    {
+                        <div class="col-sm-4 col-xs-12" style="padding-left:4%">
+                            <a class=" kuca" style="color:#79A736;" href="#">
+                                <label class="form-check-label" asp-for="@Model.NaciniIznajmljivanja[i].Selected" style="text-decoration:none;cursor:pointer">
+                                    @{ var clsName = Model.NaciniIznajmljivanja[i].Id + "nacinIzn";}
+                                    <input type="checkbox" asp-for="@Model.NaciniIznajmljivanja[i].Selected" hidden class="@clsName" onchange="changeActiveCheckBox(this);" />
+                                    @{ var klasa = "fa-square";
+                                        if (Model.NaciniIznajmljivanja[i].Selected)
+                                        {
+                                            klasa = "fa-check-square";
+                                        }
+
+                                    }
+                                    <i class="far @klasa" name="@clsName"></i>
+                                    &nbsp;@Model.NaciniIznajmljivanja[i].Naziv
+                                </label>
+                                <input type="hidden" asp-for="@Model.NaciniIznajmljivanja[i].Id" />
+                                <input type="hidden" asp-for="@Model.NaciniIznajmljivanja[i].Naziv" />
+                            </a>
+
+                        </div>
+                        <div class="col-sm-12"></div>
+                    }
+
+                    <div class="col-sm-12"></div>
+
+                </div>
+                <br />
+                <div class="orange-line"></div>
+                <div class="container" style="padding:unset">
+                    <br />
+                    <div style="padding-left:1%">
+                        <h4 style="color:#FFA260"><strong>Površina</strong></h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-12 " style="padding-left:2%;">
+                            <span style="color:#79A736;font-size:12px;">
+                                &nbsp;&nbsp;
+                                <span style="font-weight:bold;">
+                                    m<sup>2</sup>
+                                </span>
+                                <input class="form-control input-sm" style="width:80px; display:inline;margin-bottom:10px;" type="number" asp-for="@Model.Filter.PovrsinaMin" />&nbsp;
+                                &nbsp;&nbsp;<span style="font-weight:bold">-</span>
+                                &nbsp;&nbsp;
+
+                                <span style="font-weight:bold;">
+                                    m<sup>2</sup>
+                                </span>
+                                <input class="form-control input-sm" style="width:80px;display:inline" type="number" asp-for="@Model.Filter.PovrsinaMax" />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="orange-line"></div>
+                <div class="container" style="padding:unset">
+                    <br />
+                    <div style="padding-left:1%">
+                        <h4 style="color:#FFA260"><strong>Dostupno</strong></h4>
+                    </div>
+
+                    <div class="row">
+                        <h5 class="pull-left" style="color:#FFA260; display:inline; margin-right:20px; margin-left:20px;"><strong>Od</strong></h5>
+                        <div class='col-sm-2 col-xs-11'>
+                            <div class="form-group">
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <span class="input-group-addon input-sm">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                    <input type='text' class="form-control input-sm" asp-for="@Model.Filter.DostupnoOd" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h5 class="pull-left" style="color:#FFA260; display:inline; margin-right:20px; margin-left:20px;"><strong>Do</strong></h5>
+                        <div class='col-sm-2 col-xs-11'>
+                            <div class="form-group">
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <span class="input-group-addon input-sm">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                    <input type='text' class="form-control input-sm" asp-for="@Model.Filter.DostupnoDo" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="orange-line"></div>
+
+                <br />
+                <div class="form-group col-sm-5 col-xs-12">
+                    <input type="submit" style="font-weight:bold" value="Pretraži >" class="custom-btn up" />
+                </div>
+                <br /><br /><br /><br />
+                <div @*style="width:100%;height:1px; background-color:#FFA260"*@ class="orange-line"></div>
+
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+                
+            </div>
 
 
-        <div class="col-xs-12 col-sm-9">
+            <!--Search bar-->
+            <div class="col-xs-12 col-sm-9 col-sm-offset-3">
+                <br />
+                <div class="row" style="margin-left:10px">
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input type="text" class="  search-query form-control" placeholder="Pretraga" asp-for="@Model.SearchString" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-danger" type="button" onclick="document.getElementById('formIndex').submit()">
+                                    <span class="fas fa-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="col-xs-12 col-sm-9 col-sm-offset-3">
             <p class="pull-left visible-xs" style="margin-top:8px;margin-left:-10px;">
                 <button type="button" class="btn btn-default btn-sm" data-toggle="offcanvas"><i class="fas fa-filter"></i></button>
             </p>
-            <div class="canvas-body">
-                Tijelo
+
+           
+
+            <!--Ovdje tijelo-->
+
+            <div class="canvas-body" style="width:100%; margin-top:40px; margin-left:0%;">
+
+                <!--Ovdje element nekretnina-->
+                @for (int i = 0; i < Model.Nekretnine.Count(); i++)
+                {
+                    <div class="container-fluid">
+                        <div class="row overflow-hidden thumbnail flex-sm">
+                            <div class="col-sm-4 col-xs-9">
+                                @if (Model.Nekretnine.ElementAt(i).CoverImgUrl == null)
+                                {
+                                    <img src="~/images/randHouse.jpg" style="width:220px;height:150px; margin-bottom:12px;" />
+                                }
+                                else
+                                {
+                                    <img src="@Model.Nekretnine.ElementAt(i).CoverImgUrl" style="width:220px;height:150px;margin-bottom:12px;" />
+                                }
+                                    <h6>
+                                       @Model.Nekretnine.ElementAt(i).Tip.ImeTipa
+                                    </h6>
+                            </div>
+                            <div class="col-sm-5 col-xs-9 grey-border-lg-screen">
+                                <h4 style="margin-top:5px;">@Model.Nekretnine.ElementAt(i).Naslov</h4>
+                                <h6 style="color:darkgray"><i class="fa fa-map-marker"></i>&nbsp;@Model.Nekretnine.ElementAt(i).Lokacija</h6>
+
+                                <br />
+                                <span style="font-size:12px;">Dostupno od</span><br />
+                                <div class='input-group date'>
+                                    <span class="input-group-addon input-sm">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                    <input readonly type='text' class="form-control input-sm" asp-for="@Model.Nekretnine.ElementAt(i).DostupnoOd" style="width:125px;font-size:11px;" />
+                                </div>
+                                <span style="font-size:12px;">do</span><br />
+                                <div class='input-group date' style="margin-bottom:20px;">
+                                    <span class="input-group-addon input-sm">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                    <input readonly type='text' class="form-control input-sm" asp-for="@Model.Nekretnine.ElementAt(i).DostupnoDo" style="width:125px;font-size:11px;" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3" style="text-align:center; color:seagreen">
+                                <h4 style="margin-bottom:3px">BAM&nbsp;&nbsp;@Model.Nekretnine.ElementAt(i).Cijena</h4>
+                                <sup style="color:darkseagreen">@Model.Nekretnine.ElementAt(i).NacinIznajmljivanja.Naziv</sup>
+                                <h4 style="margin-top:4px;">m<sup>2</sup>&nbsp;&nbsp;@Model.Nekretnine.ElementAt(i).Povrsina</h4>
+                                <br /><br />
+                                <button type="submit" class="custom-btn fill" style="width:65%;height:38px; line-height:10px;">Više</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+
+                <!-- pager -->
+                <div class="col-xs-12 col-sm-9 col-sm-offset-3">
+                    @if (Model.Pager.EndPage > 1)
+                    {
+                        <ul class="pagination">
+                            @if (Model.Pager.CurrentPage > 1)
+                            {
+                                <li>
+                                    <a href="#" onclick="goToFirst()">Prva</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="goToPrevious()">Prethodna</a>
+                                </li>
+                            }
+
+                            @for (var pagee = Model.Pager.StartPage; pagee <= Model.Pager.EndPage; pagee++)
+                            {
+                                <li class="@(pagee == Model.Pager.CurrentPage ? "active" : "")">
+                                    <a href="#" onclick="goToPage(@pagee)">@pagee</a>
+                                </li>
+                            }
+
+                            @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                            {
+                                <li>
+                                    <a href="#" onclick="goToNext()">Sledeća</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="goToLast()">Posljednja</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
             </div>
         </div>
 
@@ -168,142 +299,28 @@
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/offcanvas.js"></script>
-
-@*Sklonit kasnije...*@
+<script src="~/js/checkbtns.js"></script>
+@*Ovo mora ovdje jer pristupa modelu...*@
 <script>
-    function changeActiveKuca(radioBtn) {
-        var kucaIcons = document.getElementsByClassName('kucaIcons')[0];
-        if (kucaIcons.classList.contains('fa-square')) {
-            kucaIcons.classList.remove('fa-square');
-            kucaIcons.classList.add('fa-check-square');
-        }
-        else {
-            kucaIcons.classList.remove('fa-check-square');
-            kucaIcons.classList.add('fa-square');
-        }
-       // document.getElementById('formFilter').submit();
+    function goToNext() {
+        document.getElementById("CurrPage").value = @Model.Pager.CurrentPage+1;
+        alert(@Model.Pager.CurrentPage+' ' + document.getElementById("CurrPage").value);
+        document.getElementById("formIndex").submit();
     }
-
-    function changeActiveStan(radioBtn) {
-        var stanIcons = document.getElementsByClassName('stanIcons')[0];
-        if (stanIcons.classList.contains('fa-square')) {
-            stanIcons.classList.remove('fa-square');
-            stanIcons.classList.add('fa-check-square');
-        }
-        else {
-            stanIcons.classList.remove('fa-check-square');
-            stanIcons.classList.add('fa-square');
-        }
-      //  document.getElementById('formFilter').submit();
+    function goToPrevious() {
+        document.getElementById("CurrPage").value = @Model.Pager.CurrentPage-1;
+        document.getElementById("formIndex").submit();
     }
-
-    function changeActiveSoba(radioBtn) {
-        var sobaIcons = document.getElementsByClassName('sobaIcons')[0];
-        if (sobaIcons.classList.contains('fa-square')) {
-            sobaIcons.classList.remove('fa-square');
-            sobaIcons.classList.add('fa-check-square');
-        }
-        else {
-            sobaIcons.classList.remove('fa-check-square');
-            sobaIcons.classList.add('fa-square');
-        }
-      //  document.getElementById('formFilter').submit();
-
+    function goToFirst() {
+        document.getElementById("CurrPage").value = 1;
+        document.getElementById("formIndex").submit();
     }
-
-    function changeActiveApartman(radioBtn) {
-        var apartmanIcons = document.getElementsByClassName('apartmanIcons')[0];
-        if (apartmanIcons.classList.contains('fa-square')) {
-            apartmanIcons.classList.remove('fa-square');
-            apartmanIcons.classList.add('fa-check-square');
-        }
-        else {
-            apartmanIcons.classList.remove('fa-check-square');
-            apartmanIcons.classList.add('fa-square');
-        }
+    function goToLast() {
+        document.getElementById("CurrPage").value = @Model.Pager.TotalPages;
+        document.getElementById("formIndex").submit();
     }
-
-    function changeActiveKrevet(radioBtn) {
-        var krevetIcons = document.getElementsByClassName('krevetIcons')[0];
-        if (krevetIcons.classList.contains('fa-square')) {
-            krevetIcons.classList.remove('fa-square');
-            krevetIcons.classList.add('fa-check-square');
-        }
-        else {
-            krevetIcons.classList.remove('fa-check-square');
-            krevetIcons.classList.add('fa-square');
-        }
-    }
-
-    function changeActiveGaraza(radioBtn) {
-        var garazaIcons = document.getElementsByClassName('garazaIcons')[0];
-        if (garazaIcons.classList.contains('fa-square')) {
-            garazaIcons.classList.remove('fa-square');
-            garazaIcons.classList.add('fa-check-square');
-        }
-        else {
-            garazaIcons.classList.remove('fa-check-square');
-            garazaIcons.classList.add('fa-square');
-        }
-    }
-
-    function changeActiveVikendica(radioBtn) {
-        var vikendicaIcons = document.getElementsByClassName('vikendicaIcons')[0];
-        if (vikendicaIcons.classList.contains('fa-square')) {
-            vikendicaIcons.classList.remove('fa-square');
-            vikendicaIcons.classList.add('fa-check-square');
-        }
-        else {
-            vikendicaIcons.classList.remove('fa-check-square');
-            vikendicaIcons.classList.add('fa-square');
-        }
-    }
-
-    function changeActiveOstalo(radioBtn) {
-        var ostaloIcons = document.getElementsByClassName('ostaloIcons')[0];
-        if (ostaloIcons.classList.contains('fa-square')) {
-            ostaloIcons.classList.remove('fa-square');
-            ostaloIcons.classList.add('fa-check-square');
-        }
-        else {
-            ostaloIcons.classList.remove('fa-check-square');
-            ostaloIcons.classList.add('fa-square');
-        }
-    }
-
-    function changeActivePoSatu(radioBtn) {
-        var poSatuIcons = document.getElementsByClassName('poSatuIcons')[0];
-        if (poSatuIcons.classList.contains('fa-square')) {
-            poSatuIcons.classList.remove('fa-square');
-            poSatuIcons.classList.add('fa-check-square');
-        }
-        else {
-            poSatuIcons.classList.remove('fa-check-square');
-            poSatuIcons.classList.add('fa-square');
-        }
-    }
-
-    function changeActivePoDanu(radioBtn) {
-        var poDanuIcons = document.getElementsByClassName('poDanuIcons')[0];
-        if (poDanuIcons.classList.contains('fa-square')) {
-            poDanuIcons.classList.remove('fa-square');
-            poDanuIcons.classList.add('fa-check-square');
-        }
-        else {
-            poDanuIcons.classList.remove('fa-check-square');
-            poDanuIcons.classList.add('fa-square');
-        }
-    }
-
-    function changeActivePoMjesecu(radioBtn) {
-        var poMjesecuIcons = document.getElementsByClassName('poMjesecuIcons')[0];
-        if (poMjesecuIcons.classList.contains('fa-square')) {
-            poMjesecuIcons.classList.remove('fa-square');
-            poMjesecuIcons.classList.add('fa-check-square');
-        }
-        else {
-            poMjesecuIcons.classList.remove('fa-check-square');
-            poMjesecuIcons.classList.add('fa-square');
-        }
+    function goToPage(pagee) {
+        document.getElementById("CurrPage").value = pagee;
+        document.getElementById("formIndex").submit();
     }
 </script>

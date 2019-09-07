@@ -21,5 +21,6 @@ namespace ITP1.Data
         public DbSet<Marker> Markeri { get; set; }
         public DbSet<Komentar> Komentari { get; set; }
         public DbSet<NekretninaImg> NekretninaImgs { get; set; }
+        public DbSet<NacinIznajmljivanja> NacinIznajmljivnja { get; set; }
     }
 }

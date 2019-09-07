@@ -32,6 +32,10 @@ footer {
     .canvas-body {
         margin-left:30%;
     }
+
+    .grey-border-lg-screen {
+        border-right: 1px solid lightgrey;
+    }
 }
 
     @media screen and (max-width: 767px) {
@@ -74,4 +78,6 @@ footer {
             width: 50%; /* 6 columns */
             margin-left: 0px; /*Ovdje*/
         }
+
+
     }
