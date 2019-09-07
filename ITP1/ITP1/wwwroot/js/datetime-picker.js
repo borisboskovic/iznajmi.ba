@@ -908,9 +908,9 @@
                 }
             },
 
-            /**
-             * Hides the widget. Possibly will emit dp.hide
-             */
+            /////**
+            //// * Hides the widget. Possibly will emit dp.hide
+            //// */
             hide = function () {
                 var transitioning = false;
                 if (!widget) {
@@ -1197,9 +1197,9 @@
                 return false;
             },
 
-            /**
-             * Shows the widget. Possibly will emit dp.show and dp.change
-             */
+            /////**
+            //// * Shows the widget. Possibly will emit dp.show and dp.change
+            //// */
             show = function () {
                 var currentMoment,
                     useCurrentGranularity = {
@@ -1263,9 +1263,9 @@
                 return picker;
             },
 
-            /**
-             * Shows or hides the widget
-             */
+            /////**
+            //// * Shows or hides the widget
+            //// */
             toggle = function () {
                 return (widget ? hide() : show());
             },
@@ -2303,11 +2303,11 @@
             update();
             return picker;
         };
-        /**
-         * Returns the component's model current viewDate, a moment object or null if not set. Passing a null value unsets the components model current moment. Parsing of the newDate parameter is made using moment library with the options.format and options.useStrict components configuration.
-         * @param {Takes string, viewDate, moment, null parameter.} newDate
-         * @returns {viewDate.clone()}
-         */
+        ///////**
+        ////// * Returns the component's model current viewDate, a moment object or null if not set. Passing a null value unsets the components model current moment. Parsing of the newDate parameter is made using moment library with the options.format and options.useStrict components configuration.
+        ////// * @param {Takes string, viewDate, moment, null parameter.} newDate
+        ////// * @returns {viewDate.clone()}
+        ////// */
         picker.viewDate = function (newDate) {
             if (arguments.length === 0) {
                 return viewDate.clone();
@@ -2400,11 +2400,11 @@
      * documents the function and classes that are added to jQuery by this plug-in.
      * @memberOf jQuery
      */
-    /**
-     * Show comments
-     * @class datetimepicker
-     * @memberOf jQuery.fn
-     */
+    ///////**
+    ////// * Show comments
+    ////// * @class datetimepicker
+    ////// * @memberOf jQuery.fn
+    ////// */
     $.fn.datetimepicker = function (options) {
         options = options || {};
 

@@ -4,14 +4,16 @@ using ITP1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ITP1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190904211308_NacinIznajmljivanjaTable")]
+    partial class NacinIznajmljivanjaTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,7 +121,9 @@ namespace ITP1.Data.Migrations
 
                     b.Property<int>("MarkerId");
 
-                    b.Property<int>("NacinIznajmljivanjaId");
+                    b.Property<string>("NacinIznajmljivanjaId");
+
+                    b.Property<int?>("NacinIznajmljivanjaId1");
 
                     b.Property<string>("Naslov");
 
@@ -135,7 +139,7 @@ namespace ITP1.Data.Migrations
 
                     b.HasIndex("MarkerId");
 
-                    b.HasIndex("NacinIznajmljivanjaId");
+                    b.HasIndex("NacinIznajmljivanjaId1");
 
                     b.HasIndex("TipId");
 
@@ -148,13 +152,11 @@ namespace ITP1.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("IsCoverImg");
-
                     b.Property<int>("NekretninaId");
 
-                    b.Property<string>("PublicId");
+                    b.Property<int>("PublicId");
 
-                    b.Property<string>("Url");
+                    b.Property<int>("Url");
 
                     b.HasKey("Id");
 
@@ -355,8 +357,7 @@ namespace ITP1.Data.Migrations
 
                     b.HasOne("ITP1.Data.Models.NacinIznajmljivanja", "NacinIznajmljivanja")
                         .WithMany()
-                        .HasForeignKey("NacinIznajmljivanjaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("NacinIznajmljivanjaId1");
 
                     b.HasOne("ITP1.Data.Models.Tip", "Tip")
                         .WithMany()

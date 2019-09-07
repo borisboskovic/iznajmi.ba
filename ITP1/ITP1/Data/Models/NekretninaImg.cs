@@ -8,9 +8,9 @@ namespace ITP1.Data.Models
     public class NekretninaImg
     {
         public int Id { get; set; }
-        public int Url { get; set; }
-        public int PublicId { get; set; }
-
+        public String Url { get; set; }
+        public String PublicId { get; set; }
+        public bool IsCoverImg { get; set; }
 
         public int NekretninaId { get; set; }
         

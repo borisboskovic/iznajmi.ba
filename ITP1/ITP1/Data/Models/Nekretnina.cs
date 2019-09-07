@@ -20,11 +20,12 @@ namespace ITP1.Data.Models
         public int TipId { get; set; }
         public int KorisnikId { get; set; }
         public int MarkerId { get; set; }
-        //public int NekretnidaImgId { get; set; }
+        public int NacinIznajmljivanjaId { get; set; }
 
-       // public NekretninaImg Slike { get; set; }
+        public NekretninaImg CoverImg { get; set; }
         public Marker Marker { get; set; }
         public Tip Tip { get; set; }
         public Korisnik Korisnik { get; set; }
+        public NacinIznajmljivanja NacinIznajmljivanja { get; set; }
     }
 }

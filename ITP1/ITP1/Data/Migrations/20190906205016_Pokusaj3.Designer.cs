@@ -4,14 +4,16 @@ using ITP1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ITP1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190906205016_Pokusaj3")]
+    partial class Pokusaj3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,6 +125,8 @@ namespace ITP1.Data.Migrations
 
                     b.Property<string>("Naslov");
 
+                    b.Property<int>("NekretninaImgId");
+
                     b.Property<string>("Opis");
 
                     b.Property<int>("Povrsina");
@@ -148,17 +152,17 @@ namespace ITP1.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("IsCoverImg");
-
                     b.Property<int>("NekretninaId");
 
-                    b.Property<string>("PublicId");
+                    b.Property<int?>("NekretninaId1");
 
-                    b.Property<string>("Url");
+                    b.Property<int>("PublicId");
+
+                    b.Property<int>("Url");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NekretninaId");
+                    b.HasIndex("NekretninaId1");
 
                     b.ToTable("NekretninaImgs");
                 });
@@ -368,8 +372,7 @@ namespace ITP1.Data.Migrations
                 {
                     b.HasOne("ITP1.Data.Models.Nekretnina", "Nekretnina")
                         .WithMany()
-                        .HasForeignKey("NekretninaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("NekretninaId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
