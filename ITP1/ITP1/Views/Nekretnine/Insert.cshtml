@@ -1,0 +1,106 @@
+﻿@model ITP1.Models.NekretninaInsertModel
+
+@{
+    ViewData["Title"] = "Dodavanje nekretnine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Nekretnine" asp-action="Insert" method="get">
+
+    <div class="col-md-12 container">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Naslov" class="control-label"></label>
+                <input asp-for="Naslov" class="form-control" />
+                <span asp-validation-for="Naslov" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lokacija" class="control-label"></label>
+                <input asp-for="Lokacija" class="form-control" />
+                <span asp-validation-for="Lokacija" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cijena" class="control-label"></label>
+                <input asp-for="Cijena" class="form-control" />
+                <span asp-validation-for="Cijena" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Povrsina" class="control-label"></label>
+                <input asp-for="Povrsina" class="form-control" />
+                <span asp-validation-for="Povrsina" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="DostupnoOd" class="control-label"></label>
+                <input asp-for="DostupnoOd" class="form-control" />
+                <span asp-validation-for="DostupnoOd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DostupnoDo" class="control-label"></label>
+                <input asp-for="DostupnoDo" class="form-control" />
+                <span asp-validation-for="DostupnoDo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => Model.TipId, htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownListFor(x => Model.TipId, new SelectList(Model.Tipovi, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => Model.NacinIznajmljivanjaId, htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownListFor(x => Model.NacinIznajmljivanjaId, new SelectList(Model.NaciniIznajmljivanja, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Opis" class="control-label"></label>
+                <textarea asp-for="Opis" class="form-control"></textarea>
+                <span asp-validation-for="Opis" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <label class="control-label">Lokacija nekretnine</label>
+        <div id="map" style="height:500px" class="img-responsive img-rounded"></div>
+    </div>
+
+    <script>
+        var map;
+        var marker;
+
+        function centerToUsersLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    function success(position) {
+                        var pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        map.setCenter(pos);
+                        map.setZoom(12);
+                        marker.setPosition(pos);
+                    }
+                );
+            }
+        }
+
+        function initMap() {
+            centerToUsersLocation();
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 43.823508, lng: 18.374364 },
+                zoom: 7
+            });
+            marker = new google.maps.Marker({
+                position: { lat: 43.823508, lng: 18.374364 },
+                map: map,
+                draggable: true,
+                title: "Lokacija"
+            });
+        }
+    </script>
+
+</form>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwk7IJwqt3KZ-DiPXW1zAP-tNguGFYy3o&callback=initMap"></script>

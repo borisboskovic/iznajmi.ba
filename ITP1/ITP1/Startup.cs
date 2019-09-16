@@ -41,7 +41,7 @@ namespace ITP1
             services.AddSingleton(Configuration);
             services.AddScoped<IKorisnik, KorisnikService>();
             services.AddScoped<INekretnina, NekretninaService>();
-
+            services.AddTransient<NekretnineRepository, NekretnineRepository>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
