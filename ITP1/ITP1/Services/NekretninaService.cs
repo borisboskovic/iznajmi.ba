@@ -16,8 +16,31 @@ namespace ITP1.Services
         {
             _context = context;
         }
-        public void AddNekretnina(Nekretnina nekretnina)
+        public void AddNekretnina(NekretninaInsertModel insertModel)
         {
+            var tip = _context.Tipovi.Where(t => t.Id == insertModel.TipId).FirstOrDefault();
+            var nacinIznajmljivanja = _context.NacinIznajmljivnja.Where(n => n.Id == insertModel.NacinIznajmljivanjaId).FirstOrDefault();
+            var korisnik = _context.Korisnici.Where(kor => kor.UserId == insertModel.UserId).FirstOrDefault();
+            Marker marker = new Marker()
+            {
+                Lat = insertModel.Latitude,
+                Lng = insertModel.Longitude
+            };
+            _context.Markeri.Add(marker);
+            Nekretnina nekretnina = new Nekretnina()
+            {
+                Naslov = insertModel.Naslov,
+                Lokacija = insertModel.Lokacija,
+                Cijena = insertModel.Cijena,
+                Povrsina = insertModel.Povrsina,
+                DostupnoOd = insertModel.DostupnoOd,
+                DostupnoDo = insertModel.DostupnoDo,
+                Opis = insertModel.Opis,
+                NacinIznajmljivanja=nacinIznajmljivanja,
+                Tip=tip,
+                Marker=marker,
+                Korisnik=korisnik
+            };
             _context.Nekretnine.Add(nekretnina);
             _context.SaveChanges();
         }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using ITP1.Data;
 using ITP1.Data.Models;
 using ITP1.Models;
+using System.Security.Claims;
 
 namespace ITP1.Controllers
 {
@@ -38,7 +39,15 @@ namespace ITP1.Controllers
         public IActionResult Insert()
         {
             var model = _repo.CreateNekretnina();
+            model.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Insert(NekretninaInsertModel model)
+        {
+            _nekretinina.AddNekretnina(model);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

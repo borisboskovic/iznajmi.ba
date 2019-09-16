@@ -41,8 +41,10 @@ namespace ITP1.Models
         public int NacinIznajmljivanjaId { get; set; }
         public IEnumerable<SelectListItem> NaciniIznajmljivanja { get; set; }
 
-        public decimal Latitude { get; set; }
+        public double Latitude { get; set; }
 
-        public decimal Longitude { get; set; }
+        public double Longitude { get; set; }
+
+        public string UserId { get; set; }
     }
 }
