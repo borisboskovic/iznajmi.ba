@@ -7,7 +7,7 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-controller="Nekretnine" asp-action="Insert" method="post">
+<form asp-controller="Nekretnine" asp-action="Insert" method="post" enctype="multipart/form-data">
 
     <div class="form-control hidden">
         <label asp-for="UserId" class="control-label"></label>
@@ -32,30 +32,42 @@
                 <span asp-validation-for="Cijena" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Povrsina" class="control-label"></label>
-                <input asp-for="Povrsina" class="form-control" />
-                <span asp-validation-for="Povrsina" class="text-danger"></span>
+                @Html.LabelFor(x => Model.NacinIznajmljivanjaId, htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownListFor(x => Model.NacinIznajmljivanjaId, new SelectList(Model.NaciniIznajmljivanja, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
             </div>
+            
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label asp-for="DostupnoOd" class="control-label"></label>
-                <input asp-for="DostupnoOd" class="form-control" />
-                <span asp-validation-for="DostupnoOd" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DostupnoDo" class="control-label"></label>
-                <input asp-for="DostupnoDo" class="form-control" />
-                <span asp-validation-for="DostupnoDo" class="text-danger"></span>
+                <label asp-for="Povrsina" class="control-label"></label>
+                <input asp-for="Povrsina" class="form-control" />
+                <span asp-validation-for="Povrsina" class="text-danger"></span>
             </div>
             <div class="form-group">
                 @Html.LabelFor(x => Model.TipId, htmlAttributes: new { @class = "control-label" })
                 @Html.DropDownListFor(x => Model.TipId, new SelectList(Model.Tipovi, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
             </div>
             <div class="form-group">
-                @Html.LabelFor(x => Model.NacinIznajmljivanjaId, htmlAttributes: new { @class = "control-label" })
-                @Html.DropDownListFor(x => Model.NacinIznajmljivanjaId, new SelectList(Model.NaciniIznajmljivanja, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+        <label asp-for="DostupnoOd" class="control-label"></label>
+            <div class='input-group date' id='datetimepicker3'>
+                <span class="input-group-addon input-sm">
+                    <span class="fa fa-calendar"></span>
+                </span>
+                <input type='text' class="form-control " asp-for="@Model.DostupnoOd" value="" />
             </div>
+            <span asp-validation-for="DostupnoOd" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DostupnoDo" class="control-label"></label>
+            <div class='input-group date' id='datetimepicker4'>
+                <span class="input-group-addon input-sm">
+                    <span class="fa fa-calendar"></span>
+                </span>
+                <input type='text' class="form-control" asp-for="@Model.DostupnoDo" value="" />
+            </div>
+            <span asp-validation-for="DostupnoDo" class="text-danger"></span>
+        </div>
+
         </div>
         <div class="col-md-4">
             <div class="form-group">
@@ -72,20 +84,87 @@
 
         <div class="form-group col-md-6">
             <label asp-for="Latitude" class="control-label"></label>
-            <input asp-for="Latitude" type="text" disabled class="form-control" id="latitude-value" />
+            <input asp-for="Latitude" type="text" readonly class="form-control" id="latitude-value" />
         </div>
         <div class="form-group col-md-6">
             <label asp-for="Longitude" class="control-label"></label>
-            <input asp-for="Longitude" type="text" disabled class="form-control" id="longitude-value" />
+            <input asp-for="Longitude" type="text" readonly class="form-control" id="longitude-value" />
         </div>
 
-        <div class="btn-group col-md-8 col-md-push-2" style="margin:10px;">
-            <input type="submit" name="Dodaj" value="Dodaj" class="btn-lg btn-primary col-md-6" />
-            <input type="button" name="Odustani" value="Odustani" class="btn-lg btn-danger col-md-6"/>
+
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label asp-for="ImgFiles"><br /><br /><span style="cursor:pointer" class="custom-btn fill">Dodaj slike (maksimalno 6)</span></label>
+                <input type="file" asp-for="ImgFiles" style="opacity:0" accept="image/jpeg, image/png" multiple class="input-group" onchange="readURL(this);" /><br />
+                <div class="thumbnail col-md-4" id="img1-cont" style="display:none">
+                    <img id="img1" src="#" alt="your image" style="display:none" />
+                </div>
+                <div class="thumbnail col-md-4" id="img2-cont" style="display:none">
+                    <img id="img2" src="#" alt="your image" style="display:none" />
+                </div>
+                <div class="thumbnail col-md-4" id="img3-cont" style="display:none">
+                    <img id="img3" src="#" alt="your image" style="display:none" />
+                </div>
+                <div class="thumbnail col-md-4" id="img4-cont" style="display:none">
+                    <img id="img4" src="#" alt="your image" style="display:none" />
+                </div>
+                <div class="thumbnail col-md-4" id="img5-cont" style="display:none">
+                    <img id="img5" src="#" alt="your image" style="display:none" />
+                </div>
+                <div class="thumbnail col-md-4" id="img6-cont" style="display:none">
+                    <img id="img6" src="#" alt="your image" style="display:none" />
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="btn-group col-md-4 col-md-push-2" style="margin:10px;">
+            <input type="submit" name="Dodaj" value="Dodaj" class="custom-btn offset" style="width:100%" />
+        </div>
+        <div class="btn-group col-md-4 col-md-push-2" style="margin:10px;">
+            <input type="button" name="Odustani" value="Odustani" class="custom-btn offset-negative" style="width:100%" />
         </div>
     </div>
 
 </form>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/offcanvas.js"></script>
+
+<script type="text/javascript">
+    function readURL(input) {
+        if (input.files.length > 6) {
+            alert("Ne mozete unijeti vise od 6 slika!");
+        }
+        for (var i = 0; i < 6; i++) {
+            var id = "#img" + (i + 1) + "-cont";
+            $(id)
+                .attr('style', 'display: none');
+        }
+        var counter = 1;
+        for (var i = 0; i < input.files.length; i++) {
+            if (input.files && input.files[i]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var contId = "#img" + counter+"-cont";
+                    $(contId)
+                        .attr('style', 'display: block');
+                    var id = "#img" + counter++;
+                    $(id)
+                        .attr('src', e.target.result)
+                        .attr('style', 'display: block')
+                        .width(200)
+                        .height(200);
+                };
+
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+    }
+</script>
 
 <script>
     var map;

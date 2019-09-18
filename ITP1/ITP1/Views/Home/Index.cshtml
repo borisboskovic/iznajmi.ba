@@ -234,14 +234,28 @@
                                     <span class="input-group-addon input-sm">
                                         <span class="fa fa-calendar"></span>
                                     </span>
-                                    <input readonly type='text' class="form-control input-sm" asp-for="@Model.Nekretnine.ElementAt(i).DostupnoOd" style="width:125px;font-size:11px;" />
+                                    @if (Model.Nekretnine.ElementAt(i).DostupnoOd == DateTime.MinValue)
+                                    {
+                                        <input readonly type='text' class="form-control input-sm" value="" style="width:125px;font-size:11px;" />
+                                    }
+                                    else
+                                    {
+                                        <input readonly type='text' class="form-control input-sm" asp-for="@Model.Nekretnine.ElementAt(i).DostupnoOd" style="width:125px;font-size:11px;" />
+                                    }
                                 </div>
                                 <span style="font-size:12px;">do</span><br />
                                 <div class='input-group date' style="margin-bottom:20px;">
                                     <span class="input-group-addon input-sm">
                                         <span class="fa fa-calendar"></span>
                                     </span>
-                                    <input readonly type='text' class="form-control input-sm" asp-for="@Model.Nekretnine.ElementAt(i).DostupnoDo" style="width:125px;font-size:11px;" />
+                                    @if (Model.Nekretnine.ElementAt(i).DostupnoDo == DateTime.MaxValue)
+                                    {
+                                        <input readonly type='text' class="form-control input-sm" value="" style="width:125px;font-size:11px;" />
+                                    }
+                                    else
+                                    {
+                                        <input readonly type='text' class="form-control input-sm" asp-for="@Model.Nekretnine.ElementAt(i).DostupnoDo" style="width:125px;font-size:11px;" />
+                                    }
                                 </div>
                             </div>
                             <div class="col-sm-3" style="text-align:center; color:seagreen">

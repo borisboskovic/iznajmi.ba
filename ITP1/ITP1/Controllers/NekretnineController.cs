@@ -7,6 +7,7 @@ using ITP1.Data;
 using ITP1.Data.Models;
 using ITP1.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ITP1.Controllers
 {
@@ -36,18 +37,47 @@ namespace ITP1.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Insert()
         {
-            var model = _repo.CreateNekretnina();
-            model.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return View(model);
+                var model = _repo.CreateNekretnina();
+                model.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                return View(model);
         }
 
         [HttpPost]
-        public IActionResult Insert(NekretninaInsertModel model)
+        [Authorize]
+        public async Task<IActionResult> Insert(NekretninaInsertModel model)
         {
-            _nekretinina.AddNekretnina(model);
-            return RedirectToAction("Index", "Home");
+            if (ModelState.IsValid)
+            {
+                 await _nekretinina.AddNekretnina(model);
+                return RedirectToAction("Index", "Home");
+            }
+            var mod = _repo.CreateNekretnina();
+            mod.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return View(mod);
+        }
+
+
+        protected Boolean IsAuthenticated()
+        {
+            if (this.User.FindFirst(ClaimTypes.NameIdentifier).Value != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        protected Boolean IsAuthorized(string id)
+        {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (userId.ToString() == id)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

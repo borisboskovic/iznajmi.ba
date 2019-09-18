@@ -1,9 +1,13 @@
-﻿using ITP1.Data;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using ITP1.Data;
 using ITP1.Data.Models;
 using ITP1.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,15 +20,15 @@ namespace ITP1.Services
         {
             _context = context;
         }
-        public void AddNekretnina(NekretninaInsertModel insertModel)
+        public async Task AddNekretnina(NekretninaInsertModel insertModel)
         {
             var tip = _context.Tipovi.Where(t => t.Id == insertModel.TipId).FirstOrDefault();
             var nacinIznajmljivanja = _context.NacinIznajmljivnja.Where(n => n.Id == insertModel.NacinIznajmljivanjaId).FirstOrDefault();
             var korisnik = _context.Korisnici.Where(kor => kor.UserId == insertModel.UserId).FirstOrDefault();
             Marker marker = new Marker()
             {
-                Lat = insertModel.Latitude,
-                Lng = insertModel.Longitude
+                Lat = double.Parse(insertModel.Latitude, CultureInfo.InvariantCulture),
+                Lng = double.Parse(insertModel.Longitude, CultureInfo.InvariantCulture)
             };
             _context.Markeri.Add(marker);
             Nekretnina nekretnina = new Nekretnina()
@@ -33,8 +37,8 @@ namespace ITP1.Services
                 Lokacija = insertModel.Lokacija,
                 Cijena = insertModel.Cijena,
                 Povrsina = insertModel.Povrsina,
-                DostupnoOd = insertModel.DostupnoOd,
-                DostupnoDo = insertModel.DostupnoDo,
+                DostupnoOd = insertModel.DostupnoOd ?? DateTime.MinValue,
+                DostupnoDo = insertModel.DostupnoDo ?? DateTime.MaxValue,
                 Opis = insertModel.Opis,
                 NacinIznajmljivanja=nacinIznajmljivanja,
                 Tip=tip,
@@ -42,7 +46,66 @@ namespace ITP1.Services
                 Korisnik=korisnik
             };
             _context.Nekretnine.Add(nekretnina);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+
+            if (insertModel.ImgFiles != null)
+            {
+               await AddNekreninaImg(insertModel.ImgFiles, nekretnina.Id);
+            }
+        }
+
+        private async Task AddNekreninaImg(List<IFormFile> imgs, int nekretninaId)
+        {
+            List<NekretninaImg> nekretnineImgs = new List<NekretninaImg>();
+            for (int i = 0; i < imgs.Count; i++)
+            {
+                ImageUploadResult imgUplResults = await UpdateImgToCloudWithStreamAsync(imgs.ElementAt(i), nekretninaId, i.ToString());
+                if (imgUplResults != null)
+                {
+                    NekretninaImg nekretninaImg = new NekretninaImg()
+                    {
+                        NekretninaId = nekretninaId,
+                        Url = imgUplResults.Uri.ToString(),
+                        PublicId = imgUplResults.PublicId,
+                        IsCoverImg = i == 0 ? true : false,
+                    };
+
+                    //Neće add range iz nekog razloga
+                    String query = "Insert into NekretninaImgs (Url, PublicId, NekretninaId, IsCoverImg) Values('" + nekretninaImg.Url + "', '" + nekretninaImg.PublicId + "', "+nekretninaImg.NekretninaId+", " + (nekretninaImg.IsCoverImg == true ? 1 : 0) + ")";
+#pragma warning disable EF1000 // Possible SQL injection vulnerability.
+                    _context.Database.ExecuteSqlCommand(query);
+#pragma warning restore EF1000 // Possible SQL injection vulnerability.
+                    await _context.SaveChangesAsync();
+
+                }
+            }
+        }
+
+        public async Task<ImageUploadResult> UpdateImgToCloudWithStreamAsync(IFormFile formFile, int nekretninaId, string imgName)
+        {
+            Account account = new Account(
+                  "dysckfx4z",
+                  "146882857231366",
+                  "dOyF8Ue2EPJuNh73agNVjzKsxNk");
+
+            Cloudinary cloudinary = new Cloudinary(account);
+
+            if (formFile.Length > 0)
+            {
+                using (var stream = formFile.OpenReadStream())
+                {
+
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(formFile.FileName, stream),
+                        PublicId = @"Nekretnine/" + nekretninaId + "/" + imgName,
+                        Transformation = new Transformation().Width(400).Height(400).Crop("limit"),
+                    };
+                    var uploadResult = await cloudinary.UploadAsync(uploadParams);
+                    return uploadResult;
+                }
+            }
+            return null;
         }
 
         public Nekretnina GetNekretnina(int id)

@@ -9,7 +9,7 @@ namespace ITP1.Data
 {
     public interface INekretnina
     {
-        void AddNekretnina(NekretninaInsertModel insertModel);
+        Task AddNekretnina(NekretninaInsertModel insertModel);
         void UpdateNekretnina(Nekretnina nekretnina);
         Nekretnina GetNekretnina(int id);
         IEnumerable<Nekretnina> GetNekretnine(int pagenumber, int pagesize);

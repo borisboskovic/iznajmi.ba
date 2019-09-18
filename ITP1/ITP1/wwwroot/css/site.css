@@ -52,6 +52,14 @@
         box-shadow: 0 0 0 0 var(--hover), inset 6em 3.5em 0 0 var(--hover);
     }
 
+.offset-negative {
+    box-shadow: 0.3em 0.3em 0 0 var(--color), inset 0.3em 0.3em 0 0 var(--color);
+}
+
+    .offset-negative:hover, .offset-negative:focus {
+        box-shadow: 0 0 0 0 var(--hover), inset 6em 3.5em 0 0 var(--hover);
+    }
+
 .fill {
     --color: #5D8AA9;
     --hover: #5D8AA9;
@@ -88,6 +96,10 @@
     --color: #19bc8b;
     --hover: #393A35;
 }
+.offset-negative {
+    --color: #FFA260;
+    --hover: #393A35;
+}
 
 .custom-btn {
     color: var(--color);
@@ -108,7 +120,7 @@
     line-height: 1;
     margin: 0.5em;
     padding: 1em 2em;
-
+    
     font-weight:500;
 }
 
