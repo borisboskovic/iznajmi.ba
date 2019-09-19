@@ -48,24 +48,24 @@
                 @Html.DropDownListFor(x => Model.TipId, new SelectList(Model.Tipovi, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
             </div>
             <div class="form-group">
-        <label asp-for="DostupnoOd" class="control-label"></label>
-            <div class='input-group date' id='datetimepicker3'>
+        <label asp-for="DostupnoOdString" class="control-label"></label>
+            <div class='input-group date datetimepicker1'>
                 <span class="input-group-addon input-sm">
                     <span class="fa fa-calendar"></span>
                 </span>
-                <input type='text' class="form-control " asp-for="@Model.DostupnoOd" value="" />
+                <input type='text' class="form-control" asp-for="@Model.DostupnoOdString" value="" onkeydown="return false" />
             </div>
-            <span asp-validation-for="DostupnoOd" class="text-danger"></span>
+            <span asp-validation-for="DostupnoOdString" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="DostupnoDo" class="control-label"></label>
-            <div class='input-group date' id='datetimepicker4'>
+            <label asp-for="DostupnoDoString" class="control-label"></label>
+            <div class='input-group date datetimepicker1'>
                 <span class="input-group-addon input-sm">
                     <span class="fa fa-calendar"></span>
                 </span>
-                <input type='text' class="form-control" asp-for="@Model.DostupnoDo" value="" />
+                <input type='text' class="form-control" asp-for="@Model.DostupnoDoString" value="" onkeydown="return false"/>
             </div>
-            <span asp-validation-for="DostupnoDo" class="text-danger"></span>
+            <span asp-validation-for="DostupnoDoString" class="text-danger"></span>
         </div>
 
         </div>

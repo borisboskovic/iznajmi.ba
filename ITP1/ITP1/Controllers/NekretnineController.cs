@@ -8,6 +8,7 @@ using ITP1.Data.Models;
 using ITP1.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
 
 namespace ITP1.Controllers
 {
@@ -51,7 +52,14 @@ namespace ITP1.Controllers
         {
             if (ModelState.IsValid)
             {
-                 await _nekretinina.AddNekretnina(model);
+                DateTime dtOd = DateTime.MinValue;
+                DateTime dtDo = DateTime.MaxValue;
+                DateTime.TryParseExact(model.DostupnoOdString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtOd);
+                model.DostupnoOd = dtOd;
+                DateTime.TryParseExact(model.DostupnoDoString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtDo);
+                model.DostupnoDo = dtDo == DateTime.MinValue ? DateTime.MaxValue : dtDo;
+
+                await _nekretinina.AddNekretnina(model);
                 return RedirectToAction("Index", "Home");
             }
             var mod = _repo.CreateNekretnina();
@@ -60,24 +68,6 @@ namespace ITP1.Controllers
         }
 
 
-        protected Boolean IsAuthenticated()
-        {
-            if (this.User.FindFirst(ClaimTypes.NameIdentifier).Value != null)
-            {
-                return true;
-            }
-            return false;
-        }
-
-
-        protected Boolean IsAuthorized(string id)
-        {
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (userId.ToString() == id)
-            {
-                return true;
-            }
-            return false;
-        }
+        
     }
 }

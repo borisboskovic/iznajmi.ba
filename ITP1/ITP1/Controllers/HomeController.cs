@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ITP1.Models;
 using ITP1.Data.Models;
 using ITP1.Data;
+using System.Globalization;
 
 namespace ITP1.Controllers
 {
@@ -18,15 +19,21 @@ namespace ITP1.Controllers
             _nekretnina = nekretnina;
         }
 
-        //Dostupno do ne vraca kako treba
-        public IActionResult Index(/*int? page, */PocetnaModel pModel)
+        public IActionResult Index(PocetnaModel pModel)
         {
             Pager pager;
             IEnumerable<Nekretnina> nekretnine;
             if (pModel.Filter != null || pModel.NaciniIznajmljivanja != null || pModel.SviTipovi != null)
             {
-                pager = new Pager(_nekretnina.CountNekretnineWithFilters(pModel), (pModel.CurrPage == 0 ? 1 : pModel.CurrPage));
 
+                DateTime dtOd = DateTime.MinValue;
+                DateTime dtDo = DateTime.MaxValue;
+                DateTime.TryParseExact(pModel.Filter.DostupnoOdString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtOd);
+                pModel.Filter.DostupnoOd = dtOd;
+                DateTime.TryParseExact(pModel.Filter.DostupnoDoString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtDo);
+                pModel.Filter.DostupnoDo = dtDo;
+
+                pager = new Pager(_nekretnina.CountNekretnineWithFilters(pModel), (pModel.CurrPage == 0 ? 1 : pModel.CurrPage));
                 nekretnine = _nekretnina.GetAllNekretnineWithFilters(pager.CurrentPage, pager.PageSize, pModel);
 
             }
@@ -107,14 +114,6 @@ namespace ITP1.Controllers
 
 
             return View(pocetnaModel);
-        }
-
-
-
-        //Ovo akcija samo proba... nece biti ovako
-        public IActionResult Filter(PocetnaModel pocetnaModel)
-        {
-            return View("Index", pocetnaModel);
         }
 
 

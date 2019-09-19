@@ -190,7 +190,7 @@ namespace ITP1.Services
             {
                 nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
-                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
+                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
                                     .Include(k => k.Korisnik)
@@ -229,7 +229,7 @@ namespace ITP1.Services
             {
                 nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
-                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
+                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
                                     .Include(k => k.Korisnik)
@@ -242,7 +242,7 @@ namespace ITP1.Services
             {
                 nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
-                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
+                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
                                     .Include(k => k.Korisnik)
@@ -268,7 +268,7 @@ namespace ITP1.Services
             {
                 nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
-                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
+                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
                                     .Include(k => k.Korisnik)
@@ -310,7 +310,7 @@ namespace ITP1.Services
             {
                 return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
-                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
+                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
                                     .Count();
@@ -337,7 +337,7 @@ namespace ITP1.Services
             {
                 return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
-                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
+                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
                                     .Count();
@@ -346,7 +346,7 @@ namespace ITP1.Services
             {
                 return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
-                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
+                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
                                     .Count();
@@ -364,7 +364,7 @@ namespace ITP1.Services
             {
                 return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
-                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
+                                    .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
                                     .Count();

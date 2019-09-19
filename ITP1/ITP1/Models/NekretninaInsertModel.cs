@@ -24,11 +24,7 @@ namespace ITP1.Models
         [Required(ErrorMessage = "Obavezno polje")]
         public int Povrsina { get; set; }
 
-        [Display(Name ="Dostupno od")]
-        public DateTime? DostupnoOd { get; set; }
-
-        [Display(Name ="Dostupno do")]
-        public DateTime? DostupnoDo { get; set; }
+        
 
         public string Opis { get; set; }
 
@@ -51,5 +47,17 @@ namespace ITP1.Models
         public String Longitude { get; set; }
 
         public string UserId { get; set; }
+
+
+        [Display(Name = "Dostupno od")]
+        public DateTime? DostupnoOd { get; set; }
+
+        [Display(Name = "Dostupno do")]
+        public DateTime? DostupnoDo { get; set; }
+
+        [Display(Name = "Dostupno od")]
+        public String DostupnoOdString { get; set; }
+        [Display(Name = "Dostupno do")]
+        public String DostupnoDoString { get; set; }
     }
 }
