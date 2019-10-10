@@ -9,7 +9,7 @@
 
 <h4>Nekretnina</h4>
 <hr />
-<form asp-controller="Nekretnine" asp-action="Insert" method="post" enctype="multipart/form-data">
+<form asp-controller="Nekretnine" asp-action="Edit" method="post" enctype="multipart/form-data">
 
     <div class="form-control hidden">
         <label asp-for="KorisnikId" class="control-label"></label>
@@ -76,8 +76,8 @@
         <label class="control-label">Lokacija nekretnine</label>
         <div id="map" style="height:500px" class="img-responsive img-rounded"></div>
 
-            <div class="btn-group col-md-4 col-md-push-2" style="margin:10px;">
-            <input type="submit" name="Dodaj" value="Dodaj" class="custom-btn offset" style="width:100%" />
+        <div class="btn-group col-md-4 col-md-push-2" style="margin:10px;">
+            <input type="submit" name="Sačuvaj" value="Sačuvaj" class="custom-btn offset" style="width:100%" />
         </div>
         <div class="btn-group col-md-4 col-md-push-2" style="margin:10px;">
             <a href="@Url.Action("Index", "Home")">
