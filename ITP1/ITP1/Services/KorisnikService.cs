@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITP1.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITP1.Services
 {
@@ -148,7 +149,7 @@ namespace ITP1.Services
         {
             IEnumerable<Nekretnina> nekretnine;
 
-            nekretnine = _context.Nekretnine.Where(n => n.KorisnikId == korisnikId).ToList();
+            nekretnine = _context.Nekretnine.Where(n => n.KorisnikId == korisnikId).Include(nekretnina => nekretnina.NacinIznajmljivanja).ToList();
             List<NekretninaItem> nekretnine_item = new List<NekretninaItem>();
 
             foreach (var item in nekretnine)
@@ -156,6 +157,7 @@ namespace ITP1.Services
                 NekretninaItem nekretnina_item = new NekretninaItem()
                 {
                     Cijena = item.Cijena,
+                    Id = item.Id,
                     Naslov = item.Naslov,
                     Korisik = item.Korisnik,
                     Lokacija = item.Lokacija,

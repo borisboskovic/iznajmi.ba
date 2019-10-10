@@ -62,8 +62,10 @@
                                                     Dostupno od @Model.NekretninaItems.ElementAt(i).DostupnoOd do @Model.NekretninaItems.ElementAt(i).DostupnoDo
                                                 </p>
                                                 <p>
-                                                    Cijena @Model.NekretninaItems.ElementAt(i).Cijena KM
+                                                    Cijena @Model.NekretninaItems.ElementAt(i).Cijena KM <br /> @Model.NekretninaItems.ElementAt(i).NacinIznajmljivanja.Naziv
                                                 </p>
+
+                                                <a asp-controller="Nekretnine" asp-action="Edit" asp-route-id="@Model.NekretninaItems.ElementAt(i).Id">Izmjeni</a>
                                             </div>
                                         </div>
                                         }

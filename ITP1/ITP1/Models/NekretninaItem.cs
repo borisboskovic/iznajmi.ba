@@ -9,6 +9,7 @@ namespace ITP1.Models
     public class NekretninaItem
     {
         public Korisnik Korisik { get; set; }
+        public int Id { get; set; }
         public string Naslov { get; set; }
         public string Lokacija { get; set; }
         public double Cijena { get; set; }
