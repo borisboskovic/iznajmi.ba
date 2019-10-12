@@ -115,13 +115,16 @@ namespace ITP1.Services
 
         public void UpdateNekretnina(Nekretnina nekretnina)
         {
-            _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).KorisnikId = nekretnina.KorisnikId;
+            //_context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).KorisnikId = nekretnina.KorisnikId;
             _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).Lokacija = nekretnina.Lokacija;
-            _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).MarkerId = nekretnina.MarkerId;
+            //_context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).MarkerId = nekretnina.MarkerId;
             _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).Naslov = nekretnina.Naslov;
             _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).Opis = nekretnina.Opis;
             _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).Povrsina = nekretnina.Povrsina;
-            _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).TipId = nekretnina.TipId;
+            _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).Cijena = nekretnina.Cijena;
+            _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).DostupnoDo = nekretnina.DostupnoDo;
+            _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).DostupnoOd = nekretnina.DostupnoOd;
+            //_context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).TipId = nekretnina.TipId;
 
             _context.SaveChanges();
         }

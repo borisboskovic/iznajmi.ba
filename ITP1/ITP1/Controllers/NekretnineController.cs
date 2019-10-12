@@ -37,6 +37,14 @@ namespace ITP1.Controllers
             return View(nekretnina);
         }
 
+        [HttpPost]
+        public IActionResult Edit(Nekretnina nekretnina)
+        {
+            _nekretinina.UpdateNekretnina(nekretnina);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpGet]
         [Authorize]
         public IActionResult Insert()
