@@ -133,11 +133,11 @@
                         <div class='col-sm-2 col-xs-11'>
                             <div class="form-group">
                                 @*datetimepicker1 je klasa za lokalizaciju*@
-                                <div class='input-group date datetimepicker1' >
+                                <div class='input-group date datetimepicker1'>
                                     <span class="input-group-addon input-sm">
                                         <span class="fa fa-calendar"></span>
                                     </span>
-                                    <input type='text' class="form-control input-sm" asp-for="@Model.Filter.DostupnoOdString" onkeydown="return false"/>
+                                    <input type='text' class="form-control input-sm" asp-for="@Model.Filter.DostupnoOdString" onkeydown="return false" />
 
                                 </div>
                             </div>
@@ -169,9 +169,8 @@
                 <div class="orange-line"></div>
 
                 <br /><br /><br />
-                
-            </div>
 
+            </div>
 
             <!--Search bar-->
             <div class="col-xs-12 col-sm-9 col-sm-offset-3">
@@ -196,7 +195,7 @@
                 <button type="button" class="btn btn-default btn-sm" data-toggle="offcanvas"><i class="fas fa-filter"></i></button>
             </p>
 
-           
+
 
             <!--Ovdje tijelo-->
 
@@ -216,9 +215,9 @@
                                 {
                                     <img src="@Model.Nekretnine.ElementAt(i).CoverImgUrl" style="width:220px;height:150px;margin-bottom:12px;" />
                                 }
-                                    <h6>
-                                       @Model.Nekretnine.ElementAt(i).Tip.ImeTipa
-                                    </h6>
+                                <h6>
+                                    @Model.Nekretnine.ElementAt(i).Tip.ImeTipa
+                                </h6>
                             </div>
                             <div class="col-sm-5 col-xs-9 grey-border-lg-screen">
                                 <h4 style="margin-top:5px;">@Model.Nekretnine.ElementAt(i).Naslov</h4>

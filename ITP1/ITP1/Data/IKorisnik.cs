@@ -19,12 +19,17 @@ namespace ITP1.Data
         string GetAvatarImgUrl(int id);
         void UpdateKorisnik(Korisnik korisnik);
         IEnumerable<Korisnik> GetAll();
-        Double GetProsjecnaOcjena(int jedinice, int dvice, int trice, int cetvorke, int petice);
 
         //Foreign Key, username is email
         string GetUsernameFromAspNetUsers(string id);
         void AddAspNetUser(Microsoft.AspNetCore.Identity.IdentityUser user);
         string GetForeignKeyAspNetUsersId(string email);
         List<NekretninaItem> GetListaNekretninaZaKorisnika(int id);
+
+        Utisak GetUtisak(int korisnikId, int ocijenjeniKorisnikId);
+        List<Utisak> GetUtisci(int ocijenjeniKorisnikId, int loggedUser);
+        void AddUtisak(Utisak utisak);
+        int GetTotalNumberOcjena(int korisnikId);
+        Double GetProsjecnaOcjena(int korisnikId);
     }
 }

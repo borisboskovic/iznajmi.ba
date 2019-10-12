@@ -1,0 +1,387 @@
+﻿@model ITP1.Models.KorisnikProfil
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="thumbnail col-sm-10 col-sm-offset-1 col-xs-12">
+        <div>
+            <form asp-action="Details" asp-route-id="@Model.Id">
+                <div class="row">
+                    @Html.HiddenFor(model => model.UserId)
+                    @Html.HiddenFor(model => model.StrId)
+                    @Html.HiddenFor(model => model.ImgFile)
+                    @Html.HiddenFor(model => model.CurrentUserId)
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-sm-offset-1" style="margin-left:6%;">
+                        <div style="display:inline">
+                            <h2 style="margin-right:4px;display:inline">
+                                <i class="fas fa-star fa-lg" style="color:#FFDF00;vertical-align:-.27em"></i>
+                            </h2>
+                        </div>
+                        <div style="display:inline">
+                            <h2 style="display:inline">@Model.ProsjecnaOcjena</h2>
+                            <h4 style="display:inline">/5</h4>
+                            <h5 style="margin-left:60px; margin-top:-3px;">@Model.BrojOcjena</h5>
+                        </div>
+                        <div class="container" style="margin-top:15px;">
+                            <div class="col-md-3">
+                                @if (Model.AvatarImgUrl == null)
+                                {
+                                    <img id="myImg" src="~/images/defaultUser.png" alt="Unable to load image" class="" style="border-radius:100%; object-fit:cover; height:200px;width:200px;" />
+                                }
+                                else
+                                {
+                                    <img id="myImg" src="@Model.AvatarImgUrl" alt="Unable to load image" class="" style="border-radius:100%; object-fit:cover; height:200px;width:200px;" />
+                                }
+
+                            </div>
+                            <ul class="nav nav-tabs form-group col-md-4">
+                                <li><a data-toggle="tab" href="#nekretnine">Nekretnine</a></li>
+                                <li><a data-toggle="tab" href="#utisci">Utisci</a></li>
+                                <li  class="active"><a data-toggle="tab" href="#profil">Profil</a></li>
+                            </ul>
+                            <div class="tab-content  form-group col-md-6" style="border:1px solid #DFD2D2;">
+                                <div id="nekretnine" class="tab-pane fade">
+                                    <h3>Moje ponude</h3>
+                                    @for (int i = 0; i < Model.NekretninaItems.Count; i++)
+                                    {
+                                        <div style="border-style: outset; border-color:aquamarine; margin:5px;">
+                                            <h3 style="text-align:center;">@Model.NekretninaItems.ElementAt(i).Naslov</h3>
+                                            <div style="display:inline-block;">
+                                                @if (Model.NekretninaItems.ElementAt(i).CoverImgUrl == null)
+                                                {
+                                                    <img src="~/images/randHouse.jpg" style="width:220px;height:150px; margin-bottom:12px;" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="@Model.NekretninaItems.ElementAt(i).CoverImgUrl" style="width:220px;height:150px;margin-bottom:12px;" />
+                                                }
+                                            </div>
+                                            <div style="display:inline-block;">
+                                                <p>
+                                                    Dostupno od @Model.NekretninaItems.ElementAt(i).DostupnoOd do @Model.NekretninaItems.ElementAt(i).DostupnoDo
+                                                </p>
+                                                <p>
+                                                    Cijena @Model.NekretninaItems.ElementAt(i).Cijena BAM 
+                                                </p>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div id="utisci" class="tab-pane fade">
+                                    <input asp-for="@Model.LicniUtisak.Ocjena" type="hidden" id="ocjena"/>
+                                    <h3>Utisci</h3>
+                                    <div style="border:1px solid #DFD2D2; padding:25px;">
+                                        <input asp-for="@Model.LicniUtisak.Komentar" placeholder="Ostavite utisak..." class="form-control" style="font-size:15px; margin-bottom:7px" />
+                                        <i class="far fa-star fa-lg" style="color:black;vertical-align:-.27em;cursor:pointer" id="rating1" onclick="setRating(this)" onmouseover="changeColor(this)" onmouseout="resetColor()" onload="resetColor()"></i>
+                                        <i class="far fa-star fa-lg" style="color:black;vertical-align:-.27em;cursor:pointer" id="rating2" onclick="setRating(this)" onmouseover="changeColor(this)" onmouseout="resetColor()"></i>
+                                        <i class="far fa-star fa-lg" style="color:black;vertical-align:-.27em;cursor:pointer" id="rating3" onclick="setRating(this)" onmouseover="changeColor(this)" onmouseout="resetColor()"></i>
+                                        <i class="far fa-star fa-lg" style="color:black;vertical-align:-.27em;cursor:pointer" id="rating4" onclick="setRating(this)" onmouseover="changeColor(this)" onmouseout="resetColor()"></i>
+                                        <i class="far fa-star fa-lg" style="color:black;vertical-align:-.27em;cursor:pointer" id="rating5" onclick="setRating(this)" onmouseover="changeColor(this)" onmouseout="resetColor()"></i>
+                                        <input class="custom-btn offset pull-right" type="submit" value="Potvrda" />
+                                        <br /><br /><br />
+                                    </div>
+                                    <br />
+                                    <div>
+                                        @for (int i = 0; i < Model.Utisci.Count; i++)
+                                        {
+                                        <div style="border:1px solid #DFD2D2; padding:25px;">
+                                            <p>
+                                                @if (Model.Utisci.ElementAt(i).Korisnik.AvatarImgUrl == null)
+                                                {
+                                                    <img id="myImg" src="~/images/defaultUser.png" alt="Unable to load image" class="" style="border-radius:100%; object-fit:cover; height:30px;width:30px;" />
+                                                }
+                                                else
+                                                {
+                                                    <img id="myImg" src="@Model.Utisci.ElementAt(i).Korisnik.AvatarImgUrl" alt="Unable to load image" class="" style="border-radius:100%; object-fit:cover; height:30px;width:30px;" />
+                                                }
+                                                @if (string.IsNullOrWhiteSpace(Model.Utisci.ElementAt(i).Korisnik.Ime))
+                                                {
+                                                    <span>Nepoznati korisnik</span>
+                                                }
+                                                else
+                                                {
+                                                    @Model.Utisci.ElementAt(i).Korisnik.Ime
+                                                }
+                                                <span class="pull-right">
+                                                    @for (int j = 0; j < Model.Utisci.ElementAt(i).Ocjena; j++)
+                                                    {
+                                                        <i class="fas fa-star fa-sm" style="color:#FFDF00;"></i>
+
+                                                    }
+                                                </span>
+                                            </p>
+            
+                                          <p>@Model.Utisci.ElementAt(i).Komentar</p>
+            
+                                         </div>
+
+                                        }
+                                    </div>
+                                    <br />
+                                </div>
+                                    <div id="profil" class="tab-pane fade in active">
+                                        <div class="" style="margin-top:10px;">
+                                            <div class="form-group">
+                                                <span style="font-size:15px">
+                                                     Ime i prezime
+                                                </span>
+                                                <input asp-for="Ime" id="name-input" class="form-control" style="font-size:17px" readonly />
+                                            </div><br />
+                                            <h3>Kontakt</h3>
+                                            <div class="table-bordered" style="padding:15px">
+                                                <div class="form-group">
+                                                    <span style="font-size:15px">
+                                                        <i class="fas fa-phone"></i>
+                                                        <label asp-for="Tel" class="control-label"></label>
+                                                    </span>
+                                                    <input asp-for="Tel" class="form-control" style="font-size:15px" readonly/>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span style="font-size:15px">
+                                                        <i class="fas fa-envelope"></i>
+                                                        <label asp-for="Mail" class="control-label"></label>
+                                                    </span>
+                                                    <input asp-for="Mail" type="email" class="form-control" style="font-size:15px" readonly/>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span style="font-size:15px">
+                                                        <i class="fa fa-globe"></i>
+                                                        <label asp-for="WebKontaktUrl" class="control-label"></label>
+                                                    </span>
+                                                    <input asp-for="WebKontaktUrl" class="form-control" style="font-size:15px" readonly/>
+                                                </div>
+                                            </div>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </form>
+        </div>
+    </div>
+</div>
+<br /><br />
+
+      <script type="text/javascript">
+          window.addEventListener('load', function () {
+              resetColor();
+                                                }, false);
+
+    function setRating(item) {
+         var id = $(item).attr("id");
+         if (id == 'rating1') {
+            $('#ocjena').val(1);
+            $('#rating1').removeClass("far").addClass("fas");;
+            $('#rating1').css('color', '#FFDF00');
+            $('#rating2').removeClass("fas").addClass("far");;
+            $('#rating2').css('color', 'black');
+            $('#rating3').removeClass("fas").addClass("far");;
+            $('#rating3').css('color', 'black');
+            $('#rating4').removeClass("fas").addClass("far");;
+            $('#rating4').css('color', 'black');
+            $('#rating5').removeClass("fas").addClass("far");;
+            $('#rating5').css('color', 'black');
+         }
+          else if (id == 'rating2')
+           {
+            $('#ocjena').val(2);
+            $('#rating1').removeClass("far").addClass("fas");;
+            $('#rating1').css('color', '#FFDF00');
+            $('#rating2').removeClass("far").addClass("fas");;
+            $('#rating2').css('color', '#FFDF00');
+            $('#rating3').removeClass("fas").addClass("far");;
+            $('#rating3').css('color', 'black');
+            $('#rating4').removeClass("fas").addClass("far");;
+            $('#rating4').css('color', 'black');
+            $('#rating5').removeClass("fas").addClass("far");;
+            $('#rating5').css('color', 'black');
+                                                    }
+                                                    else if (id == 'rating3')
+                                                    {
+            $('#ocjena').val(3);
+            $('#rating1').removeClass("far").addClass("fas");;
+            $('#rating1').css('color', '#FFDF00');
+            $('#rating2').removeClass("far").addClass("fas");;
+            $('#rating2').css('color', '#FFDF00');
+            $('#rating3').removeClass("far").addClass("fas");;
+            $('#rating3').css('color', '#FFDF00');
+            $('#rating4').removeClass("fas").addClass("far");;
+            $('#rating4').css('color', 'black');
+            $('#rating5').removeClass("fas").addClass("far");;
+            $('#rating5').css('color', 'black');
+                                                    }
+                                                    else if (id == 'rating4')
+                                                    {
+            $('#ocjena').val(4);
+            $('#rating1').removeClass("far").addClass("fas");;
+            $('#rating1').css('color', '#FFDF00');
+            $('#rating2').removeClass("far").addClass("fas");;
+            $('#rating2').css('color', '#FFDF00');
+            $('#rating3').removeClass("far").addClass("fas");;
+            $('#rating3').css('color', '#FFDF00');
+            $('#rating4').removeClass("far").addClass("fas");;
+            $('#rating4').css('color', '#FFDF00');
+            $('#rating5').removeClass("fas").addClass("far");;
+            $('#rating5').css('color', 'black');
+                                                    }
+                                                    else if (id == 'rating5')
+                                                    {
+            $('#ocjena').val(5);
+            $('#rating1').removeClass("far").addClass("fas");;
+            $('#rating1').css('color', '#FFDF00');
+            $('#rating2').removeClass("far").addClass("fas");;
+            $('#rating2').css('color', '#FFDF00');
+            $('#rating3').removeClass("far").addClass("fas");;
+            $('#rating3').css('color', '#FFDF00');
+            $('#rating4').removeClass("far").addClass("fas");;
+            $('#rating4').css('color', '#FFDF00');
+            $('#rating5').removeClass("far").addClass("fas");;
+            $('#rating5').css('color', '#FFDF00');
+                                                    }
+                                                }
+
+                                                function changeColor(item) {
+                                                    var id = $(item).attr("id");
+                                                    if (id == 'rating1') {
+                  $('#rating1').removeClass("far").addClass("fas");;
+                  $('#rating1').css('color', '#FFDF00');
+                  $('#rating2').removeClass("fas").addClass("far");;
+                  $('#rating2').css('color', 'black');
+                  $('#rating3').removeClass("fas").addClass("far");;
+                  $('#rating3').css('color', 'black');
+                  $('#rating4').removeClass("fas").addClass("far");;
+                  $('#rating4').css('color', 'black');
+                  $('#rating5').removeClass("fas").addClass("far");;
+                  $('#rating5').css('color', 'black');
+                                                    }
+                                                    else if (id == 'rating2') {
+                  $('#rating1').removeClass("far").addClass("fas");;
+                  $('#rating1').css('color', '#FFDF00');
+                  $('#rating2').removeClass("far").addClass("fas");;
+                  $('#rating2').css('color', '#FFDF00');
+                  $('#rating3').removeClass("fas").addClass("far");;
+                  $('#rating3').css('color', 'black');
+                  $('#rating4').removeClass("fas").addClass("far");;
+                  $('#rating4').css('color', 'black');
+                  $('#rating5').removeClass("fas").addClass("far");;
+                  $('#rating5').css('color', 'black');
+                                                    }
+                                                    else if (id == 'rating3') {
+                  $('#rating1').removeClass("far").addClass("fas");;
+                  $('#rating1').css('color', '#FFDF00');
+                  $('#rating2').removeClass("far").addClass("fas");;
+                  $('#rating2').css('color', '#FFDF00');
+                  $('#rating3').removeClass("far").addClass("fas");;
+                  $('#rating3').css('color', '#FFDF00');
+                  $('#rating4').removeClass("fas").addClass("far");;
+                  $('#rating4').css('color', 'black');
+                  $('#rating5').removeClass("fas").addClass("far");;
+                  $('#rating5').css('color', 'black');
+                                                    }
+                                                    else if (id == 'rating4') {
+                  $('#rating1').removeClass("far").addClass("fas");;
+                  $('#rating1').css('color', '#FFDF00');
+                  $('#rating2').removeClass("far").addClass("fas");;
+                  $('#rating2').css('color', '#FFDF00');
+                  $('#rating3').removeClass("far").addClass("fas");;
+                  $('#rating3').css('color', '#FFDF00');
+                  $('#rating4').removeClass("far").addClass("fas");;
+                  $('#rating4').css('color', '#FFDF00');
+                  $('#rating5').removeClass("fas").addClass("far");;
+                  $('#rating5').css('color', 'black');
+                                                    }
+                                                    else if (id == 'rating5') {
+                  $('#rating1').removeClass("far").addClass("fas");;
+                  $('#rating1').css('color', '#FFDF00');
+                  $('#rating2').removeClass("far").addClass("fas");;
+                  $('#rating2').css('color', '#FFDF00');
+                  $('#rating3').removeClass("far").addClass("fas");;
+                  $('#rating3').css('color', '#FFDF00');
+                  $('#rating4').removeClass("far").addClass("fas");;
+                  $('#rating4').css('color', '#FFDF00');
+                  $('#rating5').removeClass("far").addClass("fas");;
+                  $('#rating5').css('color', '#FFDF00');
+                                                    }
+                                                }
+
+                                                function resetColor() {
+                                                    if ($('#ocjena').val() == 1) {
+                  $('#rating1').removeClass("far").addClass("fas");;
+                  $('#rating1').css('color', '#FFDF00');
+                  $('#rating2').removeClass("fas").addClass("far");;
+                  $('#rating2').css('color', 'black');
+                  $('#rating3').removeClass("fas").addClass("far");;
+                  $('#rating3').css('color', 'black');
+                  $('#rating4').removeClass("fas").addClass("far");;
+                  $('#rating4').css('color', 'black');
+                  $('#rating5').removeClass("fas").addClass("far");;
+                  $('#rating5').css('color', 'black');
+                                                    }
+              else if ($('#ocjena').val() == 2) {
+                  $('#rating1').removeClass("far").addClass("fas");;
+                  $('#rating1').css('color', '#FFDF00');
+                  $('#rating2').removeClass("far").addClass("fas");;
+                  $('#rating2').css('color', '#FFDF00');
+                  $('#rating3').removeClass("fas").addClass("far");;
+                  $('#rating3').css('color', 'black');
+                  $('#rating4').removeClass("fas").addClass("far");;
+                  $('#rating4').css('color', 'black');
+                  $('#rating5').removeClass("fas").addClass("far");;
+                  $('#rating5').css('color', 'black');
+                                                    }
+              else if ($('#ocjena').val() == 3) {
+                  $('#rating1').removeClass("far").addClass("fas");;
+                  $('#rating1').css('color', '#FFDF00');
+                  $('#rating2').removeClass("far").addClass("fas");;
+                  $('#rating2').css('color', '#FFDF00');
+                  $('#rating3').removeClass("far").addClass("fas");;
+                  $('#rating3').css('color', '#FFDF00');
+                  $('#rating4').removeClass("fas").addClass("far");;
+                  $('#rating4').css('color', 'black');
+                  $('#rating5').removeClass("fas").addClass("far");;
+                  $('#rating5').css('color', 'black');
+                                                    }
+              else if ($('#ocjena').val() == 4) {
+                  $('#rating1').removeClass("far").addClass("fas");;
+                  $('#rating1').css('color', '#FFDF00');
+                  $('#rating2').removeClass("far").addClass("fas");;
+                  $('#rating2').css('color', '#FFDF00');
+                  $('#rating3').removeClass("far").addClass("fas");;
+                  $('#rating3').css('color', '#FFDF00');
+                  $('#rating4').removeClass("far").addClass("fas");;
+                  $('#rating4').css('color', '#FFDF00');
+                  $('#rating5').removeClass("fas").addClass("far");;
+                  $('#rating5').css('color', 'black');
+                                                    }
+              else if ($('#ocjena').val() == 5) {
+                  $('#rating1').removeClass("far").addClass("fas");;
+                  $('#rating1').css('color', '#FFDF00');
+                  $('#rating2').removeClass("far").addClass("fas");;
+                  $('#rating2').css('color', '#FFDF00');
+                  $('#rating3').removeClass("far").addClass("fas");;
+                  $('#rating3').css('color', '#FFDF00');
+                  $('#rating4').removeClass("far").addClass("fas");;
+                  $('#rating4').css('color', '#FFDF00');
+                  $('#rating5').removeClass("far").addClass("fas");;
+                  $('#rating5').css('color', '#FFDF00');
+                                                    }
+              else {
+                  $('#rating1').removeClass("fas").addClass("far");;
+                  $('#rating1').css('color', 'black');
+                  $('#rating2').removeClass("fas").addClass("far");;
+                  $('#rating2').css('color', 'black');
+                  $('#rating3').removeClass("fas").addClass("far");;
+                  $('#rating3').css('color', 'black');
+                  $('#rating4').removeClass("fas").addClass("far");;
+                  $('#rating4').css('color', 'black');
+                  $('#rating5').removeClass("fas").addClass("far");;
+                  $('#rating5').css('color', 'black');
+                                                    }
+                                                }
+
+      </script>

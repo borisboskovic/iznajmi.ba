@@ -36,12 +36,12 @@
 
                                 </div>
                                 <ul class="nav nav-tabs form-group col-md-4">
-                                    <li class="active"><a data-toggle="tab" href="#nekretnine">Nekretnine</a></li>
+                                    <li><a data-toggle="tab" href="#nekretnine">Nekretnine</a></li>
                                     <li><a data-toggle="tab" href="#utisci">Utisci</a></li>
-                                    <li><a data-toggle="tab" href="#profil">Uredi profil</a></li>
+                                    <li class="active"><a data-toggle="tab" href="#profil">Uredi profil</a></li>
                                 </ul>
                                 <div class="tab-content  form-group col-md-6" style="border:1px solid #DFD2D2;">
-                                    <div id="nekretnine" class="tab-pane fade in active">
+                                    <div id="nekretnine" class="tab-pane fade">
                                         <h3>Moje ponude</h3>
                                         @for(int i = 0; i < Model.NekretninaItems.Count; i++)
                                         {
@@ -72,9 +72,45 @@
                                     </div>
                                     <div id="utisci" class="tab-pane fade">
                                         <h3>Utisci</h3>
-                                        <p>Neki utisci...</p>
+                                        <div>
+                                            @for (int i = 0; i < Model.Utisci.Count; i++)
+                                            {
+                                                <div style="border:1px solid #DFD2D2; padding:25px;">
+                                                    <p>
+                                                        @if (Model.Utisci.ElementAt(i).Korisnik.AvatarImgUrl == null)
+                                                        {
+                                                            <img id="myImg" src="~/images/defaultUser.png" alt="Unable to load image" class="" style="border-radius:100%; object-fit:cover; height:30px;width:30px;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img id="myImg" src="@Model.Utisci.ElementAt(i).Korisnik.AvatarImgUrl" alt="Unable to load image" class="" style="border-radius:100%; object-fit:cover; height:30px;width:30px;" />
+                                                        }
+                                                        @if (string.IsNullOrWhiteSpace(Model.Utisci.ElementAt(i).Korisnik.Ime))
+                                                        {
+                                                            <span>Nepoznati korisnik</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @Model.Utisci.ElementAt(i).Korisnik.Ime
+                                                        }
+                                                        <span class="pull-right">
+                                                            @for (int j = 0; j < Model.Utisci.ElementAt(i).Ocjena; j++)
+                                                            {
+                                                                <i class="fas fa-star fa-sm" style="color:#FFDF00;"></i>
+
+                                                            }
+                                                        </span>
+                                                    </p>
+
+                                                    <p>@Model.Utisci.ElementAt(i).Komentar</p>
+
+                                                </div>
+
+                                            }
+                                        </div>
+                                        <br />
                                     </div>
-                                    <div id="profil" class="tab-pane fade">
+                                    <div id="profil" class="tab-pane fade in active">
                                         <div class="" style="margin-top:10px;">
                                             <div class="form-group">
                                                 <span style="font-size:15px">

@@ -62,9 +62,13 @@ namespace ITP1.Controllers
             {
                 DateTime dtOd = DateTime.MinValue;
                 DateTime dtDo = DateTime.MaxValue;
-                DateTime.TryParseExact(model.DostupnoOdString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtOd);
+                if(!DateTime.TryParseExact(model.DostupnoOdString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtOd))
+                    DateTime.TryParseExact(model.DostupnoOdString, "dd.MM.yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtOd);
+
                 model.DostupnoOd = dtOd;
-                DateTime.TryParseExact(model.DostupnoDoString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtDo);
+                if(!DateTime.TryParseExact(model.DostupnoDoString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtDo))
+                    DateTime.TryParseExact(model.DostupnoDoString, "dd.MM.yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtDo);
+
                 model.DostupnoDo = dtDo == DateTime.MinValue ? DateTime.MaxValue : dtDo;
 
                 await _nekretinina.AddNekretnina(model);

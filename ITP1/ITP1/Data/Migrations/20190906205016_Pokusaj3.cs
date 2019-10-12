@@ -25,11 +25,6 @@ namespace ITP1.Data.Migrations
                 table: "NekretninaImgs",
                 nullable: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_NekretninaImgs_NekretninaId1",
-                table: "NekretninaImgs",
-                column: "NekretninaId1");
-
             migrationBuilder.AddForeignKey(
                 name: "FK_NekretninaImgs_Nekretnine_NekretninaId1",
                 table: "NekretninaImgs",

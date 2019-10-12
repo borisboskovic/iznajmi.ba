@@ -26,5 +26,6 @@ namespace ITP1.Data
         public DbSet<Komentar> Komentari { get; set; }
         public DbSet<NekretninaImg> NekretninaImgs { get; set; }
         public DbSet<NacinIznajmljivanja> NacinIznajmljivnja { get; set; }
+        public DbSet<Utisak> Utisci { get; set; }
     }
 }
