@@ -98,6 +98,7 @@ namespace ITP1.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "Potvrdite vaš email",
                         $"Molimo vas da potvrdite vaš nalog <a href='{callbackUrl}'> klikom ovdje.</a>.");
 
+                    TempData["EmailValidation"] = "Mail za validaciju je poslat na vašu e-mail adresu!";
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }

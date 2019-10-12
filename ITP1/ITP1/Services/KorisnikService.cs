@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITP1.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITP1.Services
 {
@@ -86,6 +87,35 @@ namespace ITP1.Services
             return _context.Users.FirstOrDefault(u => u.Id == id).UserName;//UserName in AspNetUsers table is email.
         }
 
+        public Utisak GetUtisak(int korisnikId, int ocijenjeniKorisnikId)
+        {
+            return _context.Utisci
+                .FirstOrDefault(u => u.KorisnikId == korisnikId && u.OcjenjeniKorinsnikid == ocijenjeniKorisnikId)
+;
+        }
+
+        public List<Utisak> GetUtisci(int ocijenjeniKorisnikId, int loggedUser)
+        {
+            return _context.Utisci.Where(u => u.OcjenjeniKorinsnikid == ocijenjeniKorisnikId && u.KorisnikId != loggedUser)
+                .Include(u => u.Korisnik)
+                .ToList();
+        }
+
+        public void AddUtisak(Utisak utisak)
+        {
+            if (_context.Utisci.Where(u => u.KorisnikId == utisak.KorisnikId && u.OcjenjeniKorinsnikid == utisak.OcjenjeniKorinsnikid).Count() > 0)
+            {
+                _context.Utisci.Where(u => u.KorisnikId == utisak.KorisnikId && u.OcjenjeniKorinsnikid == utisak.OcjenjeniKorinsnikid).FirstOrDefault().Ocjena = utisak.Ocjena;
+                _context.Utisci.Where(u => u.KorisnikId == utisak.KorisnikId && u.OcjenjeniKorinsnikid == utisak.OcjenjeniKorinsnikid).FirstOrDefault().Komentar = utisak.Komentar;
+            }
+            else
+            {
+                _context.Utisci.Add(utisak);
+            }
+            _context.SaveChanges();
+        }
+
+
         public async Task UpdateUserImgToCloudAsync(string path, string imgName, string extension)
         {
             CloudinaryDotNet.Account account = new CloudinaryDotNet.Account(
@@ -138,6 +168,22 @@ namespace ITP1.Services
             _context.SaveChanges();
         }
 
+        public Double GetProsjecnaOcjena(int korisnikId)
+        {
+            return _context.Utisci.Where(u => u.OcjenjeniKorinsnikid == korisnikId).Count() > 0 ?
+                _context.Utisci
+                .Where(u => u.OcjenjeniKorinsnikid == korisnikId)
+                .Average(u => u.Ocjena)
+                :
+                0;
+        }
+
+        public int GetTotalNumberOcjena(int korisnikId)
+        {
+            return _context.Utisci
+                .Where(u => u.OcjenjeniKorinsnikid == korisnikId)
+                .Count();
+        }
 
         public Double GetProsjecnaOcjena(int jedinice, int dvice, int trice, int cetvorke, int petice)
         {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ITP1.Data;
 using ITP1.Data.Models;
 using ITP1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITP1.Controllers
@@ -18,7 +19,8 @@ namespace ITP1.Controllers
             _korisnik = korisnik;
         }
 
-
+        //ToDo Details
+        [Authorize]
         [HttpGet]
         public IActionResult Edit(string id)
         {
@@ -35,18 +37,19 @@ namespace ITP1.Controllers
                     Tel = korisnikModel.Tel == null ? "" : korisnikModel.Tel,
                     Mail = korisnikModel.MailKontakt == null ? "" : korisnikModel.MailKontakt,
                     WebKontaktUrl = korisnikModel.WebKontaktUrl,
-                    ProsjecnaOcjena = _korisnik.GetProsjecnaOcjena(korisnikModel.NumberOfRatings1, korisnikModel.NumberOfRatings2, korisnikModel.NumberOfRatings3, korisnikModel.NumberOfRatings4, korisnikModel.NumberOfRatings5),
+                    ProsjecnaOcjena = Math.Round(_korisnik.GetProsjecnaOcjena(korisnikModel.Id), 1),
                     NekretninaItems = _korisnik.GetListaNekretninaZaKorisnika(korisnikModel.Id),
-                    BrojOcjena = korisnikModel.NumberOfRatings1 + korisnikModel.NumberOfRatings2 + korisnikModel.NumberOfRatings3 + korisnikModel.NumberOfRatings4 + korisnikModel.NumberOfRatings5,
+                    BrojOcjena = _korisnik.GetTotalNumberOcjena(korisnikModel.Id),
                     CurrentUserId = id,
+                    Utisci = _korisnik.GetUtisci(korisnikModel.Id, korisnikModel.Id) == null ? new List<Utisak>() : _korisnik.GetUtisci(korisnikModel.Id, korisnikModel.Id),
                 };
 
                 return View(model);
             }
-
             //Napraviti svoj error Posle
             return View();//???? error page*/
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Edit(KorisnikProfil korisnikModel)
@@ -77,6 +80,58 @@ namespace ITP1.Controllers
             return View(korisnikModel);
         }
 
+
+        //TODO authorize
+        public IActionResult Details(string id)
+        {
+            int ocijenjeniKorinikId = _korisnik.GetKorisnikWithForeignKey(id).Id;
+            Utisak lUtisak = new Utisak { Ocjena = 0, Komentar = "" };
+            if (this.User.FindFirst(ClaimTypes.NameIdentifier) != null)
+            {
+                if(this.User.FindFirst(ClaimTypes.NameIdentifier).Value == id)
+                    return RedirectToAction("Edit", "Korisnik", new { id = id});
+
+                lUtisak = _korisnik.GetUtisak(_korisnik.GetKorisnikWithForeignKey(this.User.FindFirst(ClaimTypes.NameIdentifier).Value).Id, ocijenjeniKorinikId) == null ?
+                    lUtisak : _korisnik.GetUtisak(_korisnik.GetKorisnikWithForeignKey(this.User.FindFirst(ClaimTypes.NameIdentifier).Value).Id, ocijenjeniKorinikId);
+
+                
+            }
+            int loggedUserId = this.User.FindFirst(ClaimTypes.NameIdentifier) == null ? 0 : _korisnik.GetKorisnikWithForeignKey(this.User.FindFirst(ClaimTypes.NameIdentifier).Value).Id;
+            var korisnikModel = _korisnik.GetKorisnikWithForeignKey(id);
+            var model = new KorisnikProfil()
+            {
+                Id = korisnikModel.Id,
+                StrId = id,
+                UserId = korisnikModel.UserId,
+                Ime = korisnikModel.Ime,
+                AvatarImgUrl = korisnikModel.AvatarImgUrl,
+                Tel = korisnikModel.Tel == null ? "" : korisnikModel.Tel,
+                Mail = korisnikModel.MailKontakt == null ? "" : korisnikModel.MailKontakt,
+                WebKontaktUrl = korisnikModel.WebKontaktUrl,
+                ProsjecnaOcjena = Math.Round(_korisnik.GetProsjecnaOcjena(ocijenjeniKorinikId), 1),
+                NekretninaItems = _korisnik.GetListaNekretninaZaKorisnika(korisnikModel.Id),
+                BrojOcjena = _korisnik.GetTotalNumberOcjena(ocijenjeniKorinikId),
+                LicniUtisak = lUtisak,
+                Utisci = _korisnik.GetUtisci(_korisnik.GetKorisnikWithForeignKey(id).Id, loggedUserId) == null ? new List<Utisak>() : _korisnik.GetUtisci(_korisnik.GetKorisnikWithForeignKey(id).Id, loggedUserId),
+            };
+
+            return View(model);
+
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Details(KorisnikProfil model)
+        {
+            if (model.LicniUtisak.Ocjena != 0)
+            {
+                model.LicniUtisak.OcjenjeniKorinsnikid = model.Id;
+                model.LicniUtisak.KorisnikId  = _korisnik.GetKorisnikWithForeignKey(this.User.FindFirst(ClaimTypes.NameIdentifier).Value).Id;
+                _korisnik.AddUtisak(model.LicniUtisak);
+            }
+
+            return Details(model.StrId);
+        }
 
 
         protected Boolean IsAuthorized(string id)

@@ -136,11 +136,7 @@ namespace ITP1.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_NekretninaImgs_NekretninaId",
-                table: "NekretninaImgs",
-                column: "NekretninaId");
-
+            
             migrationBuilder.CreateIndex(
                 name: "IX_Nekretnine_KorisnikId",
                 table: "Nekretnine",
