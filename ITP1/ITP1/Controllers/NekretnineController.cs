@@ -33,12 +33,12 @@ namespace ITP1.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Nekretnina nekretnina = _nekretinina.GetNekretnina(id);
+            NekretninaUpadeModel nekretnina = _nekretinina.GetNekretninaUpadeModel(id);
             return View(nekretnina);
         }
 
         [HttpPost]
-        public IActionResult Edit(Nekretnina nekretnina)
+        public IActionResult Edit(NekretninaUpadeModel nekretnina)
         {
             _nekretinina.UpdateNekretnina(nekretnina);
 

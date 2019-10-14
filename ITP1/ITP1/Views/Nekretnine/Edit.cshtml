@@ -1,4 +1,4 @@
-﻿@model ITP1.Data.Models.Nekretnina
+﻿@model ITP1.Models.NekretninaUpadeModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,8 +12,8 @@
 <form asp-controller="Nekretnine" asp-action="Edit" method="post" enctype="multipart/form-data">
 
     <div class="form-control hidden">
-        <label asp-for="KorisnikId" class="control-label"></label>
-        <input asp-for="KorisnikId" class="form-control" />
+        <label asp-for="UserId" class="control-label"></label>
+        <input asp-for="UserId" class="form-control" />
     </div>
 
     <div class="col-md-12 container">
@@ -42,24 +42,24 @@
                 <span asp-validation-for="Povrsina" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DostupnoOd" class="control-label"></label>
+                <label asp-for="DostupnoOdString" class="control-label"></label>
                 <div class='input-group date datetimepicker1'>
                     <span class="input-group-addon input-sm">
                         <span class="fa fa-calendar"></span>
                     </span>
-                    <input type='text' class="form-control" asp-for="@Model.DostupnoOd" value="" onkeydown="return false" />
+                    <input type='text' class="form-control" asp-for="@Model.DostupnoOdString" value="@Model.DostupnoOdString" onkeydown="return false" />
                 </div>
-                <span asp-validation-for="DostupnoOd" class="text-danger"></span>
+                <span asp-validation-for="DostupnoOdString" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DostupnoDo" class="control-label"></label>
+                <label asp-for="DostupnoDoString" class="control-label"></label>
                 <div class='input-group date datetimepicker1'>
                     <span class="input-group-addon input-sm">
                         <span class="fa fa-calendar"></span>
                     </span>
-                    <input type='text' class="form-control" asp-for="@Model.DostupnoDo" value="" onkeydown="return false" />
+                    <input type='text' class="form-control" asp-for="@Model.DostupnoDoString" value="@Model.DostupnoDoString" onkeydown="return false" />
                 </div>
-                <span asp-validation-for="DostupnoDo" class="text-danger"></span>
+                <span asp-validation-for="DostupnoDoString" class="text-danger"></span>
             </div>
 
         </div>
@@ -76,8 +76,46 @@
         <label class="control-label">Lokacija nekretnine</label>
         <div id="map" style="height:500px" class="img-responsive img-rounded"></div>
 
+        <div class="form-group col-md-6">
+            <label asp-for="Latitude" class="control-label"></label>
+            <input asp-for="Latitude" type="text" readonly class="form-control" id="latitude-value" />
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="Longitude" class="control-label"></label>
+            <input asp-for="Longitude" type="text" readonly class="form-control" id="longitude-value" />
+        </div>
+
+
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label asp-for="ImgFiles"><br /><br /><span style="cursor:pointer" class="custom-btn fill">Dodaj slike (maksimalno 6)</span></label>
+                <input type="file" asp-for="ImgFiles" style="opacity:0" accept="image/jpeg, image/png" multiple class="input-group" onchange="readURL(this);" /><br />
+                <div class="thumbnail col-md-4" id="img1-cont" style="display:none">
+                    <img id="img1" src="#" alt="your image" style="display:none" />
+                </div>
+                <div class="thumbnail col-md-4" id="img2-cont" style="display:none">
+                    <img id="img2" src="#" alt="your image" style="display:none" />
+                </div>
+                <div class="thumbnail col-md-4" id="img3-cont" style="display:none">
+                    <img id="img3" src="#" alt="your image" style="display:none" />
+                </div>
+                <div class="thumbnail col-md-4" id="img4-cont" style="display:none">
+                    <img id="img4" src="#" alt="your image" style="display:none" />
+                </div>
+                <div class="thumbnail col-md-4" id="img5-cont" style="display:none">
+                    <img id="img5" src="#" alt="your image" style="display:none" />
+                </div>
+                <div class="thumbnail col-md-4" id="img6-cont" style="display:none">
+                    <img id="img6" src="#" alt="your image" style="display:none" />
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="btn-group col-md-4 col-md-push-2" style="margin:10px;">
-            <input type="submit" name="Sačuvaj" value="Sačuvaj" class="custom-btn offset" style="width:100%" />
+            <input type="submit" name="Izmjeni" value="Izmjeni" class="custom-btn offset" style="width:100%" />
         </div>
         <div class="btn-group col-md-4 col-md-push-2" style="margin:10px;">
             <a href="@Url.Action("Index", "Home")">
@@ -170,4 +208,4 @@
 
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwk7IJwqt3KZ-DiPXW1zAP-tNguGFYy3o&callback=initMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTT3_LSN4fZn3vqJRVhQylgR4_53qbb0&callback=initMap"></script>

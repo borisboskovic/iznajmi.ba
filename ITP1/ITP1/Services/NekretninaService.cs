@@ -113,17 +113,40 @@ namespace ITP1.Services
             return _context.Nekretnine.FirstOrDefault(nk => nk.Id == id);
         }
 
-        public void UpdateNekretnina(Nekretnina nekretnina)
+        public NekretninaUpadeModel GetNekretninaUpadeModel(int id)
         {
+            NekretninaUpadeModel nekretninaUpadeModel = new NekretninaUpadeModel
+            {
+                Cijena = _context.Nekretnine.FirstOrDefault(nk => nk.Id == id).Cijena,
+                DostupnoDo = _context.Nekretnine.FirstOrDefault(nk => nk.Id == id).DostupnoDo,
+                DostupnoDoString = _context.Nekretnine.FirstOrDefault(nk => nk.Id == id).DostupnoDo.ToString(),
+                DostupnoOd = _context.Nekretnine.FirstOrDefault(nk => nk.Id == id).DostupnoOd,
+                DostupnoOdString = _context.Nekretnine.FirstOrDefault(nk => nk.Id == id).DostupnoOd.ToString(),
+                Id = id,
+                Longitude = Convert.ToDouble(_context.Nekretnine.Include(m => m.Marker).FirstOrDefault(nk => nk.Id == id).Marker.Lng).ToString(),
+                Latitude = Convert.ToDouble(_context.Nekretnine.Include(m => m.Marker).FirstOrDefault(nk => nk.Id == id).Marker.Lat).ToString(),
+                Opis = _context.Nekretnine.FirstOrDefault(nk => nk.Id == id).Opis,
+                Naslov = _context.Nekretnine.FirstOrDefault(nk => nk.Id == id).Naslov,
+                Lokacija = _context.Nekretnine.FirstOrDefault(nk => nk.Id == id).Lokacija
+            };
+            return nekretninaUpadeModel;
+        }
+        public void UpdateNekretnina(NekretninaUpadeModel nekretnina)
+        {
+            Double Lat = Convert.ToDouble(nekretnina.Latitude);
+            Double Lng = Convert.ToDouble(nekretnina.Longitude);
+
             //_context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).KorisnikId = nekretnina.KorisnikId;
             _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).Lokacija = nekretnina.Lokacija;
+            _context.Nekretnine.Include(m => m.Marker).FirstOrDefault(nk => nk.Id == nekretnina.Id).Marker.Lat = Lat;
+            _context.Nekretnine.Include(m => m.Marker).FirstOrDefault(nk => nk.Id == nekretnina.Id).Marker.Lng = Lng;
             //_context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).MarkerId = nekretnina.MarkerId;
             _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).Naslov = nekretnina.Naslov;
             _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).Opis = nekretnina.Opis;
             _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).Povrsina = nekretnina.Povrsina;
             _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).Cijena = nekretnina.Cijena;
-            _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).DostupnoDo = nekretnina.DostupnoDo;
-            _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).DostupnoOd = nekretnina.DostupnoOd;
+            _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).DostupnoDo = Convert.ToDateTime(nekretnina.DostupnoDoString);
+            _context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).DostupnoOd = Convert.ToDateTime(nekretnina.DostupnoOdString);
             //_context.Nekretnine.FirstOrDefault(nk => nk.Id == nekretnina.Id).TipId = nekretnina.TipId;
 
             _context.SaveChanges();
@@ -395,6 +418,5 @@ namespace ITP1.Services
         {
             return _context.NacinIznajmljivnja;
         }
-
     }
 }
