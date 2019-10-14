@@ -418,5 +418,15 @@ namespace ITP1.Services
         {
             return _context.NacinIznajmljivnja;
         }
+
+        public void DeleteNekretnina(int id)
+        {
+            Nekretnina nekretnina = _context.Nekretnine.FirstOrDefault(nk => nk.Id == id);
+            _context.Nekretnine.Remove(nekretnina);
+
+            _context.SaveChanges();
+
+
+        }
     }
 }

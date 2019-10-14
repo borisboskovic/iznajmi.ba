@@ -46,6 +46,8 @@
                                         @for(int i = 0; i < Model.NekretninaItems.Count; i++)
                                         {
                                         <div style="border-style: outset; border-color:aquamarine; margin:5px;">
+                                            <a asp-controller="Nekretnine" asp-action="DeleteNekretnina" asp-route-id="@Model.NekretninaItems.ElementAt(i).Id" class="btn-danger" style="float:right; margin:5px; padding:2px; cursor:pointer; text-decoration:none;">Izbriši</a>
+                                          
                                             <h3 style="text-align:center;">@Model.NekretninaItems.ElementAt(i).Naslov</h3>
                                             <div style="display:inline-block;">
                                                 @if (Model.NekretninaItems.ElementAt(i).CoverImgUrl == null)
@@ -65,7 +67,7 @@
                                                     Cijena @Model.NekretninaItems.ElementAt(i).Cijena KM <br /> @Model.NekretninaItems.ElementAt(i).NacinIznajmljivanja.Naziv
                                                 </p>
 
-                                                <a asp-controller="Nekretnine" asp-action="Edit" asp-route-id="@Model.NekretninaItems.ElementAt(i).Id">Izmjeni</a>
+                                                <a asp-controller="Nekretnine" asp-action="Edit" asp-route-id="@Model.NekretninaItems.ElementAt(i).Id" class="btn-info" style="margin:5px; padding:2px; cursor:pointer; text-decoration:none;">Izmjeni</a>
                                             </div>
                                         </div>
                                         }

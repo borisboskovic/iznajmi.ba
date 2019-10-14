@@ -45,6 +45,12 @@ namespace ITP1.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult DeleteNekretnina(int id)
+        {
+            _nekretinina.DeleteNekretnina(id);
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpGet]
         [Authorize]
         public IActionResult Insert()

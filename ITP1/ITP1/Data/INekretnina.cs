@@ -11,6 +11,7 @@ namespace ITP1.Data
     {
         Task AddNekretnina(NekretninaInsertModel insertModel);
         void UpdateNekretnina(NekretninaUpadeModel nekretnina);
+        void DeleteNekretnina(int id);
         Nekretnina GetNekretnina(int id);
         NekretninaUpadeModel GetNekretninaUpadeModel(int id);
         IEnumerable<Nekretnina> GetNekretnine(int pagenumber, int pagesize);
