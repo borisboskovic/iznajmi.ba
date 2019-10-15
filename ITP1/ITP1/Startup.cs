@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ITP1.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using TestProject3.Areas.Identity.Services;
+using ITP1.Services.MapView;
 
 namespace ITP1
 {

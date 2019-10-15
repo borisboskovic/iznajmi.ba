@@ -197,10 +197,12 @@ namespace ITP1.Controllers
 
             return false;
         }
-        public IActionResult MapView()
+        public IActionResult MapView(MapViewModel model)
         {
-            return View();
+            if (model.NaciniIznajmljivanja == null)
+                model = _repo.CreateMapViewModel();
+            return View(model);
         }
-        
+
     }
 }
