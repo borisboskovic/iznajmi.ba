@@ -43,6 +43,7 @@ namespace ITP1
             services.AddScoped<INekretnina, NekretninaService>();
             services.AddScoped<IAdministracija, AdministracijaService>();
             services.AddTransient<NekretnineRepository, NekretnineRepository>();
+            services.AddTransient<IMapView, MapViewService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

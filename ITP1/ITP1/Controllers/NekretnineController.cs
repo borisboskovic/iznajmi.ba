@@ -197,5 +197,10 @@ namespace ITP1.Controllers
 
             return false;
         }
+        public IActionResult MapView()
+        {
+            return View();
+        }
+        
     }
 }
