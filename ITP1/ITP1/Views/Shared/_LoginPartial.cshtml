@@ -15,7 +15,8 @@
                     var user = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
                     var roles = await UserManager.GetRolesAsync(user);
                 }
-                @if (roles.Contains("Admin") || (id == Model.Korisnik.UserId))
+
+                @if (roles.Contains("Admin"))
                 {
                     <a asp-area="" asp-controller="Administracija" asp-action="Index">Administracija</a>
                 }
