@@ -26,6 +26,7 @@ namespace ITP1.Controllers
             if (pModel.Filter != null || pModel.NaciniIznajmljivanja != null || pModel.SviTipovi != null || (!string.IsNullOrWhiteSpace(pModel.SearchString)))
             {
 
+
                 DateTime dtOd = DateTime.MinValue;
                 DateTime dtDo = DateTime.MaxValue;
                 DateTime.TryParseExact(pModel.Filter.DostupnoOdString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtOd);
