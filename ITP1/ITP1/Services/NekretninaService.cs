@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ITP1.Services
@@ -582,6 +583,93 @@ namespace ITP1.Services
         public int CountKomentari(int nekretninaid)
         {
             return _context.Komentari.Where(k => k.NekretninaId == nekretninaid).Count();
+        }
+        public MapViewModel GetNekretninasFiltered(MapViewModel model)
+        {
+            //Tipovi
+            bool tipSelected = false;
+            List<int> selectedTipIds = new List<int>();
+            foreach (TipModel tip in model.SviTipovi)
+            {
+                if (tip.Selected == true)
+                {
+                    tipSelected = true;
+                    selectedTipIds.Add(tip.Id);
+                }
+            }
+            if (!tipSelected)
+                foreach (TipModel tip in model.SviTipovi)
+                {
+                    tip.Selected = true;
+                    selectedTipIds.Add(tip.Id);
+                }
+
+            //Nacini iznajmljivanja
+            bool nacinSelected = false;
+            List<int> selectedNacinIds = new List<int>();
+            foreach(NacinIznajmljivanjaModel nacin in model.NaciniIznajmljivanja)
+            {
+                if (nacin.Selected == true)
+                {
+                    nacinSelected = true;
+                    selectedNacinIds.Add(nacin.Id);
+                }
+            }
+            if (!nacinSelected)
+                foreach (NacinIznajmljivanjaModel nacin in model.NaciniIznajmljivanja)
+                {
+                    nacin.Selected = true;
+                    selectedNacinIds.Add(nacin.Id);
+                }
+
+            //Dohvatanje iz baze i filtriranje po tipu i nacinu iznajmljivanja
+            List<NekretninaListModel> nekretnine = _context.Nekretnine
+                .Where(nek => selectedTipIds.Contains(nek.Tip.Id))
+                .Where(nek=>selectedNacinIds.Contains(nek.NacinIznajmljivanja.Id))
+                .Select(nek=> new NekretninaListModel {
+                    Id=nek.Id,
+                    Naslov=nek.Naslov,
+                    Latitude=nek.Marker.Lat,
+                    Longitude=nek.Marker.Lng,
+                    NacinIznajmljivanja=nek.NacinIznajmljivanja.Naziv,
+                    Tip=nek.Tip.ImeTipa,
+                    Cijena=nek.Cijena,
+                    Lokacija=nek.Lokacija
+                })
+                .ToList();
+
+            //Filtriranje preko search stringa
+            List<NekretninaListModel> nekretnineFiltered = new List<NekretninaListModel>();
+            if (model.SearchString != null)
+            {
+                Regex regex = new Regex("[a-z0-9]{2,}");
+                MatchCollection matchCollection = regex.Matches(model.SearchString.ToLower());
+                foreach(NekretninaListModel nek in nekretnine)
+                {
+                    bool found = false;
+                    foreach(Match match in matchCollection)
+                    {
+                        if (nek.Naslov.ToLower().Contains(match.Value) || nek.Lokacija.ToLower().Contains(match.Value))
+                            found = true;
+                    }
+                    if (found)
+                        nekretnineFiltered.Add(nek);
+                }
+                nekretnine = nekretnineFiltered;
+            }
+
+            model.Nekretnine = nekretnine;
+            return model;
+        }
+
+        public int CountNekretnineWithSearch(IEnumerable<Nekretnina> nekretninas, string searchString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Nekretnina> SearchNekretnine(IEnumerable<Nekretnina> nekretninas, string searchString)
+        {
+            throw new NotImplementedException();
         }
     }
 }

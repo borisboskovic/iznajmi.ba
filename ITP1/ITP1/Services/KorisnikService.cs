@@ -194,7 +194,7 @@ namespace ITP1.Services
         {
             IEnumerable<Nekretnina> nekretnine;
 
-            nekretnine = _context.Nekretnine.Where(n => n.KorisnikId == korisnikId).Include(nekretnina => nekretnina.NacinIznajmljivanja).ToList();
+            nekretnine = _context.Nekretnine.Include(imgs=>imgs.CoverImg).Where(n => n.KorisnikId == korisnikId).ToList();
             List<NekretninaItem> nekretnine_item = new List<NekretninaItem>();
 
             foreach (var item in nekretnine)

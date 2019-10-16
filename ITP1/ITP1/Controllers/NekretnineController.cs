@@ -197,5 +197,13 @@ namespace ITP1.Controllers
 
             return false;
         }
+        public IActionResult MapView(MapViewModel model)
+        {
+            if (model.NaciniIznajmljivanja == null)
+                model = _repo.CreateMapViewModel();
+            model = _nekretinina.GetNekretninasFiltered(model);
+            return View(model);
+        }
+
     }
 }

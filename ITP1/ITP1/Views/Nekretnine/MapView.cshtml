@@ -1,0 +1,275 @@
+﻿@model ITP1.Models.MapViewModel
+@{
+    ViewData["Title"] = "MapView";
+}
+
+<link href="~/css/offcanvas.css" rel="stylesheet" />
+<link href="~/css/sitestyle.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row row-offcanvas row-offcanvas-left" style="margin-top:-37px;">
+        <form asp-controller="Nekretnine" asp-action="MapView" method="get" id="formIndex" class="form-horizontal">
+            <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" style="background-color:#F5F5F5;border-right:1px solid #DDDDDD; border-bottom:1px solid #DDDDDD;">
+                <br /><br />
+                <div class="orange-line"></div>
+
+                <div class="container" style="padding:unset">
+                    <br />
+                    <div style="padding-left:1%">
+                        <h4 style="color:#FFA260"><strong>Tip</strong></h4>
+                    </div>
+
+                    @for (int i = 0; i < Model.SviTipovi.Count; i++)
+                    {
+                        <div class="col-sm-4 col-xs-12" style="padding-left:4%">
+                            <a class=" kuca" style="color:#79A736;" href="#">
+                                <label class="form-check-label" asp-for="@Model.SviTipovi[i].Selected" style="text-decoration:none;cursor:pointer">
+                                    @{ var clsName = Model.SviTipovi[i].Id + "tip";}
+                                    <input type="checkbox" asp-for="@Model.SviTipovi[i].Selected" hidden class="@clsName" onchange="changeActiveCheckBox(this);" onload="changeActiveCheckBox(this);" onloadstart="changeActiveCheckBox(this);" />
+                                    @{ var klasa = "fa-square";
+                                        if (Model.SviTipovi[i].Selected)
+                                        {
+                                            klasa = "fa-check-square";
+                                        }
+
+                                    }
+                                    <i class="far @klasa" name="@clsName"></i>
+                                    &nbsp;@Model.SviTipovi[i].ImeTipa
+                                </label>
+                                <input type="hidden" asp-for="@Model.SviTipovi[i].Id" />
+                                <input type="hidden" asp-for="@Model.SviTipovi[i].ImeTipa" />
+                            </a>
+
+                        </div>
+                        <div class="col-sm-12"></div>
+                    }
+                </div>
+                <br />
+                <div class="orange-line"></div>
+                <div class="container" style="padding:unset">
+                    <br />
+                    <div style="padding-left:1%">
+                        <h4 style="color:#FFA260"><strong>Cijena</strong></h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-12 " style="padding-left:2%;">
+                            <span style="color:#79A736;font-size:12px;">
+                                BAM&nbsp;<input class="form-control input-sm" style="width:80px; display:inline;margin-bottom:10px;" type="number" asp-for="@Model.Filter.CijenaMin" />&nbsp;
+                                <span style="font-weight:bold">-</span>
+                                &nbsp;BAM&nbsp;<input class="form-control input-sm" style="width:80px;display:inline" type="number" asp-for="@Model.Filter.CijenaMax" />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="container" style="padding:unset">
+                    <br />
+                    <div style="padding-left:1%">
+                        <h4 style="color:#FFA260"><strong>Iznajmljivanje</strong></h4>
+                    </div>
+                    @for (int i = 0; i < Model.NaciniIznajmljivanja.Count; i++)
+                    {
+                        <div class="col-sm-4 col-xs-12" style="padding-left:4%">
+                            <a class=" kuca" style="color:#79A736;" href="#">
+                                <label class="form-check-label" asp-for="@Model.NaciniIznajmljivanja[i].Selected" style="text-decoration:none;cursor:pointer">
+                                    @{ var clsName = Model.NaciniIznajmljivanja[i].Id + "nacinIzn";}
+                                    <input type="checkbox" asp-for="@Model.NaciniIznajmljivanja[i].Selected" hidden class="@clsName" onchange="changeActiveCheckBox(this);" />
+                                    @{ var klasa = "fa-square";
+                                        if (Model.NaciniIznajmljivanja[i].Selected)
+                                        {
+                                            klasa = "fa-check-square";
+                                        }
+
+                                    }
+                                    <i class="far @klasa" name="@clsName"></i>
+                                    &nbsp;@Model.NaciniIznajmljivanja[i].Naziv
+                                </label>
+                                <input type="hidden" asp-for="@Model.NaciniIznajmljivanja[i].Id" />
+                                <input type="hidden" asp-for="@Model.NaciniIznajmljivanja[i].Naziv" />
+                            </a>
+
+                        </div>
+                        <div class="col-sm-12"></div>
+                    }
+
+                    <div class="col-sm-12"></div>
+
+                </div>
+                <br />
+                <div class="orange-line"></div>
+                <div class="container" style="padding:unset">
+                    <br />
+                    <div style="padding-left:1%">
+                        <h4 style="color:#FFA260"><strong>Površina</strong></h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-12 " style="padding-left:2%;">
+                            <span style="color:#79A736;font-size:12px;">
+                                &nbsp;&nbsp;
+                                <span style="font-weight:bold;">
+                                    m<sup>2</sup>
+                                </span>
+                                <input class="form-control input-sm" style="width:80px; display:inline;margin-bottom:10px;" type="number" asp-for="@Model.Filter.PovrsinaMin" />&nbsp;
+                                &nbsp;&nbsp;<span style="font-weight:bold">-</span>
+                                &nbsp;&nbsp;
+
+                                <span style="font-weight:bold;">
+                                    m<sup>2</sup>
+                                </span>
+                                <input class="form-control input-sm" style="width:80px;display:inline" type="number" asp-for="@Model.Filter.PovrsinaMax" />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="orange-line"></div>
+                <div class="container" style="padding:unset">
+                    <br />
+                    <div style="padding-left:1%">
+                        <h4 style="color:#FFA260"><strong>Dostupno</strong></h4>
+                    </div>
+
+                    <div class="row">
+                        <h5 class="pull-left" style="color:#FFA260; display:inline; margin-right:20px; margin-left:20px;"><strong>Od</strong></h5>
+                        <div class='col-sm-2 col-xs-11'>
+                            <div class="form-group">
+                                @*datetimepicker1 je klasa za lokalizaciju*@
+                                <div class='input-group date datetimepicker1'>
+                                    <span class="input-group-addon input-sm">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                    <input type='text' class="form-control input-sm" asp-for="@Model.Filter.DostupnoOdString" onkeydown="return false" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h5 class="pull-left" style="color:#FFA260; display:inline; margin-right:20px; margin-left:20px;"><strong>Do</strong></h5>
+                        <div class='col-sm-2 col-xs-11'>
+                            <div class="form-group">
+                                @*datetimepicker1 je klasa za lokalizaciju*@
+                                <div class='input-group date datetimepicker1'>
+                                    <span class="input-group-addon input-sm">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                    <input type='text' class="form-control input-sm" asp-for="@Model.Filter.DostupnoDoString" onkeydown="return false" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="orange-line"></div>
+
+                <br />
+                <div class="form-group col-sm-5 col-xs-12">
+                    <input type="submit" onclick="resetPager()" style="font-weight:bold" value="Pretraži >" class="custom-btn up" />
+                </div>
+                <br /><br /><br /><br />
+                <div class="orange-line"></div>
+
+                <br /><br /><br />
+
+            </div>
+
+
+            <!--Search bar-->
+            <div class="col-xs-12 col-sm-9 col-sm-offset-3">
+                <br />
+                <div class="row" style="margin-left:10px">
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input type="text" class="  search-query form-control" placeholder="Pretraga" asp-for="@Model.SearchString" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-danger" type="button" onclick="document.getElementById('formIndex').submit()">
+                                    <span class="fas fa-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="col-xs-12 col-sm-9 col-sm-offset-3">
+            <p class="pull-left visible-xs" style="margin-top:8px;margin-left:-10px;">
+                <button type="button" class="btn btn-default btn-sm" data-toggle="offcanvas"><i class="fas fa-filter"></i></button>
+            </p>
+        </div>
+
+        <br />
+        <br />
+        <div class="col-xs-12 col-sm-9 col-sm-offset-3" style="margin-top:15px;">
+            <label class="control-label">Lokacije nekretnina</label>
+            <div id="mapa-nekretnina" style="height:500px" class="img-responsive img-rounded"></div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+<script>
+    var map;
+    var markeri = [];
+    var infowindow;
+
+    function centerToUsersLocation() {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                function success(position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map.setCenter(pos);
+                    map.setZoom(7);
+                }
+            );
+        }
+    }
+
+    function initMap() {
+        centerToUsersLocation();
+        infowindow = new google.maps.InfoWindow();
+        map = new google.maps.Map(document.getElementById('mapa-nekretnina'), {
+            center: { lat: 43.823508, lng: 18.374364 },
+            zoom: 7
+        });
+        infowindow = new google.maps.InfoWindow();
+        addMarkers();
+        infowindow = new google.maps.InfoWindow();
+    }
+    function addMarkers() {
+        var nekretnineObj = @Json.Serialize(Model.Nekretnine);
+        console.log(nekretnineObj);
+        for (var i = 0; i < nekretnineObj.length; i++) {
+            var marker = new google.maps.Marker({
+                position: { lat: nekretnineObj[i].latitude, lng: nekretnineObj[i].longitude },
+                map: map,
+                draggable: false,
+                title: nekretnineObj[i].naslov
+            });
+
+            var content = "<strong>" + nekretnineObj[i].naslov + "</strong><br />Iznajmljivanje " + nekretnineObj[i].nacinIznajmljivanja + "<br />Cijena: <i>" + nekretnineObj[i].cijena + " BAM</i>";
+            content += "<br/><br/><a class='btn btn-success mx-auto' href='/Nekretnine/Display/" + nekretnineObj[i].id + "'>Detalji</a>"
+             google.maps.event.addListener(marker, 'click', function(content){
+                return function(){
+                    infowindow.setContent(content);
+                    infowindow.open(map, this);
+                }
+             }(content));
+            markeri.push(marker);
+        }
+    }
+
+</script>
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTT3_LSN4fZn3vqJRVhQylgR4_53qbb0&callback=initMap"></script>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/offcanvas.js"></script>
+<script src="~/js/checkbtns.js"></script>

@@ -42,5 +42,27 @@ namespace ITP1.Data
 
             return nekretnina;
         }
+
+        public MapViewModel CreateMapViewModel()
+        {
+            List<TipModel> tipovi = _context.Tipovi.AsNoTracking().Select(tip => new TipModel {
+                Id=tip.Id,
+                ImeTipa=tip.ImeTipa,
+                Selected=false
+            }).ToList();
+
+            List<NacinIznajmljivanjaModel> nacinIznajmljivanja = _context.NacinIznajmljivnja.AsNoTracking().Select(nizn => new NacinIznajmljivanjaModel
+            {
+                Id = nizn.Id,
+                Naziv = nizn.Naziv,
+                Selected = false
+            }).ToList();
+
+            var model = new MapViewModel();
+            model.NaciniIznajmljivanja = nacinIznajmljivanja;
+            model.SviTipovi = tipovi;
+
+            return model;
+        }
     }
 }
