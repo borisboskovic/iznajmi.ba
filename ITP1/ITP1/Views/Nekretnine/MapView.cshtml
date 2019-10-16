@@ -212,6 +212,8 @@
 
 <script>
     var map;
+    var markeri = [];
+    var infowindow;
 
     function centerToUsersLocation() {
         if ("geolocation" in navigator) {
@@ -222,7 +224,7 @@
                         lng: position.coords.longitude
                     };
                     map.setCenter(pos);
-                    map.setZoom(12);
+                    map.setZoom(7);
                 }
             );
         }
@@ -230,13 +232,41 @@
 
     function initMap() {
         centerToUsersLocation();
+        infowindow = new google.maps.InfoWindow();
         map = new google.maps.Map(document.getElementById('mapa-nekretnina'), {
             center: { lat: 43.823508, lng: 18.374364 },
             zoom: 7
         });
+        infowindow = new google.maps.InfoWindow();
+        addMarkers();
+        infowindow = new google.maps.InfoWindow();
+    }
+    function addMarkers() {
+        var nekretnineObj = @Json.Serialize(Model.Nekretnine);
+        console.log(nekretnineObj);
+        for (var i = 0; i < nekretnineObj.length; i++) {
+            var marker = new google.maps.Marker({
+                position: { lat: nekretnineObj[i].latitude, lng: nekretnineObj[i].longitude },
+                map: map,
+                draggable: false,
+                title: nekretnineObj[i].naslov
+            });
+
+            var content = "<strong>" + nekretnineObj[i].naslov + "</strong><br />Iznajmljivanje " + nekretnineObj[i].nacinIznajmljivanja + "<br />Cijena: <i>" + nekretnineObj[i].cijena + " BAM</i>";
+            content += "<br/><br/><a class='btn btn-success mx-auto' href='/Nekretnine/Display/" + nekretnineObj[i].id + "'>Detalji</a>"
+             google.maps.event.addListener(marker, 'click', function(content){
+                return function(){
+                    infowindow.setContent(content);
+                    infowindow.open(map, this);
+                }
+             }(content));
+            markeri.push(marker);
+        }
     }
 
 </script>
+
+
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTT3_LSN4fZn3vqJRVhQylgR4_53qbb0&callback=initMap"></script>
 

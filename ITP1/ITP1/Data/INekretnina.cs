@@ -29,5 +29,8 @@ namespace ITP1.Data
         void DeleteKomentar(int id);
         Task DeleteNekretninaAsync(int id);
         int CountKomentari(int nekretninaid);
+        int CountNekretnineWithSearch(IEnumerable<Nekretnina> nekretninas, String searchString);
+        IEnumerable<Nekretnina> SearchNekretnine(IEnumerable<Nekretnina> nekretninas, String searchString);
+        MapViewModel GetNekretninasFiltered(MapViewModel model);
     }
 }

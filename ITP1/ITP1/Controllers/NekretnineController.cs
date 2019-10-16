@@ -201,6 +201,7 @@ namespace ITP1.Controllers
         {
             if (model.NaciniIznajmljivanja == null)
                 model = _repo.CreateMapViewModel();
+            model = _nekretinina.GetNekretninasFiltered(model);
             return View(model);
         }
 

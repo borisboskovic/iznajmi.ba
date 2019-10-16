@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using ITP1.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using TestProject3.Areas.Identity.Services;
-using ITP1.Services.MapView;
 
 namespace ITP1
 {
@@ -44,7 +43,6 @@ namespace ITP1
             services.AddScoped<INekretnina, NekretninaService>();
             services.AddScoped<IAdministracija, AdministracijaService>();
             services.AddTransient<NekretnineRepository, NekretnineRepository>();
-            services.AddTransient<IMapView, MapViewService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
