@@ -20,6 +20,7 @@ namespace ITP1.Services
         {
             _context = context;
         }
+
         public async Task AddNekretnina(NekretninaInsertModel insertModel)
         {
             var tip = _context.Tipovi.Where(t => t.Id == insertModel.TipId).FirstOrDefault();
@@ -50,11 +51,11 @@ namespace ITP1.Services
 
             if (insertModel.ImgFiles != null)
             {
-               await AddNekreninaImg(insertModel.ImgFiles, nekretnina.Id);
+               await AddNekreninaImgs(insertModel.ImgFiles, nekretnina.Id);
             }
         }
 
-        private async Task AddNekreninaImg(List<IFormFile> imgs, int nekretninaId)
+        private async Task AddNekreninaImgs(List<IFormFile> imgs, int nekretninaId)
         {
             List<NekretninaImg> nekretnineImgs = new List<NekretninaImg>();
             for (int i = 0; i < imgs.Count; i++)
@@ -80,6 +81,31 @@ namespace ITP1.Services
                 }
             }
         }
+
+        public async Task AddNekretninaImg(IFormFile img, int nekretninaId)
+        {
+            ImageUploadResult imgUplResults = await UpdateImgToCloudWithStreamAsync(img, nekretninaId, GetNewImgName(nekretninaId));
+
+            if (imgUplResults != null)
+            {
+                NekretninaImg nekretninaImg = new NekretninaImg()
+                {
+                    NekretninaId = nekretninaId,
+                    Url = imgUplResults.Uri.ToString(),
+                    PublicId = imgUplResults.PublicId,
+                    IsCoverImg = false,
+                };
+
+                //Neće add range iz nekog razloga
+                String query = "Insert into NekretninaImgs (Url, PublicId, NekretninaId, IsCoverImg) Values('" + nekretninaImg.Url + "', '" + nekretninaImg.PublicId + "', " + nekretninaImg.NekretninaId + ", " + (nekretninaImg.IsCoverImg == true ? 1 : 0) + ")";
+#pragma warning disable EF1000 // Possible SQL injection vulnerability.
+                _context.Database.ExecuteSqlCommand(query);
+#pragma warning restore EF1000 // Possible SQL injection vulnerability.
+                await _context.SaveChangesAsync();
+
+            }
+        }
+
 
         public async Task<ImageUploadResult> UpdateImgToCloudWithStreamAsync(IFormFile formFile, int nekretninaId, string imgName)
         {
@@ -110,7 +136,19 @@ namespace ITP1.Services
 
         public Nekretnina GetNekretnina(int id)
         {
-            return _context.Nekretnine.FirstOrDefault(nk => nk.Id == id);
+            return _context.Nekretnine
+                .Include(nk => nk.Korisnik)
+                .Include(nk => nk.Marker)
+                .Include(nk => nk.NacinIznajmljivanja)
+                .Include(nk => nk.Tip)
+                .FirstOrDefault(nk => nk.Id == id);
+        }
+
+        public List<NekretninaImg> GetNekretnineImg(int nekretnineId)
+        {
+            return _context.NekretninaImgs
+                .Where(ni => ni.NekretninaId == nekretnineId)
+                .ToList();
         }
 
         public NekretninaUpadeModel GetNekretninaUpadeModel(int id)
@@ -206,6 +244,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Include(k => k.Korisnik)
                                     .Include(m => m.Marker)
                                     .Include(t => t.Tip)
@@ -219,6 +258,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Include(k => k.Korisnik)
                                    .Include(m => m.Marker)
                                    .Include(t => t.Tip)
@@ -232,6 +272,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Include(k => k.Korisnik)
                                     .Include(m => m.Marker)
                                     .Include(t => t.Tip)
@@ -245,6 +286,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Include(k => k.Korisnik)
                                     .Include(m => m.Marker)
                                     .Include(t => t.Tip)
@@ -258,6 +300,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Include(k => k.Korisnik)
                                     .Include(m => m.Marker)
                                     .Include(t => t.Tip)
@@ -271,6 +314,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Include(k => k.Korisnik)
                                     .Include(m => m.Marker)
                                     .Include(t => t.Tip)
@@ -284,6 +328,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Include(k => k.Korisnik)
                                     .Include(m => m.Marker)
                                     .Include(t => t.Tip)
@@ -297,6 +342,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Include(k => k.Korisnik)
                                     .Include(m => m.Marker)
                                     .Include(t => t.Tip)
@@ -330,6 +376,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Count();
             }
             else if (pModel.Filter.CijenaMax == 0 && pModel.Filter.PovrsinaMax == 0)
@@ -339,6 +386,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Count();
             }
             else if (pModel.Filter.CijenaMax == 0 && pModel.Filter.DostupnoOd == DateTime.MinValue)
@@ -348,6 +396,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Count();
             }
             else if (pModel.Filter.PovrsinaMax == 0 && pModel.Filter.DostupnoOd == DateTime.MinValue)
@@ -357,6 +406,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Count();
             }
             else if (pModel.Filter.CijenaMax == 0)
@@ -366,6 +416,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Count();
             }
             else if (pModel.Filter.PovrsinaMax == 0)
@@ -375,6 +426,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Count();
             }
             else if (pModel.Filter.DostupnoOd == DateTime.MinValue)
@@ -384,6 +436,7 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Count();
             }
             else
@@ -393,20 +446,9 @@ namespace ITP1.Services
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
                                     .Where(n => nacinIznIds.Contains(n.NacinIznajmljivanjaId))
+                                    .Where(n => n.Naslov.ToLower().Contains(pModel.SearchString.ToLower()) || n.Lokacija.ToLower().Contains(pModel.SearchString.ToLower()))
                                     .Count();
             }
-        }
-
-        public int CountNekretnineWithSearch(IEnumerable<Nekretnina> nekretninas, String searchString)
-        {
-            return nekretninas.Where(n => n.Naslov.ToLower().Contains(searchString.ToLower()) || n.Lokacija.ToLower().Contains(searchString.ToLower()))
-                .Count();
-        }
-
-        public IEnumerable<Nekretnina> SearchNekretnine(IEnumerable<Nekretnina> nekretninas, String searchString)
-        {
-            return nekretninas.Where(n => n.Naslov.ToLower().Contains(searchString.ToLower()) || n.Lokacija.ToLower().Contains(searchString.ToLower()))
-                .ToList();
         }
 
         public IEnumerable<Tip> GetAllTipoviFiltera()
@@ -419,6 +461,80 @@ namespace ITP1.Services
             return _context.NacinIznajmljivnja;
         }
 
+
+        public void SetNewCoverImg(NekretninaImg img)
+        {
+
+            if(_context.NekretninaImgs.Where(ni => ni.IsCoverImg == true && ni.NekretninaId == img.NekretninaId).FirstOrDefault() != null)
+                _context.NekretninaImgs.Where(ni => ni.IsCoverImg == true && ni.NekretninaId == img.NekretninaId).FirstOrDefault().IsCoverImg = false;
+            _context.NekretninaImgs.Where(ni => ni.Id == img.Id).FirstOrDefault().IsCoverImg = true;
+            _context.SaveChanges();
+        }
+
+        public async Task DeleteImgAsync(NekretninaImg img)
+        {
+            _context.NekretninaImgs.Attach(img);
+            _context.NekretninaImgs.Remove(img);
+            _context.SaveChanges();
+            var publicIdList = new List<String>() { img.PublicId };
+            await DeleteImgFromCloudinary(publicIdList);
+        }
+
+        public List<Komentar> GetKomentariForNekretnina(int nekretninaId)
+        {
+            return _context.Komentari
+                .Include(k => k.Korisnik)
+                .Where(k => k.NekretninaId == nekretninaId)
+                .OrderByDescending(k => k.dateTime)
+                .ToList();
+        }
+
+        public void AddKomentar(Komentar komentar)
+        {
+            _context.Komentari.Add(komentar);
+            _context.SaveChanges();
+        }
+
+        private async Task DeleteImgFromCloudinary(List<string> publicIdsForDelete)
+        {
+            Account account = new Account(
+                  "dysckfx4z",
+                  "146882857231366",
+                  "dOyF8Ue2EPJuNh73agNVjzKsxNk");
+
+            Cloudinary cloudinary = new Cloudinary(account);
+
+            var delParams = new DelResParams()
+            {
+                PublicIds = publicIdsForDelete,
+                Invalidate = true
+            };
+            var delResult = await cloudinary.DeleteResourcesAsync(delParams);
+        }
+
+
+        private String GetNewImgName(int nekretninaId)
+        {
+            var imgs = _context.NekretninaImgs.Where(ni => ni.NekretninaId == nekretninaId).ToList();
+            var last = new List<int>();
+            foreach (var item in imgs)
+            {
+                var str = item.Url.Split('/').Last();
+                str = str.Substring(0, str.LastIndexOf("."));
+                last.Add(Convert.ToInt32(str));
+            }
+
+            return last.Count() == 0 ? 0.ToString() : (last.Max() + 1).ToString();
+        }
+
+        public void DeleteKomentar(int id)
+        {
+            var komentar = new Komentar { Id = id };
+            _context.Komentari.Attach(komentar);
+            _context.Komentari.Remove(komentar);
+            _context.SaveChanges();
+        }
+
         public void DeleteNekretnina(int id)
         {
             Nekretnina nekretnina = _context.Nekretnine.FirstOrDefault(nk => nk.Id == id);
@@ -426,7 +542,46 @@ namespace ITP1.Services
 
             _context.SaveChanges();
 
+        }
 
+        public async Task DeleteNekretninaAsync(int id)
+        {
+            var nekretnina = new Nekretnina { Id = id };
+            if (_context.NekretninaImgs.Where(n => n.Id == id).ToList() != null)
+            {
+                var imgsList = _context.NekretninaImgs.Where(n => n.NekretninaId == id).ToList();
+                foreach (var item in imgsList)
+                {
+                    await DeleteImgAsync(item);
+                }
+            }
+            if (_context.Komentari.Where(k => k.NekretninaId == id).ToList() != null)
+            {
+                var komList = _context.Komentari.Where(k => k.NekretninaId == id).ToList();
+                foreach (var item in komList)
+                {
+                    _context.Komentari.Attach(item);
+                    _context.Komentari.Remove(item);
+                    //_context.SaveChanges();
+                    //DeleteKomentar(item.Id);
+                }
+            }
+
+            if (_context.Markeri.Where(m => m.Id == _context.Nekretnine.Where(n => n.Id == id).FirstOrDefault().MarkerId) != null)
+            {
+                var marker = new Marker { Id = _context.Nekretnine.Where(n => n.Id == id).FirstOrDefault().MarkerId };
+                _context.Markeri.Attach(marker);
+                _context.Markeri.Remove(marker);
+            }
+
+            _context.Nekretnine.Attach(nekretnina);
+            _context.Nekretnine.Remove(nekretnina);
+            _context.SaveChanges();
+        }
+
+        public int CountKomentari(int nekretninaid)
+        {
+            return _context.Komentari.Where(k => k.NekretninaId == nekretninaid).Count();
         }
     }
 }

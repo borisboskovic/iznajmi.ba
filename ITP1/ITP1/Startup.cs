@@ -41,6 +41,7 @@ namespace ITP1
             services.AddSingleton(Configuration);
             services.AddScoped<IKorisnik, KorisnikService>();
             services.AddScoped<INekretnina, NekretninaService>();
+            services.AddScoped<IAdministracija, AdministracijaService>();
             services.AddTransient<NekretnineRepository, NekretnineRepository>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -56,6 +57,7 @@ namespace ITP1
                 config.Password.RequireUppercase = false;
                 config.Password.RequireLowercase = false;
             })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

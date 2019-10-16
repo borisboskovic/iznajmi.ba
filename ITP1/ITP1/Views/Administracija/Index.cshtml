@@ -1,0 +1,142 @@
+﻿@model ITP1.Models.AdministracijaModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<form asp-controller="Administracija" asp-action="Index" method="get" id="formIndex" class="form-horizontal">
+
+    <input asp-for="@Model.CurrPage" id="CurrPage" type="hidden" />
+
+    <!--Search bar-->
+    <div class="col-xs-12 col-sm-12">
+        <br />
+        <div class="row" @*style="margin-left:10px"*@>
+            <div id="custom-search-input">
+                <div class="input-group col-md-12">
+                    <input type="text" class="  search-query form-control" placeholder="Pretraga" asp-for="@Model.SearchString" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-danger" type="button" onclick="document.getElementById('formIndex').submit()">
+                            <span class="fas fa-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br /><br /><br /><br />
+</form>
+    <h3>Korisnici</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.Display("Ime")
+                </th>
+                <th>
+                    @Html.Display("E-mail adresa")
+                </th>
+                <th>
+                    @Html.Display("Uloga")
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Korisnici)
+            {
+                <tr>
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(item.Ime))
+                        {
+                            <span>Nepoznati korisnik</span>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Ime)
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Detalji", "Details", "Korisnik", new { id = item.UserId }) |
+                        @if (item.Role != "Admin")
+                        {
+                            @Html.ActionLink("Postavi za Admina", "GiveAdminRoleToUser", new { userId = item.UserId }) <span>|</span>
+                        }
+                        @Html.ActionLink("Obriši korisnika", "DeleteUser", new { userId = item.UserId, korisnikId = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- pager -->
+    <div class="col-xs-12 col-sm-9 col-sm-offset-3">
+        @if (Model.Pager.EndPage > 1)
+        {
+            <ul class="pagination">
+                @if (Model.Pager.CurrentPage > 1)
+                {
+                    <li>
+                        <a href="#" onclick="goToFirst()">Prva</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="goToPrevious()">Prethodna</a>
+                    </li>
+                }
+
+                @*Ovo izmijeniti kasnije da bude npr Model.Pager.CurrentPage - 10 = Model.Pager.CurrentPage + 10 npr ili nesto*@
+                @for (var pagee = Model.Pager.StartPage; pagee <= Model.Pager.EndPage; pagee++)
+                {
+                    <li class="@(pagee == Model.Pager.CurrentPage ? "active" : "") hidden-sm hidden-xs">
+                        <a href="#" onclick="goToPage(@pagee)">@pagee</a>
+                    </li>
+                }
+
+                @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                {
+                    <li>
+                        <a href="#" onclick="goToNext()">Sledeća</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="goToLast()">Posljednja</a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    @*Ovo mora ovdje jer pristupa modelu...*@
+    <script>
+    function resetPager() {
+                document.getElementById("CurrPage").value = 0;
+    }
+    function goToNext() {
+        document.getElementById("CurrPage").value = @Model.Pager.CurrentPage+1;
+        document.getElementById("formIndex").submit();
+    }
+    function goToPrevious() {
+        document.getElementById("CurrPage").value = @Model.Pager.CurrentPage-1;
+        document.getElementById("formIndex").submit();
+    }
+    function goToFirst() {
+        document.getElementById("CurrPage").value = 1;
+        document.getElementById("formIndex").submit();
+    }
+    function goToLast() {
+        document.getElementById("CurrPage").value = @Model.Pager.TotalPages;
+        document.getElementById("formIndex").submit();
+    }
+    function goToPage(pagee) {
+        document.getElementById("CurrPage").value = pagee;
+        document.getElementById("formIndex").submit();
+    }
+    </script>

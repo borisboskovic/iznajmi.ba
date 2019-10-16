@@ -1,0 +1,211 @@
+﻿@model ITP1.Models.NekretninaDetails
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<input asp-for="@Model.Korisnik.UserId" type="hidden" />
+@if (SignInManager.IsSignedIn(User))
+{
+
+    var user = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
+    var roles = await UserManager.GetRolesAsync(user);
+    var id = UserManager.GetUserId(User);
+    if (id == Model.Korisnik.UserId)
+    {
+        <a asp-controller="Nekretnine" asp-action="Edit" asp-route-nekretninaid="@Model.Id" class="text-primary pull-left">Uredi</a>
+    }
+    if (roles.Contains("Admin") || (id == Model.Korisnik.UserId))
+    {
+        <div>
+
+            <a asp-controller="Nekretnine" asp-action="DeleteNekretninaDetails" asp-route-nekretninaid="@Model.Id" class="text-danger pull-right">Obriši ponudu</a>
+        </div>
+        <br /><br />
+    }
+}
+<div class="container-fluid">
+
+    <div class="row overflow-hidden thumbnail flex-sm">
+        <div class="col-sm-4 col-xs-9">
+            @if (Model.CoverImgUrl == null)
+            {
+                <img src="~/images/randHouse.jpg" style="width:220px;height:150px; margin-bottom:12px;" />
+            }
+            else
+            {
+                <img src="@Model.CoverImgUrl" style="width:220px;height:150px;margin-bottom:12px;" />
+            }
+            <h6>
+                @Model.Tip.ImeTipa
+            </h6>
+        </div>
+        <div class="col-sm-5 col-xs-9 grey-border-lg-screen">
+            <h4 style="margin-top:5px;">@Model.Naslov</h4>
+            <h6 style="color:darkgray"><i class="fa fa-map-marker"></i>&nbsp;@Model.Lokacija</h6>
+
+            <br />
+            <span style="font-size:12px;">Dostupno od</span><br />
+            <div class='input-group date datetimepicker1'>
+                <span class="input-group-addon input-sm">
+                    <span class="fa fa-calendar"></span>
+                </span>
+                @if (Model.DostupnoOd == DateTime.MinValue)
+                {
+                    <input readonly type='text' class="form-control input-sm" value="" style="width:125px;font-size:11px;" />
+                }
+                else
+                {
+                    <input readonly type='text' class="form-control input-sm" asp-for="@Model.DostupnoOd" style="width:125px;font-size:11px;" />
+                }
+            </div>
+            <span style="font-size:12px;">do</span><br />
+            <div class='input-group date datetimepicker1' style="margin-bottom:20px;">
+                <span class="input-group-addon input-sm">
+                    <span class="fa fa-calendar"></span>
+                </span>
+                @if (Model.DostupnoDo == DateTime.MaxValue)
+                {
+                    <input readonly type='text' class="form-control input-sm" value="" style="width:125px;font-size:11px;" />
+                }
+                else
+                {
+                    <input readonly type='text' class="form-control input-sm" asp-for="@Model.DostupnoDo" style="width:125px;font-size:11px;" />
+                }
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.Opis))
+            {
+                <div class="thumbnail" style="word-wrap:wrap; word-break:break-all">
+                    @Model.Opis
+                </div>
+            }
+        </div>
+        <div class="col-sm-3" style="text-align:center; color:seagreen">
+            <a href="#komentari" class=" pull-right"><span class="far fa-lg fa-comment"></span>&nbsp;@Model.BrojKomentara</a>
+            <br />
+            <h4 style="margin-bottom:3px">BAM&nbsp;&nbsp;@Model.Cijena</h4>
+            <sup style="color:darkseagreen">@Model.NacinIznajmljivanja.Naziv</sup>
+            <h4 style="margin-top:4px;">m<sup>2</sup>&nbsp;&nbsp;@Model.Povrsina</h4>
+            <br /><br />
+            <h4>
+                <a asp-area="" asp-controller="Korisnik" asp-action="Details" asp-route-id="@Model.Korisnik.UserId">
+                    @if (Model.Korisnik.AvatarImgUrl == null)
+                    {
+                        <img id="myImg" src="~/images/defaultUser.png" alt="Unable to load image" class="" style="border-radius:100%; display:inline; object-fit:cover; height:40px;width:40px;" />
+                    }
+                    else
+                    {
+                        <img id="myImg" src="@Model.Korisnik.AvatarImgUrl" alt="Unable to load image" class="" style="border-radius:100%; display:inline; object-fit:cover; height:40px;width:40px;" />
+                    }
+                    &nbsp;&nbsp;
+                    @Model.Korisnik.Ime
+                </a>
+            </h4>
+            <div>
+                <i class="fas fa-envelope"></i>&nbsp;&nbsp;
+                @Model.Korisnik.MailKontakt<br />
+                <i class="fas fa-phone"></i>&nbsp;&nbsp;@Model.Korisnik.Tel<br />
+                <i class="fa fa-globe"></i>&nbsp;&nbsp;@Model.Korisnik.WebKontaktUrl
+            </div>
+        </div>
+    </div>
+    <div>
+        @{ var cnt = 0;}
+        @for (int i = 0; i < Model.Imgs.Count; i++)
+        {
+            { cnt = cnt + 1; }
+            <form asp-controller="Nekretnine" asp-action="Details" method="post" enctype="multipart/form-data">
+                @*<input asp-for="@Model.Id" type="hidden" />*@
+                <input asp-for="@Model.Imgs.ElementAt(i).Id" type="hidden" />
+                <input name="imgId" value="@Model.Imgs.ElementAt(i).Id" type="hidden" />
+                <input asp-for="@Model.Imgs.ElementAt(i).Url" type="hidden" />
+                <input asp-for="@Model.Imgs.ElementAt(i).PublicId" type="hidden" />
+                <input asp-for="@Model.Imgs.ElementAt(i).NekretninaId" type="hidden" />
+                <div class="thumbnail col-md-4">
+                    <img src="@Model.Imgs.ElementAt(i).Url" alt="your image" />
+                    <br />
+                </div>
+            </form>
+        }
+    </div>
+</div>
+
+<div id="komentari">
+    <h3>Komentari</h3>
+    <div style="border:1px solid #DFD2D2; padding:25px;">
+        <form asp-controller="Nekretnine" asp-action="Details" method="post">
+            <input name="nekretninaId" value="@Model.Id" type="hidden" />
+            <textarea asp-for="@Model.NewKomentar.Tekst" required placeholder="Ostavite komentar..." class="form-control" style="font-size:15px; margin-bottom:7px"></textarea>
+            <input class="custom-btn offset pull-right" type="submit" value="Potvrda" />
+        </form>
+        <br /><br /><br />
+    </div>
+    <br />
+
+    @for (int i = 0; i < Model.Komentari.Count; i++)
+    {
+        <div style="border:1px solid #DFD2D2; padding:25px;">
+            <p>
+                @if (Model.Komentari.ElementAt(i).Korisnik.AvatarImgUrl == null)
+                {
+                    <img id="myImg" src="~/images/defaultUser.png" alt="Unable to load image" class="" style="border-radius:100%; object-fit:cover; height:30px;width:30px;" />
+                }
+                else
+                {
+                    <img id="myImg" src="@Model.Komentari.ElementAt(i).Korisnik.AvatarImgUrl" alt="Unable to load image" class="" style="border-radius:100%; object-fit:cover; height:30px;width:30px;" />
+                }
+                @if (string.IsNullOrWhiteSpace(Model.Komentari.ElementAt(i).Korisnik.Ime))
+                {
+                    <span>Nepoznati korisnik</span>
+                }
+                else
+                {
+                    @Model.Komentari.ElementAt(i).Korisnik.Ime
+                }
+                <span class="pull-right text-muted small">
+                    @Model.Komentari.ElementAt(i).dateTime
+                </span>
+            </p>
+
+            <p style="word-wrap:wrap; word-break:break-all">@Model.Komentari.ElementAt(i).Tekst</p>
+            @if (SignInManager.IsSignedIn(User))
+            {
+
+                var user = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
+                var roles = await UserManager.GetRolesAsync(user);
+
+                if (roles.Contains("Admin"))
+                {
+                    <a asp-controller="Nekretnine" asp-action="DeleteKomentarDetails" asp-route-id="@Model.Komentari.ElementAt(i).Id" asp-route-nekretninaid="@Model.Komentari.ElementAt(i).NekretninaId" class="text-danger pull-right">Obriši komentar</a>
+                }
+            }
+        </div>
+
+    }
+</div>
+<br />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/js/smooth-scrolling.js"></script>
+    <script type="text/javascript">
+        function readURL(input) {
+            if (input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#newImg")
+                        .attr('src', e.target.result)
+                        .attr('style', 'display: block')
+                        .width(200)
+                        .height(200);
+                };
+                reader.readAsDataURL(input.files[0]);
+                document.getElementById('add-img-form').submit();
+            }
+        }
+    </script>
+}

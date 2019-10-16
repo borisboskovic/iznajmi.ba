@@ -71,9 +71,9 @@
                                 </div>
                                 <div id="utisci" class="tab-pane fade">
                                     <input asp-for="@Model.LicniUtisak.Ocjena" type="hidden" id="ocjena"/>
-                                    <h3>Utisci</h3>
+                                    <br />
                                     <div style="border:1px solid #DFD2D2; padding:25px;">
-                                        <input asp-for="@Model.LicniUtisak.Komentar" placeholder="Ostavite utisak..." class="form-control" style="font-size:15px; margin-bottom:7px" />
+                                        <textarea asp-for="@Model.LicniUtisak.Komentar" placeholder="Ostavite utisak..." class="form-control" style="font-size:15px; margin-bottom:7px" ></textarea>
                                         <i class="far fa-star fa-lg" style="color:black;vertical-align:-.27em;cursor:pointer" id="rating1" onclick="setRating(this)" onmouseover="changeColor(this)" onmouseout="resetColor()" onload="resetColor()"></i>
                                         <i class="far fa-star fa-lg" style="color:black;vertical-align:-.27em;cursor:pointer" id="rating2" onclick="setRating(this)" onmouseover="changeColor(this)" onmouseout="resetColor()"></i>
                                         <i class="far fa-star fa-lg" style="color:black;vertical-align:-.27em;cursor:pointer" id="rating3" onclick="setRating(this)" onmouseover="changeColor(this)" onmouseout="resetColor()"></i>

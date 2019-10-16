@@ -9,7 +9,16 @@
         <ul class="nav navbar-nav navbar-right" style="width:100%">
             <li style="width:100%; margin-left:-15px;">
                 @{ var id = UserManager.GetUserId(User);}
-                <!-- <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello--@UserManager.GetUserName(User) !</a>-->
+                <!-- <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello--@UserManager.GetUserName(User)
+    !</a>-->
+                @{
+                    var user = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
+                    var roles = await UserManager.GetRolesAsync(user);
+                }
+                @if (roles.Contains("Admin") || (id == Model.Korisnik.UserId))
+                {
+                    <a asp-area="" asp-controller="Administracija" asp-action="Index">Administracija</a>
+                }
                 <a asp-area="" asp-controller="Korisnik" asp-action="Edit" asp-route-id="@id">Profil</a>
             </li>
             <li style="width:100%; margin-left:-15px;">
