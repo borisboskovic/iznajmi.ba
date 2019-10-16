@@ -253,7 +253,7 @@
             });
 
             var content = "<strong>" + nekretnineObj[i].naslov + "</strong><br />Iznajmljivanje " + nekretnineObj[i].nacinIznajmljivanja + "<br />Cijena: <i>" + nekretnineObj[i].cijena + " BAM</i>";
-            content += "<br/><br/><a class='btn btn-success mx-auto' href='/Nekretnine/Display/" + nekretnineObj[i].id + "'>Detalji</a>"
+            content += "<br/><br/><a class='btn btn-success mx-auto' href='/Nekretnine/Details/" + nekretnineObj[i].id + "'>Detalji</a>"
              google.maps.event.addListener(marker, 'click', function(content){
                 return function(){
                     infowindow.setContent(content);
