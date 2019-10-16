@@ -94,9 +94,13 @@ namespace ITP1.Services
 ;
         }
 
+        //Todo možda neće trebati logged user ovdje
         public List<Utisak> GetUtisci(int ocijenjeniKorisnikId, int loggedUser)
         {
-            return _context.Utisci.Where(u => u.OcjenjeniKorinsnikid == ocijenjeniKorisnikId && u.KorisnikId != loggedUser)
+            //return _context.Utisci.Where(u => u.OcjenjeniKorinsnikid == ocijenjeniKorisnikId && u.KorisnikId != loggedUser)
+            //    .Include(u => u.Korisnik)
+            //    .ToList();
+            return _context.Utisci.Where(u => u.OcjenjeniKorinsnikid == ocijenjeniKorisnikId)
                 .Include(u => u.Korisnik)
                 .ToList();
         }
@@ -185,10 +189,6 @@ namespace ITP1.Services
                 .Count();
         }
 
-        public Double GetProsjecnaOcjena(int jedinice, int dvice, int trice, int cetvorke, int petice)
-        {
-            return (jedinice + dvice + trice + cetvorke + petice) / 5;
-        }
 
         public List<NekretninaItem> GetListaNekretninaZaKorisnika(int korisnikId)
         {

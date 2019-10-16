@@ -19,7 +19,6 @@ namespace ITP1.Controllers
             _korisnik = korisnik;
         }
 
-        //ToDo Details
         [Authorize]
         [HttpGet]
         public IActionResult Edit(string id)

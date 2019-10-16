@@ -23,7 +23,7 @@ namespace ITP1.Controllers
         {
             Pager pager;
             IEnumerable<Nekretnina> nekretnine;
-            if (pModel.Filter != null || pModel.NaciniIznajmljivanja != null || pModel.SviTipovi != null)
+            if (pModel.Filter != null || pModel.NaciniIznajmljivanja != null || pModel.SviTipovi != null || (!string.IsNullOrWhiteSpace(pModel.SearchString)))
             {
 
                 DateTime dtOd = DateTime.MinValue;
@@ -33,28 +33,30 @@ namespace ITP1.Controllers
                 DateTime.TryParseExact(pModel.Filter.DostupnoDoString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dtDo);
                 pModel.Filter.DostupnoDo = dtDo;
 
-                pager = new Pager(_nekretnina.CountNekretnineWithFilters(pModel), (pModel.CurrPage == 0 ? 1 : pModel.CurrPage));
+                pModel.SearchString = pModel.SearchString == null ? "" : pModel.SearchString;
+
+                pager = new Pager(_nekretnina.CountNekretnineWithFilters(pModel), pModel.CurrPage );
+                if (pModel.CurrPage == 0)
+                    pager.CurrentPage = pager.EndPage;
+
                 nekretnine = _nekretnina.GetAllNekretnineWithFilters(pager.CurrentPage, pager.PageSize, pModel);
 
             }
-            else
+            else 
             {
-                pager = new Pager(_nekretnina.CountNekretnine(), (pModel.CurrPage == 0 ? 1 : pModel.CurrPage));
+                pager = new Pager(_nekretnina.CountNekretnine(), pModel.CurrPage);
+                if (pModel.CurrPage == 0)
+                    pager.CurrentPage = pager.EndPage;
+
                 nekretnine = _nekretnina.GetNekretnine(pager.CurrentPage, pager.PageSize);              
             }
-
-            if (pModel.SearchString != null && (!string.IsNullOrWhiteSpace(pModel.SearchString)))
-            {
-                pager = new Pager(_nekretnina.CountNekretnineWithSearch(nekretnine, pModel.SearchString), (pModel.CurrPage == 0 ? 1 : pModel.CurrPage));
-                nekretnine = _nekretnina.SearchNekretnine(nekretnine, pModel.SearchString);
-            }
-
 
             List<NekretninaItem> nekretnine_item = new List<NekretninaItem>();
             foreach (var item in nekretnine)
             {
                 NekretninaItem nekretnina_item = new NekretninaItem()
                 {
+                    Id = item.Id,
                     Cijena = item.Cijena,
                     Naslov = item.Naslov,
                     Korisik = item.Korisnik,
@@ -72,8 +74,7 @@ namespace ITP1.Controllers
                     {
                         Id = item.NacinIznajmljivanja == null ? 0 : item.NacinIznajmljivanja.Id,
                         Naziv = item.NacinIznajmljivanja == null ? null : item.NacinIznajmljivanja.Naziv,
-                    }
-                    ,
+                    },
                 };
                 nekretnine_item.Add(nekretnina_item);
             }

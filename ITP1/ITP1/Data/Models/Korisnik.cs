@@ -14,11 +14,6 @@ namespace ITP1.Data.Models
         public string WebKontaktUrl { get; set; }
         public string EMailFromAuthentication { get; set; }
         public string AvatarImgUrl { get; set; }
-        public int NumberOfRatings5 { get; set; }
-        public int NumberOfRatings4 { get; set; }
-        public int NumberOfRatings3 { get; set; }
-        public int NumberOfRatings2 { get; set; }
-        public int NumberOfRatings1 { get; set; }
 
 
         public string UserId { get; set; }
