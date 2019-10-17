@@ -42,17 +42,17 @@ namespace ITP1.Services
                 DostupnoOd = insertModel.DostupnoOd ?? DateTime.MinValue,
                 DostupnoDo = insertModel.DostupnoDo ?? DateTime.MaxValue,
                 Opis = insertModel.Opis,
-                NacinIznajmljivanja=nacinIznajmljivanja,
-                Tip=tip,
-                Marker=marker,
-                Korisnik=korisnik
+                NacinIznajmljivanja = nacinIznajmljivanja,
+                Tip = tip,
+                Marker = marker,
+                Korisnik = korisnik
             };
             _context.Nekretnine.Add(nekretnina);
             await _context.SaveChangesAsync();
 
             if (insertModel.ImgFiles != null)
             {
-               await AddNekreninaImgs(insertModel.ImgFiles, nekretnina.Id);
+                await AddNekreninaImgs(insertModel.ImgFiles, nekretnina.Id);
             }
         }
 
@@ -73,7 +73,7 @@ namespace ITP1.Services
                     };
 
                     //Neće add range iz nekog razloga
-                    String query = "Insert into NekretninaImgs (Url, PublicId, NekretninaId, IsCoverImg) Values('" + nekretninaImg.Url + "', '" + nekretninaImg.PublicId + "', "+nekretninaImg.NekretninaId+", " + (nekretninaImg.IsCoverImg == true ? 1 : 0) + ")";
+                    String query = "Insert into NekretninaImgs (Url, PublicId, NekretninaId, IsCoverImg) Values('" + nekretninaImg.Url + "', '" + nekretninaImg.PublicId + "', " + nekretninaImg.NekretninaId + ", " + (nekretninaImg.IsCoverImg == true ? 1 : 0) + ")";
 #pragma warning disable EF1000 // Possible SQL injection vulnerability.
                     _context.Database.ExecuteSqlCommand(query);
 #pragma warning restore EF1000 // Possible SQL injection vulnerability.
@@ -466,7 +466,7 @@ namespace ITP1.Services
         public void SetNewCoverImg(NekretninaImg img)
         {
 
-            if(_context.NekretninaImgs.Where(ni => ni.IsCoverImg == true && ni.NekretninaId == img.NekretninaId).FirstOrDefault() != null)
+            if (_context.NekretninaImgs.Where(ni => ni.IsCoverImg == true && ni.NekretninaId == img.NekretninaId).FirstOrDefault() != null)
                 _context.NekretninaImgs.Where(ni => ni.IsCoverImg == true && ni.NekretninaId == img.NekretninaId).FirstOrDefault().IsCoverImg = false;
             _context.NekretninaImgs.Where(ni => ni.Id == img.Id).FirstOrDefault().IsCoverImg = true;
             _context.SaveChanges();
@@ -607,7 +607,7 @@ namespace ITP1.Services
             //Nacini iznajmljivanja
             bool nacinSelected = false;
             List<int> selectedNacinIds = new List<int>();
-            foreach(NacinIznajmljivanjaModel nacin in model.NaciniIznajmljivanja)
+            foreach (NacinIznajmljivanjaModel nacin in model.NaciniIznajmljivanja)
             {
                 if (nacin.Selected == true)
                 {
@@ -625,16 +625,20 @@ namespace ITP1.Services
             //Dohvatanje iz baze i filtriranje po tipu i nacinu iznajmljivanja
             List<NekretninaListModel> nekretnine = _context.Nekretnine
                 .Where(nek => selectedTipIds.Contains(nek.Tip.Id))
-                .Where(nek=>selectedNacinIds.Contains(nek.NacinIznajmljivanja.Id))
-                .Select(nek=> new NekretninaListModel {
-                    Id=nek.Id,
-                    Naslov=nek.Naslov,
-                    Latitude=nek.Marker.Lat,
-                    Longitude=nek.Marker.Lng,
-                    NacinIznajmljivanja=nek.NacinIznajmljivanja.Naziv,
-                    Tip=nek.Tip.ImeTipa,
-                    Cijena=nek.Cijena,
-                    Lokacija=nek.Lokacija
+                .Where(nek => selectedNacinIds.Contains(nek.NacinIznajmljivanja.Id))
+                .Select(nek => new NekretninaListModel
+                {
+                    Id = nek.Id,
+                    Naslov = nek.Naslov,
+                    Latitude = nek.Marker.Lat,
+                    Longitude = nek.Marker.Lng,
+                    NacinIznajmljivanja = nek.NacinIznajmljivanja.Naziv,
+                    Tip = nek.Tip.ImeTipa,
+                    Cijena = nek.Cijena,
+                    Lokacija = nek.Lokacija,
+                    Povrsina = nek.Povrsina,
+                    DostupnoOd=nek.DostupnoOd,
+                    DostupnoDo=nek.DostupnoDo
                 })
                 .ToList();
 
@@ -644,10 +648,10 @@ namespace ITP1.Services
             {
                 Regex regex = new Regex("[a-z0-9]{2,}");
                 MatchCollection matchCollection = regex.Matches(model.SearchString.ToLower());
-                foreach(NekretninaListModel nek in nekretnine)
+                foreach (NekretninaListModel nek in nekretnine)
                 {
                     bool found = false;
-                    foreach(Match match in matchCollection)
+                    foreach (Match match in matchCollection)
                     {
                         if (nek.Naslov.ToLower().Contains(match.Value) || nek.Lokacija.ToLower().Contains(match.Value))
                             found = true;
@@ -656,6 +660,22 @@ namespace ITP1.Services
                         nekretnineFiltered.Add(nek);
                 }
                 nekretnine = nekretnineFiltered;
+            }
+
+            //Filtriranje po cijeni, povrsini, dostupnosti
+            if (model.Filter != null)
+            {
+                //Po cijeni
+                if (model.Filter.CijenaMax > 0 && model.Filter.CijenaMax >= model.Filter.CijenaMin)
+                    nekretnine = nekretnine.Where(nek => nek.Cijena >= model.Filter.CijenaMin && nek.Cijena <= model.Filter.CijenaMax).ToList();
+                //Po povrsini
+                if (model.Filter.PovrsinaMax > 0 && model.Filter.PovrsinaMax >= model.Filter.PovrsinaMin)
+                    nekretnine = nekretnine.Where(nek => nek.Povrsina >= model.Filter.PovrsinaMin && nek.Povrsina <= model.Filter.PovrsinaMax).ToList();
+                //Po dostupnosti
+                if (model.Filter.DostupnoOd > DateTime.MinValue)
+                    nekretnine = nekretnine.Where(nek => nek.DostupnoOd <= model.Filter.DostupnoOd).ToList();
+                if (model.Filter.DostupnoDo > DateTime.MinValue)
+                    nekretnine = nekretnine.Where(nek => nek.DostupnoDo >= model.Filter.DostupnoDo).ToList();
             }
 
             model.Nekretnine = nekretnine;

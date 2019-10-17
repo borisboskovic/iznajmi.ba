@@ -14,6 +14,9 @@ namespace ITP1.Services
         public string Lokacija { get; set; }
         public string Tip { get; set; }
         public string NacinIznajmljivanja { get; set; }
-        public decimal Cijena { get; set; }
+        public double Cijena { get; set; }
+        public int Povrsina { get; set; }
+        public DateTime DostupnoOd { get; set; }
+        public DateTime DostupnoDo { get; set; }
     }
 }
