@@ -588,7 +588,11 @@ namespace ITP1.Services
                 _context.Markeri.Remove(marker);
             }
 
-            _context.Nekretnine.Attach(nekretnina);
+            //_context.Entry(nekretnina).State = EntityState.Detached;
+            //_context.ChangeTracker.Entries<Nekretnina>().Any(e => e.Entity.Id == id);
+            nekretnina = _context.ChangeTracker.Entries<Nekretnina>().FirstOrDefault(e => e.Entity.Id == id).Entity;
+
+            //_context.Nekretnine.Attach(nekretnina);
             _context.Nekretnine.Remove(nekretnina);
             _context.SaveChanges();
         }
