@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ITP1.Data;
@@ -45,12 +44,12 @@ namespace ITP1.Controllers
 
                 return View(model);
             }
-            //Napraviti svoj error Posle
-            return View();//???? error page*/
+            return View("UnauthorizedAccess");
         }
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Edit(KorisnikProfil korisnikModel)
         {
             if (ModelState.IsValid && IsAuthorized(korisnikModel.CurrentUserId))
@@ -72,15 +71,14 @@ namespace ITP1.Controllers
                     WebKontaktUrl = korisnikModel.WebKontaktUrl,
                 };
                 _korisnik.UpdateKorisnik(korisnik);
-                return RedirectToAction("Index", "Home", new { area = "" });
-                //return View(korisnikModel);
+                //return RedirectToAction("Index", "Home", new { area = "" });
+                return View(korisnikModel);
             }
 
-            return View(korisnikModel);
+            return View("UnauthorizedAccess");
         }
 
 
-        //TODO authorize
         public IActionResult Details(string id)
         {
             int ocijenjeniKorinikId = _korisnik.GetKorisnikWithForeignKey(id).Id;

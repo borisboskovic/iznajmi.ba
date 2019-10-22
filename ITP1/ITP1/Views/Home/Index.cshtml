@@ -9,7 +9,9 @@
     <div class="row row-offcanvas row-offcanvas-left" style="margin-top:-37px;">
         <form asp-controller="Home" asp-action="Index" method="get" id="formIndex" class="form-horizontal">
             <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" style="background-color:#F5F5F5;border-right:1px solid #DDDDDD; border-bottom:1px solid #DDDDDD;">
-                <br /><br />
+                <br />
+                <h4>&nbsp;&nbsp;<a asp-controller="Nekretnine" asp-action="MapView" class="text-warning"><i class="fa fa-map"></i>&nbsp;Prikaz na mapi</a></h4>
+                <br />
                 <div class="orange-line"></div>
                 <input asp-for="@Model.CurrPage" id="CurrPage" type="hidden" />
 
@@ -281,7 +283,6 @@
                                 </li>
                             }
 
-                            @*Ovo izmijeniti kasnije da bude npr Model.Pager.CurrentPage - 10 = Model.Pager.CurrentPage + 10 npr ili nesto*@
                             @for (var pagee = Model.Pager.StartPage; pagee <= Model.Pager.EndPage; pagee++)
                             {
                                 <li class="@(pagee == Model.Pager.CurrentPage ? "active" : "") hidden-sm hidden-xs">

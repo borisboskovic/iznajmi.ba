@@ -61,8 +61,6 @@ namespace ITP1.Controllers
             if (await IsCurrentUserInRoleAsync("Admin"))
             {
                 await _administracija.DeleteUserAsync(userId, korisnikId);
-
-                //vidjet mora li ovdje još parametar new AdministracijaModel !!!
                 return RedirectToAction("Index", "Administracija");
             }
 

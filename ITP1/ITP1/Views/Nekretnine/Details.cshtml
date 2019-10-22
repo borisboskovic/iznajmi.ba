@@ -17,7 +17,7 @@
     var id = UserManager.GetUserId(User);
     if (id == Model.Korisnik.UserId)
     {
-        <a asp-controller="Nekretnine" asp-action="Edit" asp-route-nekretninaid="@Model.Id" class="text-primary pull-left">Uredi</a>
+        <a asp-controller="Nekretnine" asp-action="Edit" asp-route-id="@Model.Id" class="text-primary pull-left">Uredi</a>
     }
     if (roles.Contains("Admin") || (id == Model.Korisnik.UserId))
     {
@@ -114,12 +114,9 @@
         </div>
     </div>
     <div>
-        @{ var cnt = 0;}
         @for (int i = 0; i < Model.Imgs.Count; i++)
         {
-            { cnt = cnt + 1; }
-            <form asp-controller="Nekretnine" asp-action="Details" method="post" enctype="multipart/form-data">
-                @*<input asp-for="@Model.Id" type="hidden" />*@
+            @*<form asp-controller="Nekretnine" asp-action="Details" method="post" enctype="multipart/form-data">*@
                 <input asp-for="@Model.Imgs.ElementAt(i).Id" type="hidden" />
                 <input name="imgId" value="@Model.Imgs.ElementAt(i).Id" type="hidden" />
                 <input asp-for="@Model.Imgs.ElementAt(i).Url" type="hidden" />
@@ -129,7 +126,7 @@
                     <img src="@Model.Imgs.ElementAt(i).Url" alt="your image" />
                     <br />
                 </div>
-            </form>
+            @*</form>*@
         }
     </div>
 </div>
@@ -189,23 +186,4 @@
 </div>
 <br />
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 <script src="~/js/smooth-scrolling.js"></script>
-    <script type="text/javascript">
-        function readURL(input) {
-            if (input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $("#newImg")
-                        .attr('src', e.target.result)
-                        .attr('style', 'display: block')
-                        .width(200)
-                        .height(200);
-                };
-                reader.readAsDataURL(input.files[0]);
-                document.getElementById('add-img-form').submit();
-            }
-        }
-    </script>
-}

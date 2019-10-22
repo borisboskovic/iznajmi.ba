@@ -32,5 +32,6 @@ namespace ITP1.Data
         int CountNekretnineWithSearch(IEnumerable<Nekretnina> nekretninas, String searchString);
         IEnumerable<Nekretnina> SearchNekretnine(IEnumerable<Nekretnina> nekretninas, String searchString);
         MapViewModel GetNekretninasFiltered(MapViewModel model);
+        string GetUserIdFromNekretnina(int nekretninaId);
     }
 }

@@ -5,16 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<h2>Uredi</h2>
 
 <h4>Nekretnina</h4>
 <hr />
 <form asp-controller="Nekretnine" asp-action="Edit" method="post" enctype="multipart/form-data">
-    
+
     <div class="form-control hidden">
         <label asp-for="UserId" class="control-label"></label>
         <input asp-for="UserId" class="form-control" />
     </div>
+    <input type="hidden" asp-for="Id" />
 
     <div class="col-md-12 container">
         <div class="col-md-4">
@@ -43,28 +44,63 @@
             </div>
             <div class="form-group">
                 <label asp-for="DostupnoOdString" class="control-label"></label>
-                <div class='input-group date datetimepicker1'>
-                    <span class="input-group-addon input-sm">
-                        <span class="fa fa-calendar"></span>
-                    </span>
-                    <input type='text' class="form-control" asp-for="@Model.DostupnoOdString" value="@Model.DostupnoOdString" onkeydown="return false" />
-                </div>
+                @if (Model.DostupnoOd == DateTime.MinValue)
+                {
+                    <div class='input-group date datetimepicker1'>
+                        <span class="input-group-addon input-sm">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                        <input type='text' class="form-control" asp-for="@Model.DostupnoOdString" value="" onkeydown="return false" />
+                    </div>
+                }
+                else
+                {
+                    <div class='input-group date datetimepicker1'>
+                        <span class="input-group-addon input-sm">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                        <input type='text' class="form-control" asp-for="@Model.DostupnoOdString" value="@Model.DostupnoOdString" onkeydown="return false" />
+                    </div>
+                }
                 <span asp-validation-for="DostupnoOdString" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DostupnoDoString" class="control-label"></label>
-                <div class='input-group date datetimepicker1'>
-                    <span class="input-group-addon input-sm">
-                        <span class="fa fa-calendar"></span>
-                    </span>
-                    <input type='text' class="form-control" asp-for="@Model.DostupnoDoString" value="@Model.DostupnoDoString" onkeydown="return false" />
-                </div>
+                @if (Model.DostupnoDo == DateTime.MaxValue)
+                {
+                    <div class='input-group date datetimepicker1'>
+                        <span class="input-group-addon input-sm">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                        <input type='text' class="form-control" asp-for="@Model.DostupnoDoString" value="" onkeydown="return false" />
+                    </div>
+                }
+                else
+                {
+                    <div class='input-group date datetimepicker1'>
+                        <span class="input-group-addon input-sm">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                        <input type='text' class="form-control" asp-for="@Model.DostupnoDoString" value="@Model.DostupnoDoString" onkeydown="return false" />
+                    </div>
+                }
+
                 <span asp-validation-for="DostupnoDoString" class="text-danger"></span>
             </div>
 
         </div>
         <div class="col-md-4">
             <div class="form-group">
+            <label asp-for="Tip" class="control-label"></label>
+            @Html.DropDownListFor(m => m.Tip, (SelectList)Model.Tipovi, new { @class = "form-control input-md", Style = "width:100%;" })
+            @Html.ValidationMessageFor(model => model.Tip, "", new { @class = "text-danger" })
+            </div>
+        <div class="form-group">
+            <label asp-for="NacinIznajmljivanja" class="control-label"></label>
+            @Html.DropDownListFor(m => m.NacinIznajmljivanja, (SelectList)Model.NaciniIznajmljivanja, new { @class = "form-control input-md", Style = "width:100%;" })
+            @Html.ValidationMessageFor(model => model.NacinIznajmljivanja, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
                 <label asp-for="Opis" class="control-label"></label>
                 <textarea asp-for="Opis" class="form-control"></textarea>
                 <span asp-validation-for="Opis" class="text-danger"></span>
@@ -85,37 +121,9 @@
             <input asp-for="Longitude" type="text" readonly class="form-control" id="longitude-value" />
         </div>
 
-
-
-        <div class="col-md-12">
-            <div class="form-group">
-                <label asp-for="ImgFiles"><br /><br /><span style="cursor:pointer" class="custom-btn fill">Dodaj slike (maksimalno 6)</span></label>
-                <input type="file" asp-for="ImgFiles" style="opacity:0" accept="image/jpeg, image/png" multiple class="input-group" onchange="readURL(this);" /><br />
-                <div class="thumbnail col-md-4" id="img1-cont" style="display:none">
-                    <img id="img1" src="#" alt="your image" style="display:none" />
-                </div>
-                <div class="thumbnail col-md-4" id="img2-cont" style="display:none">
-                    <img id="img2" src="#" alt="your image" style="display:none" />
-                </div>
-                <div class="thumbnail col-md-4" id="img3-cont" style="display:none">
-                    <img id="img3" src="#" alt="your image" style="display:none" />
-                </div>
-                <div class="thumbnail col-md-4" id="img4-cont" style="display:none">
-                    <img id="img4" src="#" alt="your image" style="display:none" />
-                </div>
-                <div class="thumbnail col-md-4" id="img5-cont" style="display:none">
-                    <img id="img5" src="#" alt="your image" style="display:none" />
-                </div>
-                <div class="thumbnail col-md-4" id="img6-cont" style="display:none">
-                    <img id="img6" src="#" alt="your image" style="display:none" />
-                </div>
-            </div>
-        </div>
-
-
-
+        <br />
         <div class="btn-group col-md-4 col-md-push-2" style="margin:10px;">
-            <input type="submit" name="Izmjeni" value="Izmjeni" class="custom-btn offset" style="width:100%" />
+            <input type="submit" name="Izmjeni" value="Izmijeni" class="custom-btn offset" style="width:100%" />
         </div>
         <div class="btn-group col-md-4 col-md-push-2" style="margin:10px;">
             <a href="@Url.Action("Index", "Home")">
@@ -123,44 +131,76 @@
             </a>
         </div>
     </div>
-
 </form>
+<div>
+    <br /><br />&nbsp;
+    <br /><br />
+    </div>      <div>
+          @{ var cnt = 0;}
+          @for (int i = 0; i < Model.Imgs.Count && i < 3; i++)
+          {
+              { cnt = cnt + 1; }
+              <form asp-controller="Nekretnine" asp-action="EditImg" method="post" enctype="multipart/form-data">
+                  @*<input asp-for="@Model.Id" type="hidden" />*@
+                  <input asp-for="@Model.Imgs.ElementAt(i).Id" type="hidden" />
+                  <input name="imgId" value="@Model.Imgs.ElementAt(i).Id" type="hidden" />
+                  <input asp-for="@Model.Imgs.ElementAt(i).Url" type="hidden" />
+                  <input asp-for="@Model.Imgs.ElementAt(i).PublicId" type="hidden" />
+                  <input asp-for="@Model.Imgs.ElementAt(i).NekretninaId" type="hidden" />
+                  <div class="thumbnail col-md-4">
+                      <img src="@Model.Imgs.ElementAt(i).Url" alt="your image" />
+                      <br />
+                      @if (!Model.Imgs.ElementAt(i).IsCoverImg)
+                      {
+                          <input type="submit" value="Postavi kao naslovnu" name="set_as_cover_btn" class="btn btn-success" />
+                          <span>&nbsp; &nbsp;</span>
+                      }
+                      <input type="submit" name="delete_btn" value="Obriši" class="btn btn-danger" />
+                  </div>
+              </form>
+          }
+      </div>
+                <div>
+                    @for (int i = 3; i < Model.Imgs.Count && i < 6; i++)
+                    {
+                        { cnt = cnt + 1; }
+                        <form asp-controller="Nekretnine" asp-action="EditImg" method="post" enctype="multipart/form-data">
+                            <input asp-for="@Model.Imgs.ElementAt(i).Id" type="hidden" />
+                            <input name="imgId" value="@Model.Imgs.ElementAt(i).Id" type="hidden" />
+                            <input asp-for="@Model.Imgs.ElementAt(i).Url" type="hidden" />
+                            <input asp-for="@Model.Imgs.ElementAt(i).PublicId" type="hidden" />
+                            <input asp-for="@Model.Imgs.ElementAt(i).NekretninaId" type="hidden" />
+                            <div class="thumbnail col-md-4">
+                                <img src="@Model.Imgs.ElementAt(i).Url" alt="your image" />
+                                <br />
+                                @if (!Model.Imgs.ElementAt(i).IsCoverImg)
+                                {
+                                    <input type="submit" value="Postavi kao naslovnu" name="set_as_cover_btn" class="btn btn-success" />
+                                    <span>&nbsp; &nbsp;</span>
+                                }
+                                <input type="submit" name="delete_btn" value="Obriši" class="btn btn-danger" />
+                            </div>
+                        </form>
+                    }
+                    @if (cnt < 6)
+                    {
+                        <form asp-controller="Nekretnine" asp-action="InsertImgAsync" method="post" enctype="multipart/form-data" id="add-img-form">
+                            <div class="thumbnail col-md-4">
+
+                                <label for="newImg" id="label-img"><br /><br /><span style="cursor:pointer;margin:auto" class="custom-btn fill">Dodaj sliku</span></label>
+                                <input type="file" id="newImg" name="newImg" style="opacity:0" accept="image/jpeg, image/png" class="input-group" onchange="readURL(this);" /><br />
+                                <img id="new-img" src="#" alt="your image" style="display:none" />
+                                <input value="@Model.Id" type="hidden" name="model_id" />
+                            </div>
+
+                        </form>
+                    }
+                </div>
 
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/offcanvas.js"></script>
-
-<script type="text/javascript">
-    function readURL(input) {
-        if (input.files.length > 6) {
-            alert("Ne mozete unijeti vise od 6 slika!");
-        }
-        for (var i = 0; i < 6; i++) {
-            var id = "#img" + (i + 1) + "-cont";
-            $(id)
-                .attr('style', 'display: none');
-        }
-        var counter = 1;
-        for (var i = 0; i < input.files.length; i++) {
-            if (input.files && input.files[i]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    var contId = "#img" + counter+"-cont";
-                    $(contId)
-                        .attr('style', 'display: block');
-                    var id = "#img" + counter++;
-                    $(id)
-                        .attr('src', e.target.result)
-                        .attr('style', 'display: block')
-                        .width(200)
-                        .height(200);
-                };
-
-                reader.readAsDataURL(input.files[i]);
-            }
-        }
-    }
-</script>
+<script src="~/js/read-image.js"></script>
 
 <script>
     var map;

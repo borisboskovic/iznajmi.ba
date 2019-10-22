@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.Globalization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace ITP1.Controllers
 {
@@ -36,25 +37,42 @@ namespace ITP1.Controllers
             return View(nekretnina);
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            NekretninaUpadeModel nekretnina = _nekretinina.GetNekretninaUpadeModel(id);
-            return View(nekretnina);
+            if (IsAuthorizedUserForNekretnina(id))
+            {
+                NekretninaUpadeModel nekretnina = _nekretinina.GetNekretninaUpadeModel(id);
+                return View(nekretnina);
+            }
+            return View("UnauthorizedAccess");
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Edit(NekretninaUpadeModel nekretnina)
         {
-            _nekretinina.UpdateNekretnina(nekretnina);
+            if (ModelState.IsValid && IsAuthorizedUserForNekretnina(nekretnina.Id))
+            {
+                _nekretinina.UpdateNekretnina(nekretnina);
 
-            return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View("UnauthorizedAccess");
+
         }
 
-        public IActionResult DeleteNekretnina(int id)
+        [Authorize]
+        public async Task<IActionResult> DeleteNekretnina(int id)
         {
-            _nekretinina.DeleteNekretnina(id);
-            return RedirectToAction("Index", "Home");
+            if (IsAuthorizedUserForNekretnina(id) || (await IsCurrentUserInRoleAsync("Admin")))
+            {
+                _nekretinina.DeleteNekretnina(id);
+                return RedirectToAction("Index", "Home");
+            }
+            return View("UnauthorizedAccess");
         }
 
         [HttpGet]
@@ -145,9 +163,8 @@ namespace ITP1.Controllers
                 _nekretinina.DeleteKomentar(id);
                 return RedirectToAction("Details", "Nekretnine", new { id = nekretninaid });
             }
-            else
-                return null;
-            //Napravit svoj error page za unauthorized
+
+            return View("UnauthorizedAccess");
         }
 
         public async Task<IActionResult> DeleteNekretninaDetails(int nekretninaid)
@@ -157,42 +174,51 @@ namespace ITP1.Controllers
                 await _nekretinina.DeleteNekretninaAsync(nekretninaid);
                 return RedirectToAction("Index", "Home");
             }
-            else
-                return null;
-            //Napravit svoj error page za unauthorized
+
+            return View("UnauthorizedAccess");
+
         }
 
-        //TODO obrisat,prebacit u edit, autorizacijaaaaaaa
-        //[HttpPost]
-        //public IActionResult Details(NekretninaImg model, string delete_btn, string set_as_cover_btn, int imgId)
-        //{
-        //    //iz nekod razloga id rutira id NekretniaDetail modela,a ne ovaj
-        //    model.Id = imgId;
-        //    if (delete_btn != null)
-        //    {
-        //        _nekretinina.DeleteImgAsync(model);
-        //    }
-        //    else if (set_as_cover_btn != null)
-        //    {
-        //        _nekretinina.SetNewCoverImg(model);
-        //    }
-        //    return Details(model.NekretninaId);
-        //}
+        [Authorize]
+        [HttpPost]
+        public IActionResult EditImg(NekretninaImg model, string delete_btn, string set_as_cover_btn, int imgId)
+        {
+            if (IsAuthorizedUserForNekretnina(model.Id))
+            {
+                model.Id = imgId;
+                if (delete_btn != null)
+                {
+                    _nekretinina.DeleteImgAsync(model);
+                }
+                else if (set_as_cover_btn != null)
+                {
+                    _nekretinina.SetNewCoverImg(model);
+                }
+                return RedirectToAction("Edit", "Nekretnine", new { id = model.NekretninaId });
+            }
+            return View("UnauthorizedAccess");
+        }
 
-        //public async Task<IActionResult> InsertImgAsync(NekretninaDetails model)
-        //{
-        //    if(model.NewImgFile != null && model.Id != 0)
-        //       await _nekretinina.AddNekretninaImg(model.NewImgFile, model.Id);
+        [Authorize]
+        public async Task<IActionResult> InsertImgAsync(IFormFile newImg, int model_id)
+        {
+            if (IsAuthorizedUserForNekretnina(model_id))
+            {
+                if (newImg != null && model_id != 0)
+                    await _nekretinina.AddNekretninaImg(newImg, model_id);
 
-        //    return Details(model.Id);
-        //}
+                return RedirectToAction("Edit", "Nekretnine", new { id = model_id });
+            }
+            return View("UnauthorizedAccess");
+
+        }
 
 
         private async Task<bool> IsCurrentUserInRoleAsync(string role)
         {
             var user = await _userManager.FindByIdAsync(this.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var roles = await _userManager.GetRolesAsync(user);
-            if (roles.Contains("Admin"))
+            if (roles.Contains(role))
                 return true;
 
             return false;
@@ -203,6 +229,14 @@ namespace ITP1.Controllers
                 model = _repo.CreateMapViewModel();
             model = _nekretinina.GetNekretninasFiltered(model);
             return View(model);
+        }
+
+        private bool IsAuthorizedUserForNekretnina(int nekretninaId)
+        {
+            if (_nekretinina.GetUserIdFromNekretnina(nekretninaId) == this.User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                return true;
+
+            return false;
         }
 
     }
