@@ -4,6 +4,8 @@
     ViewData["Title"] = "Dodavanje nekretnine";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using  Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 
 <h2>@ViewData["Title"]</h2>
 
@@ -35,7 +37,7 @@
                 @Html.LabelFor(x => Model.NacinIznajmljivanjaId, htmlAttributes: new { @class = "control-label" })
                 @Html.DropDownListFor(x => Model.NacinIznajmljivanjaId, new SelectList(Model.NaciniIznajmljivanja, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
             </div>
-            
+
         </div>
         <div class="col-md-4">
             <div class="form-group">
@@ -48,25 +50,25 @@
                 @Html.DropDownListFor(x => Model.TipId, new SelectList(Model.Tipovi, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
             </div>
             <div class="form-group">
-        <label asp-for="DostupnoOdString" class="control-label"></label>
-            <div class='input-group date datetimepicker1'>
-                <span class="input-group-addon input-sm">
-                    <span class="fa fa-calendar"></span>
-                </span>
-                <input type='text' class="form-control" asp-for="@Model.DostupnoOdString" value="" onkeydown="return false" />
+                <label asp-for="DostupnoOdString" class="control-label"></label>
+                <div class='input-group date datetimepicker1'>
+                    <span class="input-group-addon input-sm">
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                    <input type='text' class="form-control" asp-for="@Model.DostupnoOdString" value="" onkeydown="return false" />
+                </div>
+                <span asp-validation-for="DostupnoOdString" class="text-danger"></span>
             </div>
-            <span asp-validation-for="DostupnoOdString" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="DostupnoDoString" class="control-label"></label>
-            <div class='input-group date datetimepicker1'>
-                <span class="input-group-addon input-sm">
-                    <span class="fa fa-calendar"></span>
-                </span>
-                <input type='text' class="form-control" asp-for="@Model.DostupnoDoString" value="" onkeydown="return false"/>
+            <div class="form-group">
+                <label asp-for="DostupnoDoString" class="control-label"></label>
+                <div class='input-group date datetimepicker1'>
+                    <span class="input-group-addon input-sm">
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                    <input type='text' class="form-control" asp-for="@Model.DostupnoDoString" value="" onkeydown="return false" />
+                </div>
+                <span asp-validation-for="DostupnoDoString" class="text-danger"></span>
             </div>
-            <span asp-validation-for="DostupnoDoString" class="text-danger"></span>
-        </div>
 
         </div>
         <div class="col-md-4">
@@ -183,4 +185,8 @@
 
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTT3_LSN4fZn3vqJRVhQylgR4_53qbb0&callback=initMap"></script>
+@{
+    var src = "https://maps.googleapis.com/maps/api/js?key=" + Configuration["GoogleMapsKey"] + "&callback=initMap";
+}
+
+<script src=@src></script>

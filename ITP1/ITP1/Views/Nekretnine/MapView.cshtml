@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "MapView";
 }
+@using  Microsoft.Extensions.Configuration
+@inject  IConfiguration Configuration
 
 <link href="~/css/offcanvas.css" rel="stylesheet" />
 <link href="~/css/sitestyle.css" rel="stylesheet" />
@@ -268,10 +270,11 @@
 
 </script>
 
+@{ 
+    var src = "https://maps.googleapis.com/maps/api/js?key=" + Configuration["GoogleMapsKey"] + "&callback=initMap";
+}
 
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTT3_LSN4fZn3vqJRVhQylgR4_53qbb0&callback=initMap"></script>
-
+<script src=@src></script>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/offcanvas.js"></script>
 <script src="~/js/checkbtns.js"></script>
