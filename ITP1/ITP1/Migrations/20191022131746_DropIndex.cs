@@ -1,20 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ITP1.Data.Migrations
+namespace ITP1.Migrations
 {
-    public partial class test : Migration
+    public partial class DropIndex : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
                 name: "IX_NekretninaImgs_NekretninaId",
                 table: "NekretninaImgs");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NekretninaImgs_NekretninaId",
-                table: "NekretninaImgs",
-                column: "NekretninaId",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -22,11 +16,6 @@ namespace ITP1.Data.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_NekretninaImgs_NekretninaId",
                 table: "NekretninaImgs");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NekretninaImgs_NekretninaId",
-                table: "NekretninaImgs",
-                column: "NekretninaId");
         }
     }
 }
