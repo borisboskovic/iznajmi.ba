@@ -169,7 +169,7 @@ namespace ITP1.Controllers
 
         public async Task<IActionResult> DeleteNekretninaDetails(int nekretninaid)
         {
-            if (await IsCurrentUserInRoleAsync("Admin"))
+            if (await IsCurrentUserInRoleAsync("Admin") || IsAuthorizedUserForNekretnina(nekretninaid))
             {
                 await _nekretinina.DeleteNekretninaAsync(nekretninaid);
                 return RedirectToAction("Index", "Home");
