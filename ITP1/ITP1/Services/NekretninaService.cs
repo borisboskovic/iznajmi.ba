@@ -206,7 +206,8 @@ namespace ITP1.Services
 
         public IEnumerable<Nekretnina> GetNekretnine(int pagenumber, int pagesize)
         {
-
+            if (pagenumber == 0)
+                pagenumber = 1;
             IEnumerable<Nekretnina> nekretnine = _context.Nekretnine
                 .Include(k => k.Korisnik)
                 .Include(m => m.Marker)
@@ -238,22 +239,29 @@ namespace ITP1.Services
         public IEnumerable<Nekretnina> GetAllNekretnineWithFilters(int pagenumber, int pagesize, PocetnaModel pModel)
         {
             List<int> tipoviCheckedIds = new List<int>();
-            foreach (var item in pModel.SviTipovi)
+            if (pModel.SviTipovi != null)
             {
-                if (item.Selected)
-                    tipoviCheckedIds.Add(item.Id);
+                foreach (var item in pModel.SviTipovi)
+                {
+                    if (item.Selected)
+                        tipoviCheckedIds.Add(item.Id);
+                }
             }
+          
             List<int> nacinIznIds = new List<int>();
-            foreach (var item in pModel.NaciniIznajmljivanja)
+            if (pModel.NaciniIznajmljivanja != null)
             {
-                if (item.Selected)
-                    nacinIznIds.Add(item.Id);
-            }
+                foreach (var item in pModel.NaciniIznajmljivanja)
+                {
+                    if (item.Selected)
+                        nacinIznIds.Add(item.Id);
+                }
+            }           
             IEnumerable<Nekretnina> nekretnine;
 
             if (pModel.Filter.CijenaMax == 0 && pModel.Filter.PovrsinaMax == 0 && pModel.Filter.DostupnoOd == DateTime.MinValue)
             {
-                nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
+                nekretnine = _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -267,7 +275,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.CijenaMax == 0 && pModel.Filter.PovrsinaMax == 0)
             {
-                nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
+                nekretnine = _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -281,7 +289,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.CijenaMax == 0 && pModel.Filter.DostupnoOd == DateTime.MinValue)
             {
-                nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
+                nekretnine = _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -295,7 +303,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.PovrsinaMax == 0 && pModel.Filter.DostupnoOd == DateTime.MinValue)
             {
-                nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
+                nekretnine = _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -309,7 +317,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.CijenaMax == 0)
             {
-                nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
+                nekretnine = _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -323,7 +331,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.PovrsinaMax == 0)
             {
-                nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
+                nekretnine = _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -337,7 +345,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.DostupnoOd == DateTime.MinValue)
             {
-                nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
+                nekretnine = _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -351,7 +359,7 @@ namespace ITP1.Services
             }
             else
             {
-                nekretnine = _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
+                nekretnine = _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -372,20 +380,28 @@ namespace ITP1.Services
         public int CountNekretnineWithFilters(PocetnaModel pModel)
         {
             List<int> tipoviCheckedIds = new List<int>();
-            foreach (var item in pModel.SviTipovi)
+            if (pModel.SviTipovi != null)
             {
-                if (item.Selected)
-                    tipoviCheckedIds.Add(item.Id);
+                foreach (var item in pModel.SviTipovi)
+                {
+                    if (item.Selected)
+                        tipoviCheckedIds.Add(item.Id);
+                }
             }
+            
             List<int> nacinIznIds = new List<int>();
-            foreach (var item in pModel.NaciniIznajmljivanja)
+            if(pModel.NaciniIznajmljivanja != null)
             {
-                if (item.Selected)
-                    nacinIznIds.Add(item.Id);
+                foreach (var item in pModel.NaciniIznajmljivanja)
+                {
+                    if (item.Selected)
+                        nacinIznIds.Add(item.Id);
+                }
             }
+            
             if (pModel.Filter.CijenaMax == 0 && pModel.Filter.PovrsinaMax == 0 && pModel.Filter.DostupnoOd == DateTime.MinValue)
             {
-                return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
+                return _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -395,7 +411,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.CijenaMax == 0 && pModel.Filter.PovrsinaMax == 0)
             {
-                return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
+                return _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -405,7 +421,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.CijenaMax == 0 && pModel.Filter.DostupnoOd == DateTime.MinValue)
             {
-                return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
+                return _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -415,7 +431,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.PovrsinaMax == 0 && pModel.Filter.DostupnoOd == DateTime.MinValue)
             {
-                return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
+                return _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -425,7 +441,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.CijenaMax == 0)
             {
-                return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
+                return _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -435,7 +451,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.PovrsinaMax == 0)
             {
-                return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
+                return _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -445,7 +461,7 @@ namespace ITP1.Services
             }
             else if (pModel.Filter.DostupnoOd == DateTime.MinValue)
             {
-                return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
+                return _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -455,7 +471,7 @@ namespace ITP1.Services
             }
             else
             {
-                return _context.Nekretnine.Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
+                return _context.Nekretnine.AsNoTracking().Where(n => n.Povrsina >= pModel.Filter.PovrsinaMin && n.Povrsina <= pModel.Filter.PovrsinaMax)
                                     .Where(n => n.Cijena >= pModel.Filter.CijenaMin && n.Cijena <= pModel.Filter.CijenaMax)
                                     .Where(n => DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoOd) >= 0 && DateTime.Compare(pModel.Filter.DostupnoOd, n.DostupnoDo) <= 0 && DateTime.Compare(pModel.Filter.DostupnoDo, n.DostupnoDo) <= 0)
                                     .Where(n => tipoviCheckedIds.Contains(n.TipId))
@@ -560,13 +576,16 @@ namespace ITP1.Services
 
         public async Task DeleteNekretninaAsync(int id)
         {
-            var nekretnina = new Nekretnina { Id = id };
             if (_context.NekretninaImgs.Where(n => n.Id == id).ToList() != null)
             {
                 var imgsList = _context.NekretninaImgs.Where(n => n.NekretninaId == id).ToList();
                 foreach (var item in imgsList)
                 {
-                    await DeleteImgAsync(item);
+                    _context.NekretninaImgs.Attach(item);
+                    _context.NekretninaImgs.Remove(item);
+                    //_context.SaveChanges();
+                    var publicIdList = new List<String>() { item.PublicId };
+                    await DeleteImgFromCloudinary(publicIdList);
                 }
             }
             if (_context.Komentari.Where(k => k.NekretninaId == id).ToList() != null)
@@ -588,11 +607,8 @@ namespace ITP1.Services
                 _context.Markeri.Remove(marker);
             }
 
-            //_context.Entry(nekretnina).State = EntityState.Detached;
-            //_context.ChangeTracker.Entries<Nekretnina>().Any(e => e.Entity.Id == id);
-            nekretnina = _context.ChangeTracker.Entries<Nekretnina>().FirstOrDefault(e => e.Entity.Id == id).Entity;
+            var nekretnina = _context.ChangeTracker.Entries<Nekretnina>().FirstOrDefault(e => e.Entity.Id == id).Entity;
 
-            //_context.Nekretnine.Attach(nekretnina);
             _context.Nekretnine.Remove(nekretnina);
             _context.SaveChanges();
         }

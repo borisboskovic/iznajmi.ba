@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ITP1.Data.Migrations
+namespace ITP1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190329191120_NovaMigr")]
-    partial class NovaMigr
+    [Migration("20191022130805_MarinaInit321")]
+    partial class MarinaInit321
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,15 +27,17 @@ namespace ITP1.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("KorisnikId");
+                    b.Property<int>("KorisnikId");
 
-                    b.Property<string>("NekretninaId");
+                    b.Property<int>("NekretninaId");
 
                     b.Property<string>("Tekst");
 
                     b.Property<DateTime>("dateTime");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("KorisnikId");
 
                     b.ToTable("Komentari");
                 });
@@ -53,16 +55,6 @@ namespace ITP1.Data.Migrations
                     b.Property<string>("Ime");
 
                     b.Property<string>("MailKontakt");
-
-                    b.Property<int>("NumberOfRatings1");
-
-                    b.Property<int>("NumberOfRatings2");
-
-                    b.Property<int>("NumberOfRatings3");
-
-                    b.Property<int>("NumberOfRatings4");
-
-                    b.Property<int>("NumberOfRatings5");
 
                     b.Property<string>("Tel");
 
@@ -90,6 +82,19 @@ namespace ITP1.Data.Migrations
                     b.ToTable("Markeri");
                 });
 
+            modelBuilder.Entity("ITP1.Data.Models.NacinIznajmljivanja", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Naziv");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NacinIznajmljivnja");
+                });
+
             modelBuilder.Entity("ITP1.Data.Models.Nekretnina", b =>
                 {
                     b.Property<int>("Id")
@@ -108,6 +113,8 @@ namespace ITP1.Data.Migrations
 
                     b.Property<int>("MarkerId");
 
+                    b.Property<int>("NacinIznajmljivanjaId");
+
                     b.Property<string>("Naslov");
 
                     b.Property<string>("Opis");
@@ -122,6 +129,8 @@ namespace ITP1.Data.Migrations
 
                     b.HasIndex("MarkerId");
 
+                    b.HasIndex("NacinIznajmljivanjaId");
+
                     b.HasIndex("TipId");
 
                     b.ToTable("Nekretnine");
@@ -133,15 +142,18 @@ namespace ITP1.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("IsCoverImg");
+
                     b.Property<int>("NekretninaId");
 
-                    b.Property<int>("PublicId");
+                    b.Property<string>("PublicId");
 
-                    b.Property<int>("Url");
+                    b.Property<string>("Url");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NekretninaId");
+                    b.HasIndex("NekretninaId")
+                        .IsUnique();
 
                     b.ToTable("NekretninaImgs");
                 });
@@ -157,6 +169,27 @@ namespace ITP1.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tipovi");
+                });
+
+            modelBuilder.Entity("ITP1.Data.Models.Utisak", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Komentar");
+
+                    b.Property<int>("KorisnikId");
+
+                    b.Property<int>("Ocjena");
+
+                    b.Property<int>("OcjenjeniKorinsnikid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KorisnikId");
+
+                    b.ToTable("Utisci");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -324,6 +357,14 @@ namespace ITP1.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ITP1.Data.Models.Komentar", b =>
+                {
+                    b.HasOne("ITP1.Data.Models.Korisnik", "Korisnik")
+                        .WithMany()
+                        .HasForeignKey("KorisnikId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("ITP1.Data.Models.Nekretnina", b =>
                 {
                     b.HasOne("ITP1.Data.Models.Korisnik", "Korisnik")
@@ -336,6 +377,11 @@ namespace ITP1.Data.Migrations
                         .HasForeignKey("MarkerId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("ITP1.Data.Models.NacinIznajmljivanja", "NacinIznajmljivanja")
+                        .WithMany()
+                        .HasForeignKey("NacinIznajmljivanjaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("ITP1.Data.Models.Tip", "Tip")
                         .WithMany()
                         .HasForeignKey("TipId")
@@ -345,8 +391,16 @@ namespace ITP1.Data.Migrations
             modelBuilder.Entity("ITP1.Data.Models.NekretninaImg", b =>
                 {
                     b.HasOne("ITP1.Data.Models.Nekretnina", "Nekretnina")
+                        .WithOne("CoverImg")
+                        .HasForeignKey("ITP1.Data.Models.NekretninaImg", "NekretninaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ITP1.Data.Models.Utisak", b =>
+                {
+                    b.HasOne("ITP1.Data.Models.Korisnik", "Korisnik")
                         .WithMany()
-                        .HasForeignKey("NekretninaId")
+                        .HasForeignKey("KorisnikId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

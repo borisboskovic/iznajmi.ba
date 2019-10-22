@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ITP1.Data.Migrations
+namespace ITP1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191001184259_NewTableUtisak")]
-    partial class NewTableUtisak
+    [Migration("20191022131746_DropIndex")]
+    partial class DropIndex
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,15 +27,17 @@ namespace ITP1.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("KorisnikId");
+                    b.Property<int>("KorisnikId");
 
-                    b.Property<string>("NekretninaId");
+                    b.Property<int>("NekretninaId");
 
                     b.Property<string>("Tekst");
 
                     b.Property<DateTime>("dateTime");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("KorisnikId");
 
                     b.ToTable("Komentari");
                 });
@@ -53,16 +55,6 @@ namespace ITP1.Data.Migrations
                     b.Property<string>("Ime");
 
                     b.Property<string>("MailKontakt");
-
-                    b.Property<int>("NumberOfRatings1");
-
-                    b.Property<int>("NumberOfRatings2");
-
-                    b.Property<int>("NumberOfRatings3");
-
-                    b.Property<int>("NumberOfRatings4");
-
-                    b.Property<int>("NumberOfRatings5");
 
                     b.Property<string>("Tel");
 
@@ -363,6 +355,14 @@ namespace ITP1.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("ITP1.Data.Models.Komentar", b =>
+                {
+                    b.HasOne("ITP1.Data.Models.Korisnik", "Korisnik")
+                        .WithMany()
+                        .HasForeignKey("KorisnikId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ITP1.Data.Models.Nekretnina", b =>

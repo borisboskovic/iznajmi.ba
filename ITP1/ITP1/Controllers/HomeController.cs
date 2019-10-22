@@ -48,7 +48,7 @@ namespace ITP1.Controllers
                 pager = new Pager(_nekretnina.CountNekretnine(), pModel.CurrPage);
                 if (pModel.CurrPage == 0)
                     pager.CurrentPage = pager.EndPage;
-
+                
                 nekretnine = _nekretnina.GetNekretnine(pager.CurrentPage, pager.PageSize);              
             }
 
