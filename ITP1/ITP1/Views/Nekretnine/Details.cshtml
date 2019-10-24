@@ -116,7 +116,6 @@
     <div>
         @for (int i = 0; i < Model.Imgs.Count; i++)
         {
-            @*<form asp-controller="Nekretnine" asp-action="Details" method="post" enctype="multipart/form-data">*@
                 <input asp-for="@Model.Imgs.ElementAt(i).Id" type="hidden" />
                 <input name="imgId" value="@Model.Imgs.ElementAt(i).Id" type="hidden" />
                 <input asp-for="@Model.Imgs.ElementAt(i).Url" type="hidden" />
@@ -126,7 +125,6 @@
                     <img src="@Model.Imgs.ElementAt(i).Url" alt="your image" />
                     <br />
                 </div>
-            @*</form>*@
         }
     </div>
 </div>

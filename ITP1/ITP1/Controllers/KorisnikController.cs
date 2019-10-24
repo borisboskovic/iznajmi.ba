@@ -71,8 +71,7 @@ namespace ITP1.Controllers
                     WebKontaktUrl = korisnikModel.WebKontaktUrl,
                 };
                 _korisnik.UpdateKorisnik(korisnik);
-                //return RedirectToAction("Index", "Home", new { area = "" });
-                return View(korisnikModel);
+                return RedirectToAction("Edit", "Korisnik", new { id = korisnikModel.UserId });
             }
 
             return View("UnauthorizedAccess");

@@ -30,12 +30,6 @@ namespace ITP1.Controllers
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        [HttpGet]
-        public IActionResult Display(int id)
-        {
-            Nekretnina nekretnina = _nekretinina.GetNekretnina(id);
-            return View(nekretnina);
-        }
 
         [Authorize]
         [HttpGet]
@@ -67,11 +61,12 @@ namespace ITP1.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteNekretnina(int id)
         {
-            if (IsAuthorizedUserForNekretnina(id) || (await IsCurrentUserInRoleAsync("Admin")))
+            if (IsAuthorizedUserForNekretnina(id) || await IsCurrentUserInRoleAsync("Admin"))
             {
-                _nekretinina.DeleteNekretnina(id);
+                await _nekretinina.DeleteNekretninaAsync(id);
                 return RedirectToAction("Index", "Home");
             }
+
             return View("UnauthorizedAccess");
         }
 
@@ -154,8 +149,7 @@ namespace ITP1.Controllers
 
         }
 
-        //Iz nekog razloga ovo uvijek vraća false no lo se!!!
-        //[Authorize(Roles = "Admin")] 
+        [Authorize]
         public async Task<IActionResult> DeleteKomentarDetails(int id, int nekretninaid)
         {
             if (await IsCurrentUserInRoleAsync("Admin"))
@@ -167,6 +161,7 @@ namespace ITP1.Controllers
             return View("UnauthorizedAccess");
         }
 
+        [Authorize]
         public async Task<IActionResult> DeleteNekretninaDetails(int nekretninaid)
         {
             if (IsAuthorizedUserForNekretnina(nekretninaid) || await IsCurrentUserInRoleAsync("Admin"))

@@ -51,8 +51,8 @@ namespace ITP1.Controllers
                 
             }
 
-            //Todo error page
-            return View();
+            return View("UnauthorizedAccess");
+
         }
 
         [Authorize]
@@ -64,8 +64,8 @@ namespace ITP1.Controllers
                 return RedirectToAction("Index", "Administracija");
             }
 
-            //todoooooo
-            return null;
+            return View("UnauthorizedAccess");
+
         }
 
         [Authorize]
@@ -76,9 +76,7 @@ namespace ITP1.Controllers
                 await _administracija.GiveUserRoleAsync(userId, "Admin");
                 return RedirectToAction("Index", "Administracija");
             }
-
-            //todoooooo
-            return null;
+            return View("UnauthorizedAccess");
         }
 
 

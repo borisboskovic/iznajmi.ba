@@ -192,10 +192,9 @@ namespace ITP1.Services
 
         public List<NekretninaItem> GetListaNekretninaZaKorisnika(int korisnikId)
         {
-            IEnumerable<Nekretnina> nekretnine;
-
-            nekretnine = _context.Nekretnine.Where(n => n.KorisnikId == korisnikId).Include(t => t.Tip).Include(ni => ni.NacinIznajmljivanja).ToList();
+            IEnumerable<Nekretnina> nekretnine = _context.Nekretnine.Where(n => n.KorisnikId == korisnikId).Include(t => t.Tip).Include(ni => ni.NacinIznajmljivanja).ToList();
             List<NekretninaItem> nekretnine_item = new List<NekretninaItem>();
+            var slidze = _context.NekretninaImgs.ToList();
 
             foreach (var item in nekretnine)
             {
@@ -209,7 +208,7 @@ namespace ITP1.Services
                     Povrsina = item.Povrsina,
                     DostupnoOd = item.DostupnoOd,
                     DostupnoDo = item.DostupnoDo,
-                    CoverImgUrl = _context.NekretninaImgs.Where(ni => ni.NekretninaId == item.Id && ni.IsCoverImg == true).FirstOrDefault() == null ? null : _context.NekretninaImgs.Where(n => n.IsCoverImg == true).FirstOrDefault().Url,
+                    CoverImgUrl = _context.NekretninaImgs.Where(ni => ni.NekretninaId == item.Id && ni.IsCoverImg == true).FirstOrDefault() == null ? null : _context.NekretninaImgs.Where(ni => ni.NekretninaId == item.Id && ni.IsCoverImg == true).FirstOrDefault().Url,
                     Tip = new TipModel()
                     {
                         Id = item.Tip == null ? 0 : item.Tip.Id,
